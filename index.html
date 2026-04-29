@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Objetivos y Metas 2026 — PETROSAR SA</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:#f0f2f6;color:#1a202c;min-height:100vh}
+:root{
+  --ps-bg:#f0f2f6;--ps-hdr:#1e2d3e;--ps-hdr2:#192638;
+  --ps-card:#fff;--ps-border:#e2e8f0;--ps-text:#1a202c;
+  --ps-muted:#718096;--ps-accent:#e8a020;--ps-accent2:#f05a28;
+}
+
+/* LOGIN */
+#loginScreen{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(135deg,#1e2d3e 0%,#2d4263 100%);padding:20px}
+.lcard{background:#fff;border-radius:16px;padding:40px;width:100%;max-width:420px;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+.llogo{display:flex;align-items:center;gap:12px;margin-bottom:28px}
+.llogo img{width:44px;height:44px;border-radius:10px;object-fit:contain}
+.llogo-txt{font-size:18px;font-weight:700;color:#1e2d3e}
+.llogo-sub{font-size:12px;color:#718096}
+.ltitle{font-size:22px;font-weight:700;color:#1e2d3e;margin-bottom:4px}
+.lsub{font-size:13px;color:#718096;margin-bottom:24px}
+.llabel{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:#718096;margin-bottom:6px;display:block}
+.lsel,.linput{width:100%;padding:11px 14px;border:1.5px solid #e2e8f0;border-radius:8px;font-size:14px;font-family:inherit;color:#1a202c;background:#f8fafc;margin-bottom:14px;transition:border-color .2s}
+.lsel:focus,.linput:focus{outline:none;border-color:#e8a020;background:#fff}
+.lbtn{width:100%;padding:13px;background:linear-gradient(135deg,#e8a020,#f05a28);color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:600;font-family:inherit;cursor:pointer;transition:opacity .2s}
+.lbtn:hover{opacity:.9}
+.lerr{background:#fff5f5;border:1px solid #fed7d7;color:#c53030;padding:10px 14px;border-radius:8px;font-size:13px;margin-top:12px;display:none}
+.lnote{font-size:11px;color:rgba(255,255,255,.45);margin-top:20px;text-align:center}
+
+/* HEADER */
+.ps-header{background:linear-gradient(135deg,#1e2d3e 0%,#192638 100%);color:#fff;padding:14px 24px}
+.ps-htop{display:flex;align-items:center;gap:14px}
+.ps-htop img{width:40px;height:40px;border-radius:9px;object-fit:contain}
+.ps-htitle{font-size:19px;font-weight:700;color:#fff}
+.ps-hsub{font-size:11px;color:rgba(255,255,255,.6);margin-top:2px}
+.ps-hright{margin-left:auto;display:flex;align-items:center;gap:8px}
+.ubadge{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:20px;padding:5px 14px;font-size:12px;color:#fff}
+.lout-btn{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.8);padding:5px 14px;border-radius:20px;font-size:12px;cursor:pointer;transition:background .2s;font-family:inherit}
+.lout-btn:hover{background:rgba(255,255,255,.18)}
+
+/* TABS */
+.ps-tabs{background:#fff;border-bottom:2px solid #e2e8f0;display:flex;padding:0 24px;gap:4px}
+.ps-tab{padding:12px 16px;font-size:13px;font-weight:600;color:#718096;border:none;background:none;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;transition:color .2s,border-color .2s;font-family:inherit}
+.ps-tab:hover{color:#1e2d3e}
+.ps-tab.active{color:#e8a020;border-bottom-color:#e8a020}
+
+/* MAIN */
+.ps-main{padding:20px 24px}
+
+/* KPI GRID */
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px;margin-bottom:20px}
+.kpi-card{background:#fff;border-radius:12px;padding:16px;box-shadow:0 1px 3px rgba(0,0,0,.07);border:1px solid #e2e8f0}
+.kpi-icon{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:15px;margin-bottom:10px}
+.ic-green{background:#f0fff4} .ic-blue{background:#ebf8ff} .ic-yellow{background:#fffbeb} .ic-red{background:#fff5f5} .ic-gray{background:#f7fafc}
+.kpi-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:#718096}
+.kpi-val{font-size:26px;font-weight:700;color:#1a202c;line-height:1;margin:4px 0}
+
+/* CONTENT CARD */
+.cc{background:#fff;border-radius:12px;box-shadow:0 1px 3px rgba(0,0,0,.07);border:1px solid #e2e8f0;margin-bottom:18px;overflow:hidden}
+.cc-hdr{padding:14px 20px;border-bottom:1px solid #e2e8f0;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.cc-title{font-size:14px;font-weight:700;color:#1e2d3e}
+.cc-sub{font-size:12px;color:#718096;margin-top:2px}
+
+/* TABLE */
+.tbl-wrap{overflow-x:auto}
+.ps-table{width:100%;border-collapse:collapse;font-size:12.5px}
+.ps-table thead th{background:#f7fafc;padding:9px 14px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#718096;border-bottom:1px solid #e2e8f0;white-space:nowrap}
+.ps-table tbody tr{border-bottom:1px solid #f0f2f6;transition:background .15s}
+.ps-table tbody tr:hover{background:#fafbfd}
+.ps-table tbody td{padding:9px 14px;vertical-align:middle}
+.ps-table tbody tr:last-child{border-bottom:none}
+.obj-txt{max-width:240px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;cursor:help}
+.meta-txt{max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;cursor:help;color:#4a5568;font-size:11.5px}
+
+/* BADGES */
+.badge{display:inline-flex;align-items:center;padding:3px 10px;border-radius:12px;font-size:11px;font-weight:600;white-space:nowrap}
+.b-ok{background:#f0fff4;color:#276749} .b-warn{background:#fffbeb;color:#744210}
+.b-danger{background:#fff5f5;color:#9b2c2c} .b-info{background:#ebf8ff;color:#2c5282}
+.b-pend{background:#f7fafc;color:#4a5568}
+
+/* FORM INPUTS in table */
+.t-sel,.t-inp{padding:6px 9px;border:1.5px solid #e2e8f0;border-radius:6px;font-size:12px;font-family:inherit;color:#1a202c;background:#f8fafc;transition:border-color .2s}
+.t-sel:focus,.t-inp:focus{outline:none;border-color:#e8a020;background:#fff}
+.t-sel{min-width:118px} .t-inp{min-width:70px} .t-inp.wide{min-width:160px} .t-inp.url{min-width:180px}
+
+/* PROGRESS */
+.prog-wrap{background:#e2e8f0;border-radius:6px;height:5px;min-width:70px}
+.prog-bar{height:5px;border-radius:6px;transition:width .3s}
+
+/* SECTOR GRID (gerencia) */
+.sec-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px;margin-bottom:22px}
+.sec-card{background:#fff;border-radius:12px;padding:16px;box-shadow:0 1px 3px rgba(0,0,0,.07);border:1px solid #e2e8f0;border-left:4px solid #e2e8f0;transition:transform .15s,box-shadow .15s;cursor:default}
+.sec-card:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,.1)}
+.sc-all{border-left-color:#38a169} .sc-warn{border-left-color:#d69e2e} .sc-danger{border-left-color:#e53e3e} .sc-none{border-left-color:#a0aec0}
+.sec-name{font-size:13px;font-weight:700;color:#1e2d3e;margin-bottom:10px}
+.sec-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px}
+.sec-lbl{font-size:11px;color:#718096} .sec-val{font-size:12px;font-weight:600}
+
+/* SAVE BTN */
+.sav-btn{padding:5px 12px;background:#e8a020;color:#fff;border:none;border-radius:6px;font-size:11.5px;font-weight:600;cursor:pointer;font-family:inherit;transition:all .2s;white-space:nowrap}
+.sav-btn:hover{opacity:.85} .sav-btn.saved{background:#38a169}
+
+/* FILTER */
+.filter-bar{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap;align-items:center}
+.filter-bar select,.filter-bar input{padding:8px 12px;border:1.5px solid #e2e8f0;border-radius:8px;font-size:12.5px;font-family:inherit;color:#1a202c;background:#fff}
+.filter-bar select:focus,.filter-bar input:focus{outline:none;border-color:#e8a020}
+
+/* TOAST */
+#toast{position:fixed;bottom:24px;right:24px;background:#1e2d3e;color:#fff;padding:11px 18px;border-radius:10px;font-size:13px;font-weight:500;box-shadow:0 8px 24px rgba(0,0,0,.2);opacity:0;transform:translateY(10px);transition:opacity .3s,transform .3s;z-index:9999;pointer-events:none}
+#toast.show{opacity:1;transform:translateY(0)}
+
+/* SECTOR TITLE BAR */
+.sec-bar{background:#fff;border-bottom:1px solid #e2e8f0;padding:10px 24px;display:flex;align-items:center;gap:10px}
+.sec-bar-name{font-size:16px;font-weight:700;color:#1e2d3e}
+.sec-bar-count{font-size:12px;color:#718096;background:#f0f2f6;padding:3px 10px;border-radius:12px}
+
+/* ===== GERENCIA V2 ===== */
+.sumbar{display:grid;grid-template-columns:repeat(5,1fr);background:#1e2d3e;border-radius:14px;overflow:hidden;margin-bottom:22px}
+.sumbar-item{padding:16px 18px;position:relative;border-right:1px solid rgba(255,255,255,.08)}
+.sumbar-item:last-child{border-right:none}
+.sumbar-lbl{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:rgba(255,255,255,.5);margin-bottom:6px}
+.sumbar-val{font-size:32px;font-weight:800;line-height:1;color:#fff}
+.sumbar-item.s-ok .sumbar-val{color:#6ee7b7}
+.sumbar-item.s-blue .sumbar-val{color:#93c5fd}
+.sumbar-item.s-warn .sumbar-val{color:#fcd34d}
+.sumbar-item.s-red .sumbar-val{color:#fca5a5}
+.sumbar-item.s-gray .sumbar-val{color:rgba(255,255,255,.35)}
+.sumbar-stripe{position:absolute;bottom:0;left:0;right:0;height:3px}
+.sec2-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;margin-bottom:22px}
+.sec2-card{background:#fff;border-radius:14px;padding:18px 20px;box-shadow:0 1px 4px rgba(0,0,0,.07);border:1px solid #e2e8f0;transition:transform .15s,box-shadow .15s;position:relative;overflow:hidden}
+.sec2-card:hover{transform:translateY(-3px);box-shadow:0 6px 20px rgba(0,0,0,.1)}
+.sec2-top{display:flex;align-items:center;gap:16px;margin-bottom:14px}
+.sec2-ring{flex-shrink:0}
+.sec2-info{flex:1;min-width:0}
+.sec2-name{font-size:13.5px;font-weight:700;color:#1e2d3e;margin-bottom:6px}
+.sec2-pills{display:flex;flex-wrap:wrap;gap:5px}
+.sec2-pill{font-size:10.5px;font-weight:600;padding:2px 8px;border-radius:10px;display:inline-flex;align-items:center;gap:4px}
+.p-ok{background:#f0fff4;color:#276749} .p-blue{background:#ebf8ff;color:#2c5282}
+.p-warn{background:#fffbeb;color:#744210} .p-red{background:#fff5f5;color:#9b2c2c}
+.p-gray{background:#f7fafc;color:#718096}
+.sec2-distbar{display:flex;height:5px;border-radius:5px;overflow:hidden;margin-top:10px}
+.sec2-accent{position:absolute;top:0;left:0;width:4px;bottom:0;border-radius:14px 0 0 14px}
+.view-toggle{display:inline-flex;background:#f0f2f6;border-radius:8px;padding:3px;gap:2px}
+.view-toggle button{padding:6px 14px;border:none;background:none;border-radius:6px;font-size:12px;font-weight:600;font-family:inherit;color:#718096;cursor:pointer;transition:all .2s}
+.view-toggle button.active{background:#fff;color:#1e2d3e;box-shadow:0 1px 3px rgba(0,0,0,.1)}{.ps-main{padding:14px}.ps-header{padding:12px 14px}.ps-tabs{padding:0 12px}.sumbar{grid-template-columns:repeat(3,1fr)}}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="loginScreen">
+  <div class="lcard">
+    <div class="llogo">
+      <img src="data:image/png;base64,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" alt="PETROSAR">
+      <div><div class="llogo-txt">PETROSAR SA</div></div>
+    </div>
+    <div class="ltitle">Programa de Objetivos y Metas</div>
+    <div class="lsub" style="margin-bottom:24px">Seguimiento 2026 — Ingresá con tu sector</div>
+    <label class="llabel">Sector</label>
+    <select id="sectorSel" class="lsel">
+      <option value="">— Seleccionar sector —</option>
+      <option value="GESTION">Gestión</option>
+      <option value="SSA_TRANSP">SSA Transporte</option>
+      <option value="SSA_PROD">SSA Producción y Mantenimiento</option>
+      <option value="AMBIENTE">Ambiente</option>
+      <option value="MANTENIMIENTO">Mantenimiento</option>
+      <option value="COMPRAS">Compras</option>
+      <option value="ADM_PROV">Administración – Proveedores</option>
+      <option value="ADM_FACT">Administración – Facturación y Cobranzas</option>
+      <option value="ADM_CONT">Administración – Contabilidad</option>
+      <option value="ADM_RRHH">Administración – RRHH</option>
+      <option value="ADM_CTRL">Administración – Control Documentario</option>
+      <option value="GERENCIA">Gerencia</option>
+    </select>
+    <label class="llabel">Contraseña</label>
+    <input id="passInp" type="password" class="linput" placeholder="Contraseña del sector" onkeydown="if(event.key==='Enter')doLogin()">
+    <button class="lbtn" onclick="doLogin()">Ingresar</button>
+    <label style="display:flex;align-items:center;gap:8px;margin-top:14px;cursor:pointer;font-size:13px;color:#4a5568">
+      <input type="checkbox" id="rememberMe" style="width:16px;height:16px;accent-color:#e8a020">
+      Recordarme en este equipo
+    </label>
+    <div id="lerr" class="lerr">Contraseña incorrecta. Verificá el sector seleccionado.</div>
+  </div>
+  <div class="lnote">Las contraseñas iniciales figuran en el documento de implementación entregado al responsable de cada sector.</div>
+</div>
+
+<!-- APP -->
+<div id="appScreen" style="display:none">
+  <header class="ps-header">
+    <div class="ps-htop">
+      <img src="data:image/png;base64,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" alt="PETROSAR">
+      <div>
+        <div class="ps-htitle">Objetivos y Metas 2026</div>
+        <div class="ps-hsub">Programa Objetivos y Metas 2026</div>
+      </div>
+      <div class="ps-hright">
+        <span class="ubadge" id="userBadge"></span>
+        <button class="lout-btn" onclick="doLogout()">Salir</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="ps-tabs" id="tabBar"></div>
+  <div id="appContent"></div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+// ===== PASSWORDS =====
+const PASSWORDS = {
+  GESTION:'gestion26', SSA_TRANSP:'transp26', SSA_PROD:'ssprod26',
+  AMBIENTE:'ambiente26', MANTENIMIENTO:'mant26', COMPRAS:'compras26',
+  ADM_PROV:'admprov26', ADM_FACT:'admfact26', ADM_CONT:'admcont26',
+  ADM_RRHH:'admrrhh26', ADM_CTRL:'admctrl26', GERENCIA:'gerencia26'
+};
+const SECTOR_LABELS = {
+  GESTION:'Gestión', SSA_TRANSP:'SSA Transporte', SSA_PROD:'SSA Producción y Mant.',
+  AMBIENTE:'Ambiente', MANTENIMIENTO:'Mantenimiento', COMPRAS:'Compras',
+  ADM_PROV:'Adm. – Proveedores', ADM_FACT:'Adm. – Facturación', ADM_CONT:'Adm. – Contabilidad',
+  ADM_RRHH:'Adm. – RRHH', ADM_CTRL:'Adm. – Control Documental', GERENCIA:'Gerencia'
+};
+const MONTHS = [
+  {val:'2026-01',lbl:'Enero 2026'},{val:'2026-02',lbl:'Febrero 2026'},{val:'2026-03',lbl:'Marzo 2026'},
+  {val:'2026-04',lbl:'Abril 2026'},{val:'2026-05',lbl:'Mayo 2026'},{val:'2026-06',lbl:'Junio 2026'},
+  {val:'2026-07',lbl:'Julio 2026'},{val:'2026-08',lbl:'Agosto 2026'},{val:'2026-09',lbl:'Septiembre 2026'},
+  {val:'2026-10',lbl:'Octubre 2026'},{val:'2026-11',lbl:'Noviembre 2026'},{val:'2026-12',lbl:'Diciembre 2026'}
+];
+const ESTADO_OPTS = ['Sin actualizar','En curso','En riesgo','Vencido','Cumplido'];
+const BADGE_CLASS = {'Sin actualizar':'b-pend','En curso':'b-info','En riesgo':'b-warn','Vencido':'b-danger','Cumplido':'b-ok'};
+const PROG_COLOR  = {'Sin actualizar':'#a0aec0','En curso':'#3182ce','En riesgo':'#d69e2e','Vencido':'#e53e3e','Cumplido':'#38a169'};
+
+// Dates corrected: all objectives end Dec 2026
+const OBJETIVOS = [
+  {id:'G-01a',s:'GESTION',obj:'Asegurar disponibilidad de documentación SGI/SGSV. Gestión Documental 0 Papel.',meta:'80% — Estructura Documental ordenada y disponible en espacio digital',ini:'Dic 2025',fin:'Dic 2026',ind:'Dashboard Interactivo SGI',frec:'Mensual'},
+  {id:'G-01b',s:'GESTION',obj:'Asegurar disponibilidad de documentación SGI/SGSV. Gestión Documental 0 Papel.',meta:'100% — Unificación documental SGI y Seguridad Vial',ini:'Dic 2025',fin:'Dic 2026',ind:'Dashboard Interactivo SGI',frec:'Mensual'},
+  {id:'G-02',s:'GESTION',obj:'Diseñar e implementar App para Gestión de Visitas a Frentes de Trabajo.',meta:'1 aplicación implementada',ini:'Dic 2025',fin:'Jun 2026',ind:'Tablero de Control – Visitas a Frentes',frec:'Mensual'},
+  {id:'G-03',s:'GESTION',obj:'Automatizar seguimiento y control de No Conformidades.',meta:'1 aplicación sistematizada implementada',ini:'Ene 2026',fin:'Jun 2026',ind:'Tablero de Control No Conformidades',frec:'Mensual'},
+  {id:'G-04',s:'GESTION',obj:'Diseñar e implementar APP para Gestión de Checklist de Unidades y Registro Pre viaje.',meta:'1 aplicación implementada',ini:'Ene 2026',fin:'Abr 2026',ind:'App FleetCheck / App FleetCheck PRO',frec:'Mensual'},
+  {id:'ST-01',s:'SSA_TRANSP',obj:'Mantener la baja incidencia de accidentología vial de 2025.',meta:'<1',ini:'Ene 2026',fin:'Dic 2026',ind:'IFAT',frec:'Mensual'},
+  {id:'ST-02',s:'SSA_TRANSP',obj:'ICR: mantener conductores en Riesgo Bajo – Muy Bajo.',meta:'<20% en categorías de riesgo elevado',ini:'Ene 2026',fin:'Dic 2026',ind:'Indicador ICR PRO',frec:'Mensual'},
+  {id:'ST-03',s:'SSA_TRANSP',obj:'Evitar inhabilitaciones por repetición de Riesgos Altos/Moderados en conducta de manejo.',meta:'0 inhabilitaciones',ini:'Ene 2026',fin:'Dic 2026',ind:'Indicador de Habilitación de Recursos',frec:'Mensual'},
+  {id:'ST-04',s:'SSA_TRANSP',obj:'Formación y toma de conciencia. Capacitaciones.',meta:'>3 capacitaciones',ini:'Feb 2026',fin:'Dic 2026',ind:'Indicador de Capacitaciones',frec:'Mensual'},
+  {id:'ST-05',s:'SSA_TRANSP',obj:'Reducir trasbordos respecto a 2025 (4 trasbordos).',meta:'<4 trasbordos',ini:'Ene 2026',fin:'Dic 2026',ind:'Indicador de Trasbordos y Cambios de Unidad',frec:'Mensual'},
+  {id:'SP-01',s:'SSA_PROD',obj:'Reducir accidentes personales respecto a 2025.',meta:'<10 accidentes',ini:'Ene 2026',fin:'Dic 2026',ind:'Indicador de Estadística Interna 2026',frec:'Mensual'},
+  {id:'SP-02',s:'SSA_PROD',obj:'Gestión vehicular: reducir accidentes vehiculares respecto a 2025.',meta:'<5 accidentes',ini:'Ene 2026',fin:'Dic 2026',ind:'Indicador de Estadística Interna 2026',frec:'Mensual'},
+  {id:'SP-03',s:'SSA_PROD',obj:'Visitas a frentes de trabajo.',meta:'>2 visitas por período',ini:'Ene 2026',fin:'Dic 2026',ind:'Indicador de Visitas Realizadas',frec:'Mensual'},
+  {id:'SP-04',s:'SSA_PROD',obj:'Cumplir horas de capacitación por operario.',meta:'4 hs/mes diurno | 1 hs/mes nocturno',ini:'Ene 2026',fin:'Dic 2026',ind:'Indicador Seguimiento de Capacitación',frec:'Mensual'},
+  {id:'SP-05',s:'SSA_PROD',obj:'Evitar inhabilitaciones por ICR Altos/Moderados en conducta de manejo.',meta:'0 inhabilitaciones',ini:'Ene 2026',fin:'Dic 2026',ind:'Indicador de Habilitación de Recursos',frec:'Mensual'},
+  {id:'AM-01',s:'AMBIENTE',obj:'Construir 3 recintos de acopio de residuos peligrosos (Disp. 185).',meta:'3 recintos construidos y operativos',ini:'Jul 2025',fin:'Oct 2026',ind:'N° de recintos construidos y operativos',frec:'Semestral'},
+  {id:'AM-02',s:'AMBIENTE',obj:'Actualizar matriz de evaluación de Impacto Ambiental incluyendo nuevos servicios.',meta:'1 matriz actualizada alineada a ISO 14001',ini:'Jul 2025',fin:'Abr 2026',ind:'Matriz Actualizada (ISO 14.001)',frec:'Mensual'},
+  {id:'AM-03a',s:'AMBIENTE',obj:'Disminuir generación de residuos – Base de datos.',meta:'Base de datos funcional con generación de informes',ini:'Ene 2026',fin:'Jun 2026',ind:'Base de Datos',frec:'Semestral'},
+  {id:'AM-03b',s:'AMBIENTE',obj:'Disminuir generación de residuos – Reducción efectiva.',meta:'Reducción del 10%',ini:'Jul 2026',fin:'Nov 2026',ind:'Indicador de Generación de Residuos',frec:'Mensual'},
+  {id:'AM-04a',s:'AMBIENTE',obj:'Capacitar al personal en temáticas ambientales – Cantidad.',meta:'6 capacitaciones anuales',ini:'Dic 2025',fin:'Nov 2026',ind:'Indicador de Capacitaciones MA',frec:'Bimestral'},
+  {id:'AM-04b',s:'AMBIENTE',obj:'Capacitar al personal en temáticas ambientales – Cobertura.',meta:'80% del personal capacitado',ini:'Ene 2026',fin:'Dic 2026',ind:'Indicador de Capacitaciones MA',frec:'Mensual'},
+  {id:'AM-05',s:'AMBIENTE',obj:'Cumplimiento de Requisitos Legales Ambientales.',meta:'1 (documentación y habilitaciones vigentes)',ini:'Ene 2026',fin:'Dic 2026',ind:'Habilitaciones y Registros Vigentes',frec:'Semestral'},
+  {id:'MN-01',s:'MANTENIMIENTO',obj:'Disponibilidad y confiabilidad de Flota por encima del objetivo.',meta:'>90%',ini:'Ene 2026',fin:'Dic 2026',ind:'Indicador de Mantenimiento',frec:'Mensual'},
+  {id:'MN-02',s:'MANTENIMIENTO',obj:'Clasificar mantenimientos en CORRECTIVO y PREVENTIVO.',meta:'Nueva clasificación implementada',ini:'Ene 2026',fin:'Dic 2026',ind:'Indicador de Mantenimiento',frec:'Mensual'},
+  {id:'MN-03',s:'MANTENIMIENTO',obj:'Reducción de días en taller promedio por intervención.',meta:'1.5 días promedio',ini:'Feb 2026',fin:'Dic 2026',ind:'Indicador de Mantenimiento',frec:'Mensual'},
+  {id:'CP-01',s:'COMPRAS',obj:'Reducir tiempos de entrega de mercadería.',meta:'Máximo 48 hs para mercadería en stock',ini:'Ene 2026',fin:'Dic 2026',ind:'Reportes del sistema',frec:'Mensual'},
+  {id:'CP-02',s:'COMPRAS',obj:'Reorganización y orden del pañol con inventario fidedigno.',meta:'1 reorganización completa',ini:'Ene 2026',fin:'Dic 2026',ind:'Control de stock',frec:'Mensual'},
+  {id:'CP-03',s:'COMPRAS',obj:'Vinculación en compras y pañol de ambos sectores.',meta:'1 integración implementada',ini:'Ene 2026',fin:'Dic 2026',ind:'El reparto de tareas',frec:'Mensual'},
+  {id:'AP-01',s:'ADM_PROV',obj:'Migrar gestión integral de proveedores a SAP Business One.',meta:'1 (trazabilidad completa del ciclo de compras)',ini:'Ene 2026',fin:'Jun 2026',ind:'Proveedores activos SAP / Total x100',frec:'Mensual'},
+  {id:'AP-02',s:'ADM_PROV',obj:'Normalizar base de datos de proveedores con documentación vigente.',meta:'100% proveedores con doc. fiscal y comercial',ini:'Ene 2026',fin:'Jul 2026',ind:'Proveedores con doc. completa / Total x100',frec:'Mensual'},
+  {id:'AP-03',s:'ADM_PROV',obj:'Reducir tiempos de procesamiento de facturas.',meta:'>48 hs = 0%',ini:'Ene 2026',fin:'Sep 2026',ind:'Facturas sin ingresar con antigüedad >48hs',frec:'Mensual'},
+  {id:'AP-04',s:'ADM_PROV',obj:'Deuda vencida proveedores.',meta:'≤5%',ini:'Ene 2026',fin:'Oct 2026',ind:'Monto deuda vencida / Deuda total x100',frec:'Mensual'},
+  {id:'AP-05',s:'ADM_PROV',obj:'Circuito OC completo en SAP.',meta:'≥95%',ini:'Ene 2026',fin:'Jul 2026',ind:'OC con recepción y factura en SAP / Total OC x100',frec:'Mensual'},
+  {id:'AF-01',s:'ADM_FACT',obj:'DSO – Días de cobranza.',meta:'Tendencia a la baja (↓)',ini:'Ene 2026',fin:'Dic 2026',ind:'—',frec:'Mensual'},
+  {id:'AF-02',s:'ADM_FACT',obj:'Cartera vencida >30 días.',meta:'≤10%',ini:'Ene 2026',fin:'Dic 2026',ind:'—',frec:'Mensual'},
+  {id:'AF-03',s:'ADM_FACT',obj:'Efectividad de cobranza.',meta:'≥90%',ini:'Ene 2026',fin:'Dic 2026',ind:'—',frec:'Mensual'},
+  {id:'AC-01',s:'ADM_CONT',obj:'Días cierre contable.',meta:'≤10 días',ini:'Ene 2026',fin:'Dic 2026',ind:'—',frec:'Mensual'},
+  {id:'AC-02',s:'ADM_CONT',obj:'DDJJ en término.',meta:'1 (cumplimiento total)',ini:'Ene 2026',fin:'Dic 2026',ind:'—',frec:'Mensual'},
+  {id:'AC-03',s:'ADM_CONT',obj:'Multas / intereses.',meta:'0',ini:'Ene 2026',fin:'Dic 2026',ind:'—',frec:'Mensual'},
+  {id:'AR-01',s:'ADM_RRHH',obj:'Automatización del ciclo de novedades y liquidación de haberes – Migración Dot People.',meta:'1 (100% empleados activos en sistema)',ini:'Ene 2026',fin:'Jun 2026',ind:'% empleados activos en el sistema',frec:'Mensual'},
+  {id:'AR-02a',s:'ADM_RRHH',obj:'Información automática al sistema de nómina – Relojes operativos 100%.',meta:'Relojes de asistencia operativos 100%',ini:'Ene 2026',fin:'Oct 2026',ind:'% puntos de fichaje activos',frec:'Mensual'},
+  {id:'AR-02b',s:'ADM_RRHH',obj:'Información automática al sistema de nómina – Tasa fichaje automático.',meta:'Tasa fichaje automático ≥95%',ini:'Ene 2026',fin:'Dic 2026',ind:'Personal fichado / Total nómina x100',frec:'Mensual'},
+  {id:'AR-03',s:'ADM_RRHH',obj:'Reducir errores en liquidación de haberes.',meta:'≤5 incidencias por mes',ini:'Ene 2026',fin:'Dic 2026',ind:'% de Liquidaciones sin reclamos',frec:'Mensual'},
+  {id:'AR-04',s:'ADM_RRHH',obj:'Tiempo ciclo liquidación.',meta:'≤5 días hábiles',ini:'Oct 2026',fin:'Dic 2026',ind:'Días hábiles del cierre a pago',frec:'Mensual'},
+  {id:'CD-01a',s:'ADM_CTRL',obj:'Garantizar habilitación permanente del personal para ingreso a yacimiento.',meta:'% personal habilitado ≥98%',ini:'Ene 2026',fin:'Dic 2026',ind:'Personal habilitado / Nómina total x100',frec:'Mensual'},
+  {id:'CD-01b',s:'ADM_CTRL',obj:'Garantizar habilitación permanente de vehículos para ingreso a yacimiento.',meta:'% flota habilitada ≥98%',ini:'Dic 2025',fin:'Oct 2026',ind:'Flota habilitada / Flota total x100',frec:'Mensual'},
+  {id:'CD-01c',s:'ADM_CTRL',obj:'Garantizar 0 rechazos de acceso a yacimiento.',meta:'0 rechazos de acceso',ini:'Ene 2026',fin:'Dic 2026',ind:'—',frec:'Mensual'},
+  {id:'CD-02a',s:'ADM_CTRL',obj:'Digitalizar el 100% de los legajos de empleados.',meta:'100% legajos digitales completos',ini:'Feb 2026',fin:'Dic 2026',ind:'—',frec:'Mensual'},
+  {id:'CD-02b',s:'ADM_CTRL',obj:'Digitalizar el 100% de los legajos vehiculares.',meta:'100% legajos vehiculares digitales',ini:'Mar 2026',fin:'Dic 2026',ind:'—',frec:'Mensual'},
+];
+
+// ===== STATE =====
+let currentSector = null;
+let activeMonth = null;
+let activeTab = null;
+let viewMode = 'acumulado';
+let data = {};
+
+// ===== HELPERS =====
+function currentMonthVal() {
+  const now = new Date();
+  return `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
+}
+function monthData(month) { return data[month] || {}; }
+function monthLabel(val) { return (MONTHS.find(m=>m.val===val)||{lbl:val}).lbl; }
+function monthOpts(selected) {
+  return MONTHS.map(m=>`<option value="${m.val}" ${m.val===selected?'selected':''}>${m.lbl}</option>`).join('');
+}
+function getViewData() {
+  if (viewMode === 'mes') return monthData(activeMonth);
+  const result = {};
+  const sortedMonths = MONTHS.map(m=>m.val).filter(m=>data[m]);
+  OBJETIVOS.forEach(o => {
+    for (let i = sortedMonths.length - 1; i >= 0; i--) {
+      const md = data[sortedMonths[i]];
+      if (md && md[o.id] && md[o.id].estado !== 'Sin actualizar') {
+        result[o.id] = md[o.id]; break;
+      }
+    }
+  });
+  return result;
+}
+function updateEviBtn(id, val) {
+  const btn = document.getElementById('evibtn-'+id);
+  if (!btn) return;
+  const isUrl = val && (val.startsWith('http://') || val.startsWith('https://'));
+  if (isUrl) {
+    btn.outerHTML = `<a id="evibtn-${id}" href="${escHtml(val)}" target="_blank" style="flex-shrink:0;padding:5px 10px;background:#1e2d3e;color:#fff;border-radius:6px;font-size:11px;font-weight:600;text-decoration:none;white-space:nowrap">Ver →</a>`;
+  } else {
+    btn.outerHTML = `<span id="evibtn-${id}" style="flex-shrink:0;padding:5px 10px;background:#e2e8f0;color:#a0aec0;border-radius:6px;font-size:11px;font-weight:600;white-space:nowrap">Ver →</span>`;
+  }
+}
+function escHtml(s){ return (s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function showToast(msg) {
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  clearTimeout(window._toastT);
+  window._toastT=setTimeout(()=>t.classList.remove('show'),2200);
+}
+
+// ===== STORAGE (Supabase) =====
+const SB_URL = 'https://atnnhefwyfjhwcudtlbe.supabase.co';
+const SB_KEY = 'sb_publishable__nG3H2u-Ms8789o8ykcl9g_u9K20CaN';
+const SB_HEADERS = { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' };
+
+async function loadData() {
+  try {
+    const res = await fetch(`${SB_URL}/rest/v1/om2026_seguimiento?select=*`, { headers: SB_HEADERS });
+    const rows = await res.json();
+    data = {};
+    if (Array.isArray(rows)) {
+      rows.forEach(r => {
+        if (!data[r.month]) data[r.month] = {};
+        data[r.month][r.id] = { estado: r.estado, avance: r.avance, obs: r.obs, evidencia: r.evidencia, fecha: r.fecha };
+      });
+    }
+  } catch(e) { data = {}; }
+}
+async function saveItem(month, id, item) {
+  try {
+    if (!data[month]) data[month] = {};
+    data[month][id] = item;
+    await fetch(`${SB_URL}/rest/v1/om2026_seguimiento`, {
+      method: 'POST',
+      headers: { ...SB_HEADERS, 'Prefer': 'resolution=merge-duplicates,return=minimal' },
+      body: JSON.stringify({ id, month, sector: currentSector, estado: item.estado, avance: item.avance, obs: item.obs, evidencia: item.evidencia, fecha: item.fecha })
+    });
+  } catch(e) { showToast('Error al guardar.'); }
+}
+
+// ===== AUTH =====
+function doLogin() {
+  const sec = document.getElementById('sectorSel').value;
+  const pass = document.getElementById('passInp').value;
+  const err = document.getElementById('lerr');
+  if (!sec) { err.textContent='Seleccioná un sector.'; err.style.display='block'; return; }
+  if (PASSWORDS[sec] !== pass) { err.style.display='block'; return; }
+  err.style.display='none';
+  if (document.getElementById('rememberMe').checked) {
+    localStorage.setItem('om2026_remember', JSON.stringify({sec, pass}));
+  } else {
+    localStorage.removeItem('om2026_remember');
+  }
+  currentSector = sec;
+  loadData().then(renderApp);
+}
+function doLogout() {
+  currentSector = null;
+  document.getElementById('loginScreen').style.display='flex';
+  document.getElementById('appScreen').style.display='none';
+  document.getElementById('passInp').value='';
+  document.getElementById('sectorSel').value='';
+}
+// Auto-login if remembered
+window.addEventListener('DOMContentLoaded', () => {
+  try {
+    const saved = JSON.parse(localStorage.getItem('om2026_remember'));
+    if (saved && PASSWORDS[saved.sec] === saved.pass) {
+      document.getElementById('sectorSel').value = saved.sec;
+      document.getElementById('passInp').value = saved.pass;
+      document.getElementById('rememberMe').checked = true;
+      currentSector = saved.sec;
+      loadData().then(renderApp);
+    }
+  } catch(e) {}
+});
+
+// ===== RENDER APP =====
+function renderApp() {
+  document.getElementById('loginScreen').style.display='none';
+  document.getElementById('appScreen').style.display='block';
+  document.getElementById('userBadge').textContent = SECTOR_LABELS[currentSector]||currentSector;
+  activeMonth = currentMonthVal();
+  buildTabs();
+}
+function buildTabs() {
+  const bar = document.getElementById('tabBar');
+  if (currentSector === 'GERENCIA') {
+    bar.innerHTML = `
+      <button class="ps-tab active" onclick="switchTab('overview',this)">📊 Resumen General</button>
+      <button class="ps-tab" onclick="switchTab('detail',this)">📋 Detalle por Sector</button>`;
+    activeTab = 'overview';
+    renderGerenciaOverview();
+  } else {
+    bar.innerHTML = `
+      <button class="ps-tab active" onclick="switchTab('tablero',this)">📊 Mi Tablero</button>
+      <button class="ps-tab" onclick="switchTab('sector',this)">📋 Mis Objetivos</button>`;
+    activeTab = 'tablero';
+    renderSectorTablero();
+  }
+}
+function switchTab(tab, el) {
+  document.querySelectorAll('.ps-tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  activeTab = tab;
+  if (tab==='overview') loadData().then(renderGerenciaOverview);
+  else if (tab==='detail') loadData().then(renderGerenciaDetail);
+  else if (tab==='sector') renderSectorView();
+  else if (tab==='tablero') renderSectorTablero();
+}
+
+// ===== SECTOR TABLERO =====
+function sectorViewData() {
+  // Acumulado para el sector: último estado conocido por objetivo
+  const result = {};
+  const sortedMonths = MONTHS.map(m=>m.val).filter(m=>data[m]);
+  const objs = OBJETIVOS.filter(o=>o.s===currentSector);
+  objs.forEach(o => {
+    for (let i=sortedMonths.length-1;i>=0;i--) {
+      const md=data[sortedMonths[i]];
+      if(md&&md[o.id]&&md[o.id].estado!=='Sin actualizar'){result[o.id]=md[o.id];break;}
+    }
+  });
+  return result;
+}
+function miniRing(pct, color, size=52) {
+  const r=18,cx=size/2,cy=size/2,circ=2*Math.PI*r,dash=(pct/100)*circ;
+  return `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">
+    <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="#f0f2f6" stroke-width="4.5"/>
+    <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${color}" stroke-width="4.5"
+      stroke-dasharray="${dash} ${circ}" stroke-linecap="round" transform="rotate(-90 ${cx} ${cy})"/>
+    <text x="${cx}" y="${cy}" text-anchor="middle" dominant-baseline="central"
+      fill="#1a202c" font-size="9.5" font-weight="700" font-family="Segoe UI,sans-serif">${pct}%</text>
+  </svg>`;
+}
+function renderSectorTablero() {
+  const objs = OBJETIVOS.filter(o=>o.s===currentSector);
+  const md = sectorViewData();
+  let sc=0,si=0,sr=0,sv=0,sa=0,totalAvg=0;
+  objs.forEach(o=>{
+    const est=(md[o.id]||{}).estado||'Sin actualizar';
+    const av=Number((md[o.id]||{}).avance)||0;
+    totalAvg+=av;
+    if(est==='Cumplido')sc++;
+    else if(est==='En curso')si++;
+    else if(est==='En riesgo')sr++;
+    else if(est==='Vencido')sv++;
+    else sa++;
+  });
+  const avgP=objs.length?Math.round(totalAvg/objs.length):0;
+  const ringColor=sv>0?'#e53e3e':sr>0?'#d69e2e':sc===objs.length?'#38a169':si>0?'#3182ce':'#a0aec0';
+
+  // Objective cards
+  let objCards = objs.map(o=>{
+    const d=md[o.id]||{estado:'Sin actualizar',avance:0};
+    const av=Number(d.avance)||0;
+    const est=d.estado||'Sin actualizar';
+    const bc=BADGE_CLASS[est]||'b-pend';
+    const pc=PROG_COLOR[est]||'#a0aec0';
+    const accentColor=est==='Cumplido'?'#38a169':est==='En curso'?'#3182ce':est==='En riesgo'?'#d69e2e':est==='Vencido'?'#e53e3e':'#e2e8f0';
+    return `<div style="background:#fff;border-radius:12px;padding:14px 16px;border:1px solid #e2e8f0;box-shadow:0 1px 3px rgba(0,0,0,.06);border-left:4px solid ${accentColor};display:flex;align-items:center;gap:14px">
+      <div style="flex-shrink:0">${miniRing(av,pc)}</div>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:10px;font-weight:700;color:#e8a020;text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px">${o.id}</div>
+        <div style="font-size:12.5px;font-weight:600;color:#1e2d3e;margin-bottom:6px;line-height:1.35;white-space:normal">${o.obj}</div>
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+          <span class="badge ${bc}" style="font-size:10.5px">${est}</span>
+          <span style="font-size:11px;color:#718096">Meta: <em>${o.meta}</em></span>
+        </div>
+        ${d.obs?`<div style="font-size:11px;color:#718096;margin-top:4px;font-style:italic">💬 ${escHtml(d.obs)}</div>`:''}
+        ${d.evidencia?`<div style="margin-top:6px"><a href="${escHtml(d.evidencia)}" target="_blank" style="font-size:11px;font-weight:600;color:#1e2d3e;text-decoration:none;background:#f0f2f6;padding:3px 9px;border-radius:5px">🔗 Ver indicador →</a></div>`:''}
+      </div>
+    </div>`;
+  }).join('');
+
+  document.getElementById('appContent').innerHTML = `<div class="ps-main">
+    <!-- KPI bar -->
+    <div class="sumbar" style="margin-bottom:18px">
+      <div class="sumbar-item">
+        <div class="sumbar-lbl">Total</div>
+        <div class="sumbar-val">${objs.length}</div>
+        <div class="sumbar-stripe" style="background:#e8a020"></div>
+      </div>
+      <div class="sumbar-item s-ok">
+        <div class="sumbar-lbl">Cumplidos</div>
+        <div class="sumbar-val">${sc}</div>
+        <div class="sumbar-stripe" style="background:#38a169"></div>
+      </div>
+      <div class="sumbar-item s-blue">
+        <div class="sumbar-lbl">En Curso</div>
+        <div class="sumbar-val">${si}</div>
+        <div class="sumbar-stripe" style="background:#3182ce"></div>
+      </div>
+      <div class="sumbar-item s-warn">
+        <div class="sumbar-lbl">En Riesgo</div>
+        <div class="sumbar-val">${sr}</div>
+        <div class="sumbar-stripe" style="background:#d69e2e"></div>
+      </div>
+      <div class="sumbar-item s-red">
+        <div class="sumbar-lbl">Vencidos</div>
+        <div class="sumbar-val">${sv}</div>
+        <div class="sumbar-stripe" style="background:#e53e3e"></div>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:220px 1fr;gap:16px;align-items:start">
+      <!-- Avance global -->
+      <div class="cc" style="padding:20px;text-align:center">
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#718096;margin-bottom:14px">Avance Global</div>
+        <div style="display:flex;justify-content:center;margin-bottom:10px">
+          ${svgRing(avgP,ringColor,80)}
+        </div>
+        <div style="font-size:12px;color:#718096">Acumulado sobre<br><strong style="color:#1e2d3e">${objs.length} objetivos</strong></div>
+        ${sa>0?`<div style="margin-top:10px;font-size:11px;color:#a0aec0">⬜ ${sa} sin actualizar</div>`:''}
+      </div>
+
+      <!-- Objetivo cards -->
+      <div class="cc" style="overflow:hidden">
+        <div class="cc-hdr"><div class="cc-title">Estado por Objetivo — Acumulado</div></div>
+        <div style="padding:14px;display:flex;flex-direction:column;gap:10px">${objCards}</div>
+      </div>
+    </div>
+  </div>`;
+}
+
+// ===== SECTOR SEGUIMIENTO =====
+function renderSectorView() {
+  const objs = OBJETIVOS.filter(o=>o.s===currentSector);
+  const md = monthData(activeMonth);
+  let rows = objs.map(o=>{
+    const d=md[o.id]||{estado:'Sin actualizar',avance:0,obs:'',evidencia:''};
+    return `<tr>
+      <td><strong style="color:#1e2d3e">${o.id}</strong></td>
+      <td><div class="obj-txt" title="${o.obj}">${o.obj}</div></td>
+      <td><div class="meta-txt" title="${o.meta}">${o.meta}</div></td>
+      <td style="white-space:nowrap;color:#718096;font-size:11.5px">${o.ini}</td>
+      <td style="white-space:nowrap;color:#718096;font-size:11.5px">${o.fin}</td>
+      <td><div class="meta-txt" title="${o.ind}">${o.ind}</div></td>
+      <td style="font-size:11px;color:#718096">${o.frec}</td>
+      <td><select class="t-sel" id="est-${o.id}">
+        ${ESTADO_OPTS.map(e=>`<option value="${e}" ${e===d.estado?'selected':''}>${e}</option>`).join('')}
+      </select></td>
+      <td><input type="number" class="t-inp" id="av-${o.id}" min="0" max="100" value="${d.avance||0}" style="width:62px"></td>
+      <td><input type="text" class="t-inp wide" id="obs-${o.id}" value="${escHtml(d.obs||'')}" placeholder="Observaciones…"></td>
+      <td>
+        <div style="display:flex;align-items:center;gap:6px">
+          <input type="text" class="t-inp url" id="evi-${o.id}" value="${escHtml(d.evidencia||'')}" placeholder="Pegar URL…" oninput="updateEviBtn('${o.id}',this.value)">
+          ${d.evidencia ? `<a id="evibtn-${o.id}" href="${escHtml(d.evidencia)}" target="_blank" style="flex-shrink:0;padding:5px 10px;background:#1e2d3e;color:#fff;border-radius:6px;font-size:11px;font-weight:600;text-decoration:none;white-space:nowrap">Ver →</a>` : `<span id="evibtn-${o.id}" style="flex-shrink:0;padding:5px 10px;background:#e2e8f0;color:#a0aec0;border-radius:6px;font-size:11px;font-weight:600;white-space:nowrap">Ver →</span>`}
+        </div>
+      </td>
+      <td><button class="sav-btn" id="btn-${o.id}" onclick="saveRow('${o.id}')">Guardar</button></td>
+    </tr>`;
+  }).join('');
+  document.getElementById('appContent').innerHTML = `<div class="ps-main">
+    <div class="cc"><div class="cc-hdr">
+      <div><div class="cc-title">${SECTOR_LABELS[currentSector]} — Seguimiento Mensual</div>
+      <div class="cc-sub">${objs.length} objetivos · Completá y guardá cada fila</div></div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <label style="font-size:11px;font-weight:600;color:#718096;text-transform:uppercase;letter-spacing:.05em">Período</label>
+        <select onchange="changeMonth(this.value)" style="padding:7px 12px;border:1.5px solid #e2e8f0;border-radius:8px;font-size:13px;font-family:inherit;color:#1a202c;background:#fff;font-weight:600">${monthOpts(activeMonth)}</select>
+      </div>
+    </div>
+    <div class="tbl-wrap"><table class="ps-table">
+      <thead><tr><th>ID</th><th>Objetivo</th><th>Meta</th><th>Inicio</th><th>Fin</th><th>Indicador</th><th>Frec.</th><th>Estado</th><th>Avance %</th><th>Observaciones</th><th>Evidencia / Link</th><th></th></tr></thead>
+      <tbody>${rows}</tbody>
+    </table></div></div>
+  </div>`;
+}
+function changeMonth(val) { activeMonth=val; renderSectorView(); }
+async function saveRow(id) {
+  const est=document.getElementById('est-'+id).value;
+  const av=parseInt(document.getElementById('av-'+id).value)||0;
+  const obs=document.getElementById('obs-'+id).value;
+  const evi=document.getElementById('evi-'+id).value;
+  await saveItem(activeMonth, id, {estado:est,avance:av,obs,evidencia:evi,fecha:new Date().toLocaleDateString('es-AR')});
+  const btn=document.getElementById('btn-'+id);
+  btn.textContent='✓ Guardado'; btn.classList.add('saved');
+  setTimeout(()=>{btn.textContent='Guardar';btn.classList.remove('saved');},2000);
+  showToast(`Guardado — ${monthLabel(activeMonth)}`);
+}
+
+// ===== GERENCIA HELPERS =====
+function svgRing(pct, color, size=56) {
+  const r=size*0.357,cx=size/2,cy=size/2,circ=2*Math.PI*r,dash=(pct/100)*circ;
+  const sw=size*0.089;
+  return `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">
+    <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="#f0f2f6" stroke-width="${sw}"/>
+    <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${color}" stroke-width="${sw}"
+      stroke-dasharray="${dash} ${circ}" stroke-linecap="round" transform="rotate(-90 ${cx} ${cy})"/>
+    <text x="${cx}" y="${cy}" text-anchor="middle" dominant-baseline="central"
+      fill="#1a202c" font-size="${size*0.178}" font-weight="700" font-family="Segoe UI,sans-serif">${pct}%</text>
+  </svg>`;
+}
+function distBar(sc,si,sr,sv,sa) {
+  const segs=[{n:sc,c:'#38a169'},{n:si,c:'#3182ce'},{n:sr,c:'#d69e2e'},{n:sv,c:'#e53e3e'},{n:sa,c:'#e2e8f0'}];
+  return `<div class="sec2-distbar">${segs.filter(s=>s.n>0).map(s=>`<div style="flex:${s.n};background:${s.c}"></div>`).join('')}</div>`;
+}
+function toggleWidget() {
+  return `<div class="view-toggle">
+    <button class="${viewMode==='acumulado'?'active':''}" onclick="setViewMode('acumulado')">Acumulado</button>
+    <button class="${viewMode==='mes'?'active':''}" onclick="setViewMode('mes')">Por mes</button>
+  </div>`;
+}
+function monthSelWidget(tab) {
+  if(viewMode!=='mes') return '';
+  return `<select onchange="changeMonthGerencia(this.value,'${tab}')" style="padding:7px 12px;border:1.5px solid #e2e8f0;border-radius:8px;font-size:13px;font-family:inherit;color:#1a202c;background:#fff;font-weight:600">${monthOpts(activeMonth)}</select>`;
+}
+
+// ===== GERENCIA OVERVIEW =====
+function renderGerenciaOverview() {
+  const md=getViewData();
+  const total=OBJETIVOS.length;
+  let cumplidos=0,enCurso=0,enRiesgo=0,vencidos=0,sinAct=0;
+  OBJETIVOS.forEach(o=>{
+    const est=(md[o.id]||{}).estado||'Sin actualizar';
+    if(est==='Cumplido')cumplidos++;
+    else if(est==='En curso')enCurso++;
+    else if(est==='En riesgo')enRiesgo++;
+    else if(est==='Vencido')vencidos++;
+    else sinAct++;
+  });
+  const secKeys=Object.keys(SECTOR_LABELS).filter(k=>k!=='GERENCIA');
+  let secCards='';
+  secKeys.forEach(sk=>{
+    const objs=OBJETIVOS.filter(o=>o.s===sk);
+    if(!objs.length)return;
+    let sc=0,si=0,sr=0,sv=0,sa=0;
+    objs.forEach(o=>{
+      const est=(md[o.id]||{}).estado||'Sin actualizar';
+      if(est==='Cumplido')sc++;else if(est==='En curso')si++;else if(est==='En riesgo')sr++;else if(est==='Vencido')sv++;else sa++;
+    });
+    const avgs=objs.map(o=>Number((md[o.id]||{}).avance)||0);
+    const avgP=Math.round(avgs.reduce((a,b)=>a+b,0)/avgs.length);
+    const accentColor=sv>0?'#e53e3e':sr>0?'#d69e2e':sa===objs.length?'#a0aec0':'#38a169';
+    const ringColor=sv>0?'#e53e3e':sr>0?'#d69e2e':sc===objs.length?'#38a169':si>0?'#3182ce':'#a0aec0';
+    let pills='';
+    if(sc)pills+=`<span class="sec2-pill p-ok">✅ ${sc} Cumplido${sc>1?'s':''}</span>`;
+    if(si)pills+=`<span class="sec2-pill p-blue">🔵 ${si} En curso</span>`;
+    if(sr)pills+=`<span class="sec2-pill p-warn">⚠️ ${sr} En riesgo</span>`;
+    if(sv)pills+=`<span class="sec2-pill p-red">🔴 ${sv} Vencido${sv>1?'s':''}</span>`;
+    if(sa)pills+=`<span class="sec2-pill p-gray">⬜ ${sa} Sin actualizar</span>`;
+    secCards+=`<div class="sec2-card">
+      <div class="sec2-accent" style="background:${accentColor}"></div>
+      <div class="sec2-top">
+        <div class="sec2-ring">${svgRing(avgP,ringColor)}</div>
+        <div class="sec2-info"><div class="sec2-name">${SECTOR_LABELS[sk]}</div><div class="sec2-pills">${pills}</div></div>
+      </div>${distBar(sc,si,sr,sv,sa)}
+    </div>`;
+  });
+  const subtitle=viewMode==='acumulado'?'Última actualización registrada por objetivo':`Datos del período <strong>${monthLabel(activeMonth)}</strong>`;
+  document.getElementById('appContent').innerHTML=`<div class="ps-main">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px">
+      <div style="font-size:13px;color:#718096">${subtitle}</div>
+      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">${toggleWidget()}${monthSelWidget('overview')}</div>
+    </div>
+    <div class="sumbar">
+      <div class="sumbar-item"><div class="sumbar-lbl">Total Objetivos</div><div class="sumbar-val">${total}</div><div class="sumbar-stripe" style="background:#e8a020"></div></div>
+      <div class="sumbar-item s-ok"><div class="sumbar-lbl">Cumplidos</div><div class="sumbar-val">${cumplidos}</div><div class="sumbar-stripe" style="background:#38a169"></div></div>
+      <div class="sumbar-item s-blue"><div class="sumbar-lbl">En Curso</div><div class="sumbar-val">${enCurso}</div><div class="sumbar-stripe" style="background:#3182ce"></div></div>
+      <div class="sumbar-item s-warn"><div class="sumbar-lbl">En Riesgo</div><div class="sumbar-val">${enRiesgo}</div><div class="sumbar-stripe" style="background:#d69e2e"></div></div>
+      <div class="sumbar-item s-red"><div class="sumbar-lbl">Vencidos</div><div class="sumbar-val">${vencidos}</div><div class="sumbar-stripe" style="background:#e53e3e"></div></div>
+    </div>
+    <div class="cc"><div class="cc-hdr"><div class="cc-title">Estado por Sector</div></div>
+      <div style="padding:16px"><div class="sec2-grid">${secCards}</div></div>
+    </div>
+  </div>`;
+}
+
+// ===== GERENCIA DETAIL =====
+function renderGerenciaDetail() {
+  const md=getViewData();
+  const secKeys=Object.keys(SECTOR_LABELS).filter(k=>k!=='GERENCIA');
+  const secOpts=secKeys.map(k=>`<option value="${k}">${SECTOR_LABELS[k]}</option>`).join('');
+  const estOpts=['','Sin actualizar','En curso','En riesgo','Vencido','Cumplido'].map(e=>`<option value="${e}">${e||'Todos los estados'}</option>`).join('');
+  let rows=OBJETIVOS.map(o=>{
+    const d=md[o.id]||{estado:'Sin actualizar',avance:0,obs:''};
+    const bc=BADGE_CLASS[d.estado]||'b-pend';
+    const pc=PROG_COLOR[d.estado]||'#a0aec0';
+    const avp=Number(d.avance)||0;
+    return `<tr data-sector="${o.s}" data-estado="${d.estado}">
+      <td style="font-size:11px;font-weight:700;color:#1e2d3e">${o.id}</td>
+      <td style="font-size:11.5px;font-weight:600;color:#1e2d3e">${SECTOR_LABELS[o.s]||o.s}</td>
+      <td><div class="obj-txt" title="${o.obj}" style="max-width:210px">${o.obj}</div></td>
+      <td><div class="meta-txt" title="${o.meta}">${o.meta}</div></td>
+      <td style="white-space:nowrap;font-size:11px;color:#718096">${o.fin}</td>
+      <td><span class="badge ${bc}">${d.estado}</span></td>
+      <td><div style="display:flex;align-items:center;gap:8px">
+        <div class="prog-wrap" style="min-width:60px"><div class="prog-bar" style="width:${avp}%;background:${pc}"></div></div>
+        <span style="font-size:12px;font-weight:600">${avp}%</span>
+      </div></td>
+      <td style="font-size:12px;color:#4a5568;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${d.obs||'—'}</td>
+      <td style="font-size:11px;color:#718096">${d.fecha||'—'}</td>
+    </tr>`;
+  }).join('');
+  const subtitle=viewMode==='acumulado'?'Acumulado':monthLabel(activeMonth);
+  document.getElementById('appContent').innerHTML=`<div class="ps-main">
+    <div class="cc"><div class="cc-hdr">
+      <div><div class="cc-title">Detalle Completo — ${subtitle}</div></div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+        ${toggleWidget()}${monthSelWidget('detail')}
+        <select id="fSec" onchange="applyFilter()"><option value="">Todos los sectores</option>${secOpts}</select>
+        <select id="fEst" onchange="applyFilter()"><option value="">Todos los estados</option>${estOpts}</select>
+      </div>
+    </div>
+    <div class="tbl-wrap"><table class="ps-table">
+      <thead><tr><th>ID</th><th>Sector</th><th>Objetivo</th><th>Meta</th><th>Fin</th><th>Estado</th><th>Avance</th><th>Observaciones</th><th>Guardado</th></tr></thead>
+      <tbody id="detailTbody">${rows}</tbody>
+    </table></div></div>
+  </div>`;
+}
+
+function setViewMode(mode) {
+  viewMode=mode;
+  if(activeTab==='overview') loadData().then(renderGerenciaOverview);
+  else loadData().then(renderGerenciaDetail);
+}
+function changeMonthGerencia(val,tab) {
+  activeMonth=val;
+  if(tab==='overview') renderGerenciaOverview();
+  else renderGerenciaDetail();
+}
+function applyFilter() {
+  const sec=document.getElementById('fSec').value;
+  const est=document.getElementById('fEst').value;
+  document.querySelectorAll('#detailTbody tr').forEach(tr=>{
+    tr.style.display=(!sec||tr.dataset.sector===sec)&&(!est||tr.dataset.estado===est)?'':'none';
+  });
+}
+</script>
+</body>
+</html>
