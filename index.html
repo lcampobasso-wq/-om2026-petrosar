@@ -292,6 +292,7 @@ let activeMonth = null;
 let activeTab = null;
 let viewMode = 'acumulado';
 let data = {};
+let customObjetivos = [];
 
 // ===== HELPERS =====
 function currentMonthVal() {
@@ -307,11 +308,12 @@ function getViewData() {
   if (viewMode === 'mes') return monthData(activeMonth);
   const result = {};
   const sortedMonths = MONTHS.map(m=>m.val).filter(m=>data[m]);
-  OBJETIVOS.forEach(o => {
+  [...OBJETIVOS, ...customObjetivos].forEach(o => {
+    const oid = o.id;
     for (let i = sortedMonths.length - 1; i >= 0; i--) {
       const md = data[sortedMonths[i]];
-      if (md && md[o.id] && md[o.id].estado !== 'Sin actualizar') {
-        result[o.id] = md[o.id]; break;
+      if (md && md[oid] && md[oid].estado !== 'Sin actualizar') {
+        result[oid] = md[oid]; break;
       }
     }
   });
@@ -342,8 +344,12 @@ const SB_HEADERS = { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY, 'Con
 
 async function loadData() {
   try {
-    const res = await fetch(`${SB_URL}/rest/v1/om2026_seguimiento?select=*`, { headers: SB_HEADERS });
-    const rows = await res.json();
+    const [r1, r2] = await Promise.all([
+      fetch(`${SB_URL}/rest/v1/om2026_seguimiento?select=*`, { headers: SB_HEADERS }),
+      fetch(`${SB_URL}/rest/v1/om2026_objetivos_custom?select=*&order=created_at.asc`, { headers: SB_HEADERS })
+    ]);
+    const rows = await r1.json();
+    const custom = await r2.json();
     data = {};
     if (Array.isArray(rows)) {
       rows.forEach(r => {
@@ -351,7 +357,8 @@ async function loadData() {
         data[r.month][r.id] = { estado: r.estado, avance: r.avance, obs: r.obs, evidencia: r.evidencia, fecha: r.fecha };
       });
     }
-  } catch(e) { data = {}; }
+    customObjetivos = Array.isArray(custom) ? custom : [];
+  } catch(e) { data = {}; customObjetivos = []; }
 }
 async function saveItem(month, id, item) {
   try {
@@ -364,6 +371,29 @@ async function saveItem(month, id, item) {
     });
   } catch(e) { showToast('Error al guardar.'); }
 }
+async function saveCustomObjetivo(obj) {
+  try {
+    customObjetivos = customObjetivos.filter(o=>o.id!==obj.id);
+    customObjetivos.push(obj);
+    await fetch(`${SB_URL}/rest/v1/om2026_objetivos_custom`, {
+      method: 'POST',
+      headers: { ...SB_HEADERS, 'Prefer': 'resolution=merge-duplicates,return=minimal' },
+      body: JSON.stringify(obj)
+    });
+  } catch(e) { showToast('Error al guardar objetivo.'); }
+}
+async function deleteCustomObjetivo(id) {
+  if (!confirm('¿Eliminar este objetivo?')) return;
+  customObjetivos = customObjetivos.filter(o=>o.id!==id);
+  await fetch(`${SB_URL}/rest/v1/om2026_objetivos_custom?id=eq.${encodeURIComponent(id)}`, { method:'DELETE', headers: SB_HEADERS });
+  await fetch(`${SB_URL}/rest/v1/om2026_seguimiento?id=eq.${encodeURIComponent(id)}`, { method:'DELETE', headers: SB_HEADERS });
+  renderSectorView();
+}
+function allObjetivos(sector) {
+  return [...OBJETIVOS.filter(o=>o.s===sector), ...customObjetivos.filter(o=>o.sector===sector)];
+}
+
+
 
 // ===== AUTH =====
 function doLogin() {
@@ -441,7 +471,7 @@ function sectorViewData() {
   // Acumulado para el sector: último estado conocido por objetivo
   const result = {};
   const sortedMonths = MONTHS.map(m=>m.val).filter(m=>data[m]);
-  const objs = OBJETIVOS.filter(o=>o.s===currentSector);
+  const objs = allObjetivos(currentSector);
   objs.forEach(o => {
     for (let i=sortedMonths.length-1;i>=0;i--) {
       const md=data[sortedMonths[i]];
@@ -461,7 +491,7 @@ function miniRing(pct, color, size=52) {
   </svg>`;
 }
 function renderSectorTablero() {
-  const objs = OBJETIVOS.filter(o=>o.s===currentSector);
+  const objs = allObjetivos(currentSector);
   const md = sectorViewData();
   let sc=0,si=0,sr=0,sv=0,sa=0,totalAvg=0;
   objs.forEach(o=>{
@@ -552,18 +582,19 @@ function renderSectorTablero() {
 
 // ===== SECTOR SEGUIMIENTO =====
 function renderSectorView() {
-  const objs = OBJETIVOS.filter(o=>o.s===currentSector);
+  const objs = allObjetivos(currentSector);
   const md = monthData(activeMonth);
   let rows = objs.map(o=>{
     const d=md[o.id]||{estado:'Sin actualizar',avance:0,obs:'',evidencia:''};
+    const isCustom = customObjetivos.some(c=>c.id===o.id);
     return `<tr>
-      <td><strong style="color:#1e2d3e">${o.id}</strong></td>
+      <td><strong style="color:#1e2d3e">${o.id}</strong>${isCustom?'<span style="font-size:9px;background:#ebf8ff;color:#2c5282;border-radius:4px;padding:1px 5px;margin-left:4px">nuevo</span>':''}</td>
       <td><div class="obj-txt" title="${o.obj}">${o.obj}</div></td>
       <td><div class="meta-txt" title="${o.meta}">${o.meta}</div></td>
-      <td style="white-space:nowrap;color:#718096;font-size:11.5px">${o.ini}</td>
-      <td style="white-space:nowrap;color:#718096;font-size:11.5px">${o.fin}</td>
-      <td><div class="meta-txt" title="${o.ind}">${o.ind}</div></td>
-      <td style="font-size:11px;color:#718096">${o.frec}</td>
+      <td style="white-space:nowrap;color:#718096;font-size:11.5px">${o.ini||'—'}</td>
+      <td style="white-space:nowrap;color:#718096;font-size:11.5px">${o.fin||'Dic 2026'}</td>
+      <td><div class="meta-txt" title="${o.ind||''}">${o.ind||'—'}</div></td>
+      <td style="font-size:11px;color:#718096">${o.frec||'Mensual'}</td>
       <td><select class="t-sel" id="est-${o.id}">
         ${ESTADO_OPTS.map(e=>`<option value="${e}" ${e===d.estado?'selected':''}>${e}</option>`).join('')}
       </select></td>
@@ -575,23 +606,77 @@ function renderSectorView() {
           ${d.evidencia ? `<a id="evibtn-${o.id}" href="${escHtml(d.evidencia)}" target="_blank" style="flex-shrink:0;padding:5px 10px;background:#1e2d3e;color:#fff;border-radius:6px;font-size:11px;font-weight:600;text-decoration:none;white-space:nowrap">Ver →</a>` : `<span id="evibtn-${o.id}" style="flex-shrink:0;padding:5px 10px;background:#e2e8f0;color:#a0aec0;border-radius:6px;font-size:11px;font-weight:600;white-space:nowrap">Ver →</span>`}
         </div>
       </td>
-      <td><button class="sav-btn" id="btn-${o.id}" onclick="saveRow('${o.id}')">Guardar</button></td>
+      <td style="white-space:nowrap">
+        <button class="sav-btn" id="btn-${o.id}" onclick="saveRow('${o.id}')">Guardar</button>
+        ${isCustom?`<button onclick="deleteCustomObjetivo('${o.id}')" style="margin-left:4px;padding:5px 8px;background:none;border:1.5px solid #fed7d7;color:#e53e3e;border-radius:6px;font-size:11px;cursor:pointer" title="Eliminar">✕</button>`:''}
+      </td>
     </tr>`;
   }).join('');
+
   document.getElementById('appContent').innerHTML = `<div class="ps-main">
     <div class="cc"><div class="cc-hdr">
       <div><div class="cc-title">${SECTOR_LABELS[currentSector]} — Seguimiento Mensual</div>
       <div class="cc-sub">${objs.length} objetivos · Completá y guardá cada fila</div></div>
-      <div style="display:flex;align-items:center;gap:8px">
+      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
         <label style="font-size:11px;font-weight:600;color:#718096;text-transform:uppercase;letter-spacing:.05em">Período</label>
         <select onchange="changeMonth(this.value)" style="padding:7px 12px;border:1.5px solid #e2e8f0;border-radius:8px;font-size:13px;font-family:inherit;color:#1a202c;background:#fff;font-weight:600">${monthOpts(activeMonth)}</select>
+        <button onclick="toggleNuevoObjetivo()" style="padding:7px 14px;background:linear-gradient(135deg,#e8a020,#f05a28);color:#fff;border:none;border-radius:8px;font-size:12.5px;font-weight:600;cursor:pointer;font-family:inherit">+ Nuevo objetivo</button>
       </div>
     </div>
+
+    <!-- FORM NUEVO OBJETIVO -->
+    <div id="nuevoObjForm" style="display:none;padding:16px 20px;border-bottom:1px solid #e2e8f0;background:#fafbfd">
+      <div style="font-size:13px;font-weight:700;color:#1e2d3e;margin-bottom:12px">Agregar nuevo objetivo</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+        <div>
+          <label style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:#718096;display:block;margin-bottom:4px">Descripción del objetivo *</label>
+          <input id="nObj" type="text" class="t-inp" style="width:100%" placeholder="Describí el objetivo…">
+        </div>
+        <div>
+          <label style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:#718096;display:block;margin-bottom:4px">Meta *</label>
+          <input id="nMeta" type="text" class="t-inp" style="width:100%" placeholder="Valor o condición de cumplimiento…">
+        </div>
+        <div>
+          <label style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:#718096;display:block;margin-bottom:4px">Indicador</label>
+          <input id="nInd" type="text" class="t-inp" style="width:100%" placeholder="Indicador de medición…">
+        </div>
+        <div>
+          <label style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:#718096;display:block;margin-bottom:4px">Frecuencia</label>
+          <select id="nFrec" class="t-sel" style="width:100%">
+            <option>Mensual</option><option>Bimestral</option><option>Trimestral</option><option>Semestral</option><option>Anual</option>
+          </select>
+        </div>
+      </div>
+      <div style="display:flex;gap:8px">
+        <button onclick="guardarNuevoObjetivo()" style="padding:8px 18px;background:#e8a020;color:#fff;border:none;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit">Guardar objetivo</button>
+        <button onclick="toggleNuevoObjetivo()" style="padding:8px 14px;background:none;border:1.5px solid #e2e8f0;color:#718096;border-radius:7px;font-size:13px;cursor:pointer;font-family:inherit">Cancelar</button>
+      </div>
+    </div>
+
     <div class="tbl-wrap"><table class="ps-table">
       <thead><tr><th>ID</th><th>Objetivo</th><th>Meta</th><th>Inicio</th><th>Fin</th><th>Indicador</th><th>Frec.</th><th>Estado</th><th>Avance %</th><th>Observaciones</th><th>Evidencia / Link</th><th></th></tr></thead>
       <tbody>${rows}</tbody>
     </table></div></div>
   </div>`;
+}
+function toggleNuevoObjetivo() {
+  const f = document.getElementById('nuevoObjForm');
+  f.style.display = f.style.display==='none' ? 'block' : 'none';
+}
+async function guardarNuevoObjetivo() {
+  const obj = document.getElementById('nObj').value.trim();
+  const meta = document.getElementById('nMeta').value.trim();
+  const ind = document.getElementById('nInd').value.trim();
+  const frec = document.getElementById('nFrec').value;
+  if (!obj || !meta) { showToast('Completá al menos objetivo y meta.'); return; }
+  const now = new Date();
+  const prefix = currentSector.substring(0,3).toUpperCase();
+  const id = `${prefix}-C${now.getTime().toString().slice(-4)}`;
+  const iniLabel = now.toLocaleString('es-AR',{month:'short',year:'numeric'}).replace('.',''). replace(/^\w/,c=>c.toUpperCase());
+  const newObj = { id, sector: currentSector, obj, meta, ini: iniLabel, fin: 'Dic 2026', ind, frec };
+  await saveCustomObjetivo(newObj);
+  showToast('Objetivo agregado correctamente');
+  renderSectorView();
 }
 function changeMonth(val) { activeMonth=val; renderSectorView(); }
 async function saveRow(id) {
@@ -636,9 +721,9 @@ function monthSelWidget(tab) {
 // ===== GERENCIA OVERVIEW =====
 function renderGerenciaOverview() {
   const md=getViewData();
-  const total=OBJETIVOS.length;
+  const allObj=[...OBJETIVOS,...customObjetivos]; const total=allObj.length;
   let cumplidos=0,enCurso=0,enRiesgo=0,vencidos=0,sinAct=0;
-  OBJETIVOS.forEach(o=>{
+  allObj.forEach(o=>{
     const est=(md[o.id]||{}).estado||'Sin actualizar';
     if(est==='Cumplido')cumplidos++;
     else if(est==='En curso')enCurso++;
@@ -649,7 +734,7 @@ function renderGerenciaOverview() {
   const secKeys=Object.keys(SECTOR_LABELS).filter(k=>k!=='GERENCIA');
   let secCards='';
   secKeys.forEach(sk=>{
-    const objs=OBJETIVOS.filter(o=>o.s===sk);
+    const objs=allObjetivos(sk);
     if(!objs.length)return;
     let sc=0,si=0,sr=0,sv=0,sa=0;
     objs.forEach(o=>{
@@ -699,7 +784,7 @@ function renderGerenciaDetail() {
   const secKeys=Object.keys(SECTOR_LABELS).filter(k=>k!=='GERENCIA');
   const secOpts=secKeys.map(k=>`<option value="${k}">${SECTOR_LABELS[k]}</option>`).join('');
   const estOpts=['','Sin actualizar','En curso','En riesgo','Vencido','Cumplido'].map(e=>`<option value="${e}">${e||'Todos los estados'}</option>`).join('');
-  let rows=OBJETIVOS.map(o=>{
+  const allObj2=[...OBJETIVOS,...customObjetivos]; let rows=allObj2.map(o=>{
     const d=md[o.id]||{estado:'Sin actualizar',avance:0,obs:''};
     const bc=BADGE_CLASS[d.estado]||'b-pend';
     const pc=PROG_COLOR[d.estado]||'#a0aec0';
