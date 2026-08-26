@@ -1121,13 +1121,16 @@ function generarRM02HTML() {
   const html = `<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8">
 <title>RM-02 Programa de Objetivos y Metas 2026 — PETROSAR SA</title>
 <style>
-@page{size:A4;margin:15mm 12mm}
+@page{size:A4 portrait;margin:12mm 10mm}
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Segoe UI',system-ui,sans-serif;background:#fff;color:#1a202c;width:210mm;margin:0 auto}
-@media screen{body{background:#e8eaed;width:auto}.page{background:#fff;width:210mm;margin:0 auto;box-shadow:0 4px 20px rgba(0,0,0,.15)}}
-.page{padding:0}
+html,body{background:#d0d4d8;color:#1a202c;font-family:'Segoe UI',system-ui,sans-serif;min-height:100vh}
+.page{background:#fff;width:794px;max-width:794px;margin:24px auto;box-shadow:0 4px 24px rgba(0,0,0,.18);overflow:hidden}
+@media print{
+  html,body{background:#fff;min-height:auto}
+  .page{width:100%;max-width:100%;margin:0;box-shadow:none}
+}
 .header{background:linear-gradient(135deg,#1e2d3e,#192638);padding:18px 24px 20px;color:#fff}
-.header-top{display:flex;align-items:center;gap:14px;margin-bottom:14px}
+.header-top{display:flex;align-items:center;gap:14px;margin-bottom:0}
 .header-logo{width:44px;height:44px;border-radius:10px;object-fit:contain;flex-shrink:0}
 .header-brand{display:flex;flex-direction:column}
 .header-company{font-size:13px;font-weight:700;color:#fff}
