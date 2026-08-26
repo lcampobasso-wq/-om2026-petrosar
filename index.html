@@ -147,6 +147,9 @@ body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:#f0f2f
 .view-toggle button{padding:6px 14px;border:none;background:none;border-radius:6px;font-size:12px;font-weight:600;font-family:inherit;color:#718096;cursor:pointer;transition:all .2s}
 .view-toggle button.active{background:#fff;color:#1e2d3e;box-shadow:0 1px 3px rgba(0,0,0,.1)}{.ps-main{padding:14px}.ps-header{padding:12px 14px}.ps-tabs{padding:0 12px}.sumbar{grid-template-columns:repeat(3,1fr)}}
 </style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/docx@8.5.0/build/index.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/file-saver@2.0.5/dist/FileSaver.min.js"></script>
 </head>
 <body>
 
@@ -445,7 +448,9 @@ function buildTabs() {
   if (currentSector === 'GERENCIA') {
     bar.innerHTML = `
       <button class="ps-tab active" onclick="switchTab('overview',this)">📊 Resumen General</button>
-      <button class="ps-tab" onclick="switchTab('detail',this)">📋 Detalle por Sector</button>`;
+      <button class="ps-tab" onclick="switchTab('detail',this)">📋 Detalle por Sector</button>
+      <button class="ps-tab" onclick="switchTab('rm02',this)">📑 RM-02 Prog. Obj. y Metas</button>
+      <button class="ps-tab" onclick="exportarExcel()" style="margin-left:auto;color:#e8a020">⬇ Excel</button>`;
     activeTab = 'overview';
     renderGerenciaOverview();
   } else {
@@ -462,6 +467,7 @@ function switchTab(tab, el) {
   activeTab = tab;
   if (tab==='overview') loadData().then(renderGerenciaOverview);
   else if (tab==='detail') loadData().then(renderGerenciaDetail);
+  else if (tab==='rm02') loadData().then(renderRM02);
   else if (tab==='sector') renderSectorView();
   else if (tab==='tablero') renderSectorTablero();
 }
@@ -608,7 +614,8 @@ function renderSectorView() {
       </td>
       <td style="white-space:nowrap">
         <button class="sav-btn" id="btn-${o.id}" onclick="saveRow('${o.id}')">Guardar</button>
-        ${isCustom?`<button onclick="deleteCustomObjetivo('${o.id}')" style="margin-left:4px;padding:5px 8px;background:none;border:1.5px solid #fed7d7;color:#e53e3e;border-radius:6px;font-size:11px;cursor:pointer" title="Eliminar">✕</button>`:''}
+        ${isCustom?`<button onclick="renombrarObjetivo('${o.id}')" style="margin-left:4px;padding:5px 8px;background:none;border:1.5px solid #bee3f8;color:#2c5282;border-radius:6px;font-size:11px;cursor:pointer" title="Renombrar">✏️</button>
+        <button onclick="deleteCustomObjetivo('${o.id}')" style="margin-left:2px;padding:5px 8px;background:none;border:1.5px solid #fed7d7;color:#e53e3e;border-radius:6px;font-size:11px;cursor:pointer" title="Eliminar">✕</button>`:''}
       </td>
     </tr>`;
   }).join('');
@@ -663,6 +670,24 @@ function toggleNuevoObjetivo() {
   const f = document.getElementById('nuevoObjForm');
   f.style.display = f.style.display==='none' ? 'block' : 'none';
 }
+// Mapa de prefijos por sector
+const SECTOR_PREFIX = {
+  GESTION:'G', SSA_TRANSP:'ST', SSA_PROD:'SP', AMBIENTE:'AM',
+  MANTENIMIENTO:'MN', COMPRAS:'CP', ADM_PROV:'AP', ADM_FACT:'AF',
+  ADM_CONT:'AC', ADM_RRHH:'AR', ADM_CTRL:'CD'
+};
+function nextCustomId(sector) {
+  const prefix = SECTOR_PREFIX[sector] || sector.substring(0,2).toUpperCase();
+  // Obtener todos los IDs existentes del sector (base + custom)
+  const allIds = allObjetivos(sector).map(o=>o.id);
+  // Buscar el mayor número usado con este prefijo
+  let max = 0;
+  allIds.forEach(id => {
+    const match = id.match(new RegExp(`^${prefix}-(\\d+)`, 'i'));
+    if (match) { const n = parseInt(match[1]); if (n > max) max = n; }
+  });
+  return `${prefix}-${String(max + 1).padStart(2,'0')}`;
+}
 async function guardarNuevoObjetivo() {
   const obj = document.getElementById('nObj').value.trim();
   const meta = document.getElementById('nMeta').value.trim();
@@ -670,14 +695,35 @@ async function guardarNuevoObjetivo() {
   const frec = document.getElementById('nFrec').value;
   if (!obj || !meta) { showToast('Completá al menos objetivo y meta.'); return; }
   const now = new Date();
-  const prefix = currentSector.substring(0,3).toUpperCase();
-  const id = `${prefix}-C${now.getTime().toString().slice(-4)}`;
-  const iniLabel = now.toLocaleString('es-AR',{month:'short',year:'numeric'}).replace('.',''). replace(/^\w/,c=>c.toUpperCase());
+  const id = nextCustomId(currentSector);
+  const iniLabel = now.toLocaleString('es-AR',{month:'short',year:'numeric'}).replace('.','').replace(/^\w/,c=>c.toUpperCase());
   const newObj = { id, sector: currentSector, obj, meta, ini: iniLabel, fin: 'Dic 2026', ind, frec };
   await saveCustomObjetivo(newObj);
-  showToast('Objetivo agregado correctamente');
+  showToast(`Objetivo ${id} agregado correctamente`);
   renderSectorView();
 }
+async function renombrarObjetivo(oldId) {
+  const newId = prompt(`Nuevo ID para "${oldId}":`, oldId);
+  if (!newId || newId === oldId) return;
+  if (!/^[A-Z]{1,3}-\d+[a-z]?$/i.test(newId)) { showToast('Formato inválido. Usá algo como G-05 o ST-06'); return; }
+  try {
+    // Actualizar en objetivos_custom
+    await fetch(`${SB_URL}/rest/v1/om2026_objetivos_custom?id=eq.${encodeURIComponent(oldId)}`, {
+      method: 'PATCH', headers: SB_HEADERS,
+      body: JSON.stringify({id: newId.toUpperCase()})
+    });
+    // Actualizar en seguimiento
+    await fetch(`${SB_URL}/rest/v1/om2026_seguimiento?id=eq.${encodeURIComponent(oldId)}`, {
+      method: 'PATCH', headers: SB_HEADERS,
+      body: JSON.stringify({id: newId.toUpperCase()})
+    });
+    const obj = customObjetivos.find(o=>o.id===oldId);
+    if (obj) obj.id = newId.toUpperCase();
+    showToast(`Renombrado a ${newId.toUpperCase()}`);
+    renderSectorView();
+  } catch(e) { showToast('Error al renombrar.'); }
+}
+
 function changeMonth(val) { activeMonth=val; renderSectorView(); }
 async function saveRow(id) {
   const est=document.getElementById('est-'+id).value;
@@ -826,17 +872,388 @@ function setViewMode(mode) {
   if(activeTab==='overview') loadData().then(renderGerenciaOverview);
   else loadData().then(renderGerenciaDetail);
 }
-function changeMonthGerencia(val,tab) {
-  activeMonth=val;
-  if(tab==='overview') renderGerenciaOverview();
-  else renderGerenciaDetail();
-}
+function changeMonthGerencia_old_removed() {}
 function applyFilter() {
   const sec=document.getElementById('fSec').value;
   const est=document.getElementById('fEst').value;
   document.querySelectorAll('#detailTbody tr').forEach(tr=>{
     tr.style.display=(!sec||tr.dataset.sector===sec)&&(!est||tr.dataset.estado===est)?'':'none';
   });
+}
+// ===== EXPORT EXCEL =====
+async function exportarExcel() {
+  showToast('Generando Excel…');
+  await loadData();
+
+  const WB_NAVY  = '1E2D3E';
+  const WB_ORANGE= 'E8A020';
+  const WB_WHITE = 'FFFFFF';
+  const WB_LGRAY = 'F7FAFC';
+  const WB_GRAY  = 'E2E8F0';
+  const WB_TEXT  = '1A202C';
+
+  function hdrStyle(bgHex, fontHex='FFFFFF', sz=10) {
+    return { font:{name:'Arial',sz,bold:true,color:{rgb:fontHex}}, fill:{patternType:'solid',fgColor:{rgb:bgHex}},
+      alignment:{horizontal:'center',vertical:'center',wrapText:true},
+      border:{bottom:{style:'thin',color:{rgb:WB_GRAY}}} };
+  }
+  function cellStyle(bgHex=WB_WHITE, fontHex=WB_TEXT, bold=false, wrap=true) {
+    return { font:{name:'Arial',sz:9,bold,color:{rgb:fontHex}}, fill:{patternType:'solid',fgColor:{rgb:bgHex}},
+      alignment:{vertical:'center',wrapText:wrap},
+      border:{bottom:{style:'thin',color:{rgb:WB_GRAY}},right:{style:'thin',color:{rgb:WB_GRAY}}} };
+  }
+  function statusColor(est) {
+    return est==='Cumplido'?'C6F6D5':est==='En curso'?'BEE3F8':est==='En riesgo'?'FEFCBF':est==='Vencido'?'FED7D7':'F7FAFC';
+  }
+  function makeCell(v, style) { return { v, s: style, t: typeof v==='number'?'n':'s' }; }
+
+  const wb = XLSX.utils.book_new();
+
+  // ========== HOJA 1: PROGRAMA BASE ==========
+  const ws1 = {};
+  const merge1 = [];
+
+  // Título
+  ws1['A1'] = makeCell('PETROSAR SA — Programa de Objetivos y Metas 2026',
+    {...hdrStyle(WB_NAVY,WB_ORANGE,13), alignment:{horizontal:'center',vertical:'center'}});
+  ws1['B1']=ws1['C1']=ws1['D1']=ws1['E1']=ws1['F1']=ws1['G1']=ws1['H1']={v:'',s:hdrStyle(WB_NAVY)};
+  merge1.push({s:{r:0,c:0},e:{r:0,c:7}});
+
+  // Sub-header
+  const h1 = ['ID','Sector','Objetivo','Meta','Inicio','Fin','Indicador','Frecuencia'];
+  h1.forEach((h,i)=> { ws1[XLSX.utils.encode_cell({r:1,c:i})] = makeCell(h, hdrStyle(WB_ORANGE,WB_WHITE)); });
+
+  const allObjs = [...OBJETIVOS, ...customObjetivos];
+  allObjs.forEach((o, ri) => {
+    const r = ri + 2;
+    const bg = ri%2===0 ? WB_WHITE : WB_LGRAY;
+    const sector = SECTOR_LABELS[o.s||o.sector] || o.s || o.sector || '';
+    const row = [o.id, sector, o.obj, o.meta, o.ini||'', o.fin||'Dic 2026', o.ind||'', o.frec||'Mensual'];
+    row.forEach((v,ci) => { ws1[XLSX.utils.encode_cell({r,c:ci})] = makeCell(v, cellStyle(bg)); });
+  });
+  ws1['!ref'] = XLSX.utils.encode_range({s:{r:0,c:0},e:{r:allObjs.length+1,c:7}});
+  ws1['!merges'] = merge1;
+  ws1['!rows'] = [{hpt:24},{hpt:30},...allObjs.map(()=>({hpt:40}))];
+  ws1['!cols'] = [{wch:10},{wch:22},{wch:52},{wch:34},{wch:10},{wch:10},{wch:32},{wch:11}];
+  XLSX.utils.book_append_sheet(wb, ws1, 'Programa Base');
+
+  // ========== HOJA 2: SEGUIMIENTO ==========
+  const ws2 = {};
+  const merge2 = [];
+  const vd = getViewData();
+
+  ws2['A1'] = makeCell('PETROSAR SA — Seguimiento de Objetivos y Metas 2026',
+    {...hdrStyle(WB_NAVY,WB_ORANGE,13), alignment:{horizontal:'center',vertical:'center'}});
+  ['B1','C1','D1','E1','F1','G1','H1','I1','J1'].forEach(k=>{ws2[k]={v:'',s:hdrStyle(WB_NAVY)};});
+  merge2.push({s:{r:0,c:0},e:{r:0,c:9}});
+
+  const h2 = ['ID','Sector','Objetivo','Meta','Fin','Estado','Avance %','Observaciones','Evidencia / Link','Última actualización'];
+  h2.forEach((h,i)=> { ws2[XLSX.utils.encode_cell({r:1,c:i})] = makeCell(h, hdrStyle(WB_ORANGE,WB_WHITE)); });
+
+  allObjs.forEach((o, ri) => {
+    const r = ri + 2;
+    const d = vd[o.id] || {estado:'Sin actualizar',avance:0,obs:'',evidencia:'',fecha:''};
+    const bg = statusColor(d.estado);
+    const sector = SECTOR_LABELS[o.s||o.sector] || o.s || o.sector || '';
+    const row = [o.id, sector, o.obj, o.meta, o.fin||'Dic 2026', d.estado, Number(d.avance)||0, d.obs||'', d.evidencia||'', d.fecha||''];
+    row.forEach((v,ci) => {
+      const s = cellStyle(ci===5?bg:ri%2===0?WB_WHITE:WB_LGRAY, WB_TEXT, ci===5);
+      ws2[XLSX.utils.encode_cell({r,c:ci})] = makeCell(v, s);
+    });
+  });
+  ws2['!ref'] = XLSX.utils.encode_range({s:{r:0,c:0},e:{r:allObjs.length+1,c:9}});
+  ws2['!merges'] = merge2;
+  ws2['!rows'] = [{hpt:24},{hpt:30},...allObjs.map(()=>({hpt:40}))];
+  ws2['!cols'] = [{wch:10},{wch:22},{wch:46},{wch:30},{wch:10},{wch:14},{wch:9},{wch:32},{wch:28},{wch:14}];
+  XLSX.utils.book_append_sheet(wb, ws2, 'Seguimiento');
+
+  const fecha = new Date().toLocaleDateString('es-AR').replace(/\//g,'-');
+  XLSX.writeFile(wb, `OM2026_PETROSAR_${fecha}.xlsx`);
+  showToast('Excel descargado correctamente');
+}
+// ===== RM-02 PROGRAMA DE OBJETIVOS Y METAS =====
+function renderRM02() {
+  const allObjs = [...OBJETIVOS, ...customObjetivos];
+  const vd = getViewData();
+  const total = allObjs.length;
+  let cumplidos=0,enCurso=0,enRiesgo=0,vencidos=0,sinAct=0;
+  allObjs.forEach(o=>{
+    const est=(vd[o.id]||{}).estado||'Sin actualizar';
+    if(est==='Cumplido')cumplidos++;
+    else if(est==='En curso')enCurso++;
+    else if(est==='En riesgo')enRiesgo++;
+    else if(est==='Vencido')vencidos++;
+    else sinAct++;
+  });
+
+  const secKeys = Object.keys(SECTOR_LABELS).filter(k=>k!=='GERENCIA');
+  let sectoresHTML = secKeys.map(sk=>{
+    const objs = allObjetivos(sk);
+    if(!objs.length) return '';
+    let rows = objs.map(o=>{
+      const d=vd[o.id]||{estado:'Sin actualizar',avance:0,obs:''};
+      const bc=BADGE_CLASS[d.estado]||'b-pend';
+      const avp=Number(d.avance)||0;
+      const pc=PROG_COLOR[d.estado]||'#a0aec0';
+      return `<tr>
+        <td style="font-size:11px;font-weight:700;color:#1e2d3e;white-space:nowrap">${o.id}</td>
+        <td style="font-size:12px;max-width:220px">${o.obj}</td>
+        <td style="font-size:11.5px;color:#4a5568;max-width:160px">${o.meta}</td>
+        <td style="white-space:nowrap;font-size:11px;color:#718096">${o.fin||'Dic 2026'}</td>
+        <td><span class="badge ${bc}">${d.estado}</span></td>
+        <td>
+          <div style="display:flex;align-items:center;gap:6px;min-width:90px">
+            <div class="prog-wrap" style="min-width:50px"><div class="prog-bar" style="width:${avp}%;background:${pc}"></div></div>
+            <span style="font-size:11.5px;font-weight:600">${avp}%</span>
+          </div>
+        </td>
+        <td style="font-size:11.5px;color:#4a5568;max-width:160px">${d.obs||'—'}</td>
+      </tr>`;
+    }).join('');
+    let sc=0,si=0,sr=0,sv=0;
+    objs.forEach(o=>{
+      const est=(vd[o.id]||{}).estado||'Sin actualizar';
+      if(est==='Cumplido')sc++;else if(est==='En curso')si++;else if(est==='En riesgo')sr++;else if(est==='Vencido')sv++;
+    });
+    const accentColor=sv>0?'#e53e3e':sr>0?'#d69e2e':sc===objs.length?'#38a169':'#3182ce';
+    return `<div style="background:#fff;border-radius:12px;border:1px solid #e2e8f0;box-shadow:0 1px 3px rgba(0,0,0,.06);margin-bottom:16px;overflow:hidden">
+      <div style="background:#f7fafc;border-bottom:3px solid ${accentColor};padding:12px 20px;display:flex;align-items:center;justify-content:space-between">
+        <span style="font-size:14px;font-weight:700;color:#1e2d3e">${SECTOR_LABELS[sk]}</span>
+        <span style="font-size:12px;color:#718096">${objs.length} objetivos${sc?` · ✅ ${sc}`:''} ${si?`· 🔵 ${si}`:''}${sr?` · ⚠️ ${sr}`:''}${sv?` · 🔴 ${sv}`:''}</span>
+      </div>
+      <div class="tbl-wrap"><table class="ps-table">
+        <thead><tr><th>ID</th><th>Objetivo</th><th>Meta</th><th>Fin</th><th>Estado</th><th>Avance</th><th>Observaciones</th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table></div>
+    </div>`;
+  }).join('');
+
+  const fechaHoy = new Date().toLocaleDateString('es-AR');
+  const periodoLabel = viewMode==='mes' ? monthLabel(activeMonth) : 'Acumulado al ' + fechaHoy;
+
+  document.getElementById('appContent').innerHTML = `<div class="ps-main">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px">
+      <div>
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#718096">Documento SGI</div>
+        <div style="font-size:18px;font-weight:800;color:#1e2d3e">RM-02 Programa de Objetivos y Metas 2026</div>
+        <div style="font-size:12px;color:#718096;margin-top:2px">${periodoLabel}</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+        ${toggleWidget()}${monthSelWidget('rm02')}
+        <button onclick="generarRM02HTML()" style="padding:8px 16px;background:#1e2d3e;color:#fff;border:none;border-radius:8px;font-size:12.5px;font-weight:600;cursor:pointer;font-family:inherit">🌐 Generar HTML</button>
+        <button onclick="generarRM02Word()" style="padding:8px 16px;background:linear-gradient(135deg,#e8a020,#f05a28);color:#fff;border:none;border-radius:8px;font-size:12.5px;font-weight:600;cursor:pointer;font-family:inherit">📄 Generar Word</button>
+      </div>
+    </div>
+
+    <div class="sumbar" style="margin-bottom:20px">
+      <div class="sumbar-item"><div class="sumbar-lbl">Total</div><div class="sumbar-val">${total}</div><div class="sumbar-stripe" style="background:#e8a020"></div></div>
+      <div class="sumbar-item s-ok"><div class="sumbar-lbl">Cumplidos</div><div class="sumbar-val">${cumplidos}</div><div class="sumbar-stripe" style="background:#38a169"></div></div>
+      <div class="sumbar-item s-blue"><div class="sumbar-lbl">En Curso</div><div class="sumbar-val">${enCurso}</div><div class="sumbar-stripe" style="background:#3182ce"></div></div>
+      <div class="sumbar-item s-warn"><div class="sumbar-lbl">En Riesgo</div><div class="sumbar-val">${enRiesgo}</div><div class="sumbar-stripe" style="background:#d69e2e"></div></div>
+      <div class="sumbar-item s-red"><div class="sumbar-lbl">Vencidos</div><div class="sumbar-val">${vencidos}</div><div class="sumbar-stripe" style="background:#e53e3e"></div></div>
+    </div>
+
+    ${sectoresHTML}
+  </div>`;
+}
+
+function changeMonthGerencia(val, tab) {
+  activeMonth = val;
+  if (tab==='overview') renderGerenciaOverview();
+  else if (tab==='detail') renderGerenciaDetail();
+  else if (tab==='rm02') renderRM02();
+}
+
+// ── Generar HTML ──────────────────────────────────────────────────
+const PETROSAR_LOGO = "data:image/png;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/2wBDAQUFBQcGBw4ICA4eFBEUHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh7/wAARCACfAJsDASIAAhEBAxEB/8QAHQABAQADAAMBAQAAAAAAAAAAAAIGBwgDBAkFAf/EAEEQAAECAwQGBAsHAwUAAAAAAAABAgMEBQYHERITITJSkaEIMVFhFyI2QVZxdJKywtEUFjdCcoGxM3XBFSNVgvD/xAAcAQEAAQUBAQAAAAAAAAAAAAAAAQMEBQYHAgj/xAA0EQACAQIEBAIHCAMAAAAAAAAAAQIDBAURElEGITFBcbEzYYGRocHRExUWIjQ1UnJT4fH/2gAMAwEAAhEDEQA/AOh87993EZ377uJIOCa5bm35IrO/fdxGd++7iSBrluMkVnfvu4jO/fdxJA1y3GSKzv33cRnfvu4kga5bjJFZ377uIzv33cSQNctxkis7993EZ377uJIGuW4yRWd++7iM7993EkDXLcZIrO/fdxGd++7iSBrluMkVnfvu4jO/fdxJA1y3GSKzv33cS2vflTx3cTxFs2UPdOUs+pDSIABSPQAAAAAAAAAAAAAAAAAAAAAAAALZsoQWzZQqU+pDIABTJAAAAAAAMetra+lWVlEfOOWLMxExgy0NfHf3r2J3mnK7ebaipxHJAmW06CvVDgJrRO9y6y5o2tSqs10M9hfDl7iMdcFlHd/Lu/I6Fyr2LwGC9inJVdtZPyUnEnqnXJ1IbNaq6O7FV7ETHrNYVS+q2CTDkolUnJKCi+K5Yqucvfr1GYsuHLm8502st30PON4VbYNFK4uE5vpFRbfnyXifQMHz3S/W9VEw+9037rfoPDter6XTfut+hkfwVefzj8foah96UtmfQgHz38O16vpdN+636G3eijeZbe195UWl2ir0eek2yMSKkN7WomZFTBdSd5bXfCd1a0JVpTi1FZ9/oe6eI06k1FJ8zqsAGrGQAAABbNlCC2bKFSn1IZAAKZIAAAPTrVQgUmkzVSmVwhS0JYju/DqT91PcMAv3m3S9iUgNXD7TMMYveia/8FSlDXNR3L3DbVXd3ToPpJpezv8AA0pXqrN1urzFTnXq6NGdjhjqa3zNTuQ9EHt0SnxqrV5Smy/9WZipDavZj5zYeUV6kd1Sp0KfLlGK9yRo+9qsxJ6vOpzHr9nlPFyp1K/zqYUftW5l4knbOsykVVV8Gdiw1VetcHqn+D8U6fZ0o0qEIR6ZHy9i19O/vatxN5uTfu7L2IA2LdjZKnVSnPqdSYsdNIrIcPHBEw61Uzb7m2Z/4mDxX6mOucdt7eq6bTbW3/TZcL4DxHEbWNzCUYxlzWbeeXsTNCG+OhB+L0b+2xf5abLuVuwu8r7KnAq9mpaZiwFY+G5XuRUauKKmpe029Y+7Gw1kautWs5QYUhOLDWEsRkR6+KvWmCrh5jAYtxPa1repbqMs2su2XmY26wC4wy8dKq03HLpntnsZiADnZeAAAAtmyhBbNlCpT6kMgAFMkAAAGs+kH5N0/wBr+VTZhrPpCeTdP9r+VS4tfTRM3w3+6UfH5M0mZbdA1HXh0zFMcFeqevKpiRl1zuu8Smp+v4VM1W9HLwZ1vF/0Fb+svJmm+l1Y6PZq9WbqjIKpIVrGagvRPFz/AJ2+vHX+5ps7uvhrFgbbUCestXYU6kWDEckGYZBRXQIzdWZq9nannQ5WkLr5tai5JydhJKMeuVzE8aI3HUuHmxNxwTG6bs1G4emUVl4rs0cDq8JYrUqr7KhLKXsXvMiuehRIdk870VGxI7lbj2akMzPBISsCRk4UpLMRkGE1GtanYec1u8rq4rzqLuzvWDWDw+wpWsnm4pJ+Pc2l0d0X/Vau78qQGIvrxNzGtOj/AEx8vZ6dqkRMPtkfJD/SxPqpss1q8knWeRyviitGrilVx7ZL3JJ/EAAtTXwAAAWzZQgtmyhUp9SGQACmSAAADWfSE8m6f7X8qmzDWfSE8m6f7X8qlxa+miZvhv8AdKPj8maTMvuc/EWmet/wmIGXXOarxaYv6/hM1W9HLwZ1rGP0Ff8ArLyZ+FanynqvtkX4lPzjY1cuwtXOVqem4MOS0UaYfEZjHRFwVcUPFLXRWniORI0xT4DfOqxVd/CHiNxSUV+ZFpRx3DoUY6q0eSXf1Gvj8e1doJKz9OdMTD0dFVFSFCRfGev07zf9Fudp8FyPq9Tiza+eHBbo28es5U6TN31QsLbn/cnI09Tag1YslHiri5qIuuGve3+DJ4NC3vrn7KUvXlv6jWeIeOaVrQasVqk+WrLJL18+b8i7m77bQWFtHEizj4lQos5Gzzcm52zj+aHjsqnZ1Kdz2YrtMtLQZSuUeZbMyM3DR8N6c0XsVOpUPl+dM9By2sxArk/YebjK6UmYazUo1V2IjdpE7lTX+xmOKMDpVKDuqKylHr619V5HIbK9nKrpqPPV5/7OuQAc1M0AAAC2bKEFs2UKlPqQyAAUyQAAAaz6Qnk3T/a/lU2Yaz6Qnk3T/a/lUuLX00TN8N/ulHx+TNJmXXPfiJTf+/wqYiZfc5+ItM9b/hM1W9HLwZ1rF/0Fb+svJm1KnexdxTKjMU6oWup0vNy0RYUaE9y5mOTrRdR6/hlut9NqX76/Q4cvv/F61f8AdI3xKYabJQ4NtalKM3OXNJ9vofN88TqRk1kj6KLfNdaiY/fal++v0OX+lpehQre1em02zbnTMjTEerptzVakV7sNlF15UROs0WDJ4dwxa2FdV4yba6Z5fJFvXv6laGhrkDafRS03h0oGhx2ombDdyLiasOneg7YeZi1eet3OQVZKwIayskrk/qPXbcnciase1S/xy4hQsKsp9017XyKVrBzrRSOtVABxc2gAAAFs2UILZsoVKfUhkAApkgAAAwG+ukVOsUKSgUuSjTcRkzmc2GmKomXrM+B7pzdOSkuxd2F5KyuIXEFm47nNP3Gtf6PTvuGTXXWVtHTbcyE7P0ealpaHmzxHtwRNRvAF3O/nKLjkuZst1xldXFGdGVOKUk137+04WvYukvIq15lo6lTrIVKYlJmoRYkGKxiZXtVy4KmvqMY8Cd6voRVfcT6n0QBsVLjK6pwUFTjyWXf6nPJYZCTb1M+d/gTvV9CKr7ifUplyN6r3o1LE1NMfOrURP5PocD3+Nbv/ABx+P1I+6qf8mcdXZdFy0E/PQZu28xDpkg1Uc+WgvR8eIm7impvr1nXFDpVOodJlqTSZSHKSUsxGQYTEwRqJ/wC6z3QYDEsYusRknWfJdEuheULanQX5QADFlwAAAC2bKEFs2UKlPqQyAAUyQAAAAAAAAAAAAAAAAAAAAAAAAWzZQgtmyhUp9SGQCtG/d5jRv3eZGiWwzRIK0b93mNG/d5jRLYZokFaN+7zGjfu8xolsM0SCtG/d5jRv3eY0S2GaJBWjfu8xo37vMaJbDNEgrRv3eY0b93mNEthmiQVo37vMaN+7zGiWwzRIK0b93mNG/d5jRLYZokFaN+7zGjfu8xolsM0SWzZQ/mjfu8zyMhvyp4vM904Sz6ENo//Z";
+function generarRM02HTML() {
+  const LOGO_B64 = PETROSAR_LOGO;
+  const allObjs = [...OBJETIVOS, ...customObjetivos];
+  const vd = getViewData();
+  const fechaHoy = new Date().toLocaleDateString('es-AR');
+  const periodoLabel = viewMode==='mes' ? monthLabel(activeMonth) : 'Acumulado al ' + fechaHoy;
+  let total=allObjs.length, cumplidos=0, enCurso=0, enRiesgo=0, vencidos=0, sinAct=0;
+  allObjs.forEach(o=>{
+    const est=(vd[o.id]||{}).estado||'Sin actualizar';
+    if(est==='Cumplido')cumplidos++;else if(est==='En curso')enCurso++;else if(est==='En riesgo')enRiesgo++;else if(est==='Vencido')vencidos++;else sinAct++;
+  });
+
+  function badgeCls(est) {
+    return est==='Cumplido'?'great':est==='En curso'?'info':est==='En riesgo'?'warn':est==='Vencido'?'danger':'gray';
+  }
+
+  const secKeys = Object.keys(SECTOR_LABELS).filter(k=>k!=='GERENCIA');
+  const seccionesHTML = secKeys.map((sk,idx)=>{
+    const objs = allObjetivos(sk);
+    if(!objs.length) return '';
+    let sc=0,si=0,sr=0,sv=0;
+    objs.forEach(o=>{const est=(vd[o.id]||{}).estado||'Sin actualizar';if(est==='Cumplido')sc++;else if(est==='En curso')si++;else if(est==='En riesgo')sr++;else if(est==='Vencido')sv++;});
+    const accent=sv>0?'#e53e3e':sr>0?'#d69e2e':sc===objs.length?'#38a169':'#3182ce';
+    const rows = objs.map(o=>{
+      const d=vd[o.id]||{estado:'Sin actualizar',avance:0,obs:''};
+      const cls=badgeCls(d.estado);
+      const avp=Number(d.avance)||0;
+      return `<tr>
+        <td style="font-weight:700;font-size:11px;white-space:nowrap;color:#1e2d3e">${o.id}</td>
+        <td style="font-size:12px">${o.obj}</td>
+        <td style="font-size:11.5px;color:#4a5568">${o.meta}</td>
+        <td style="white-space:nowrap;font-size:11px;color:#718096">${o.fin||'Dic 2026'}</td>
+        <td><span class="badge-${cls}">${d.estado}</span></td>
+        <td>
+          <div style="display:flex;align-items:center;gap:6px">
+            <div style="background:#e2e8f0;border-radius:4px;height:5px;min-width:60px"><div style="height:5px;border-radius:4px;width:${avp}%;background:${avp===100?'#38a169':avp>0?'#3182ce':'#a0aec0'}"></div></div>
+            <span style="font-size:11px;font-weight:600">${avp}%</span>
+          </div>
+        </td>
+        <td style="font-size:11.5px;color:#4a5568">${d.obs||'—'}</td>
+      </tr>`;
+    }).join('');
+    return `<div class="section">
+      <div class="section-header" style="border-left:4px solid ${accent}">
+        <span class="section-num">${idx+1}</span>
+        <span class="section-title">${SECTOR_LABELS[sk]}</span>
+        <span class="section-pills">${sc?`<span class="badge-great">✅ ${sc}</span>`:''}${si?`<span class="badge-info">🔵 ${si}</span>`:''}${sr?`<span class="badge-warn">⚠️ ${sr}</span>`:''}${sv?`<span class="badge-danger">🔴 ${sv}</span>`:''}</span>
+      </div>
+      <div class="tbl-wrap"><table class="tbl"><thead><tr><th>ID</th><th>Objetivo</th><th>Meta</th><th>Fin</th><th>Estado</th><th>Avance</th><th>Observaciones</th></tr></thead><tbody>${rows}</tbody></table></div>
+    </div>`;
+  }).join('');
+
+  const html = `<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8">
+<title>RM-02 Programa de Objetivos y Metas 2026 — PETROSAR SA</title>
+<style>
+@page{size:A4;margin:15mm 12mm}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:#fff;color:#1a202c;width:210mm;margin:0 auto}
+@media screen{body{background:#e8eaed;width:auto}.page{background:#fff;width:210mm;margin:0 auto;box-shadow:0 4px 20px rgba(0,0,0,.15)}}
+.page{padding:0}
+.header{background:linear-gradient(135deg,#1e2d3e,#192638);padding:18px 24px 20px;color:#fff}
+.header-top{display:flex;align-items:center;gap:14px;margin-bottom:14px}
+.header-logo{width:44px;height:44px;border-radius:10px;object-fit:contain;flex-shrink:0}
+.header-brand{display:flex;flex-direction:column}
+.header-company{font-size:13px;font-weight:700;color:#fff}
+.header-sgi{font-size:10px;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.08em}
+.header-divider{width:1px;height:40px;background:rgba(255,255,255,.2);margin:0 4px}
+.header-doc-block{flex:1}
+.header-doc{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.5);margin-bottom:4px}
+.header-title{font-size:18px;font-weight:800;margin-bottom:2px}
+.header-sub{font-size:11px;color:rgba(255,255,255,.55)}
+.header-kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.kpi{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:10px 12px}
+.kpi-val{font-size:22px;font-weight:800}.kpi-lbl{font-size:9px;color:rgba(255,255,255,.55);margin-top:3px}
+.kpi-ok .kpi-val{color:#6ee7b7}.kpi-blue .kpi-val{color:#93c5fd}.kpi-warn .kpi-val{color:#fcd34d}.kpi-red .kpi-val{color:#fca5a5}
+.main{padding:14px 20px}
+.section{background:#fff;border-radius:12px;border:1px solid #e2e8f0;box-shadow:0 1px 3px rgba(0,0,0,.06);margin-bottom:18px;overflow:hidden}
+.section-header{background:#f7fafc;padding:14px 20px;display:flex;align-items:center;gap:10px;border-bottom:1px solid #e2e8f0}
+.section-num{background:#1e2d3e;color:#fff;font-weight:700;font-size:12px;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.section-title{font-size:14px;font-weight:700;color:#1e2d3e}
+.section-pills{margin-left:auto;display:flex;gap:5px;flex-wrap:wrap}
+.tbl-wrap{overflow-x:auto}
+.tbl{width:100%;border-collapse:collapse;font-size:12px}
+.tbl thead th{background:#f7fafc;padding:9px 14px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#718096;border-bottom:1px solid #e2e8f0;white-space:nowrap}
+.tbl tbody td{padding:9px 14px;border-bottom:1px solid #f0f2f6;vertical-align:middle}
+.tbl tbody tr:last-child td{border-bottom:none}
+.badge-great{background:#f0fff4;color:#276749;padding:3px 10px;border-radius:12px;font-size:11px;font-weight:600;display:inline-block}
+.badge-info{background:#ebf8ff;color:#2c5282;padding:3px 10px;border-radius:12px;font-size:11px;font-weight:600;display:inline-block}
+.badge-warn{background:#fffbeb;color:#744210;padding:3px 10px;border-radius:12px;font-size:11px;font-weight:600;display:inline-block}
+.badge-danger{background:#fff5f5;color:#9b2c2c;padding:3px 10px;border-radius:12px;font-size:11px;font-weight:600;display:inline-block}
+.badge-gray{background:#f7fafc;color:#4a5568;padding:3px 10px;border-radius:12px;font-size:11px;font-weight:600;display:inline-block}
+.footer{text-align:center;padding:18px;font-size:11px;color:#718096;border-top:1px solid #e2e8f0;background:#fff;margin-top:4px}
+@media print{body{background:#fff}.main{padding:16px}}
+</style></head><body>
+<div class="page">
+<div class="header">
+  <div class="header-top">
+    <img class="header-logo" src="${LOGO_B64}" alt="PETROSAR">
+    <div class="header-brand">
+      <div class="header-company">PETROSAR SA</div>
+      <div class="header-sgi">Sistema de Gestión Integrado</div>
+    </div>
+    <div class="header-divider"></div>
+    <div class="header-doc-block">
+      <div class="header-doc">Documento SGI · RM-02</div>
+      <div class="header-title">Programa de Objetivos y Metas 2026</div>
+      <div class="header-sub">${periodoLabel} · Emitido el ${fechaHoy}</div>
+    </div>
+  </div>
+  </div>
+</div>
+<div class="main">${seccionesHTML}</div>
+<div class="footer">PETROSAR PRODUCCIÓN Y SERVICIOS SA · RM-02 Programa de Objetivos y Metas · Período: ${periodoLabel}</div>
+</div>
+</body></html>`;
+
+  const blob = new Blob([html], {type:'text/html'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href=url; a.download=`RM-02_Objetivos_Metas_2026_${fechaHoy.replace(/\//g,'-')}.html`;
+  a.click();
+  window.open(url,'_blank');
+  URL.revokeObjectURL(url);
+  showToast('HTML generado y descargado');
+}
+
+// ── Generar Word (.docx) ──────────────────────────────────────────
+async function generarRM02Word() {
+  const { Document, Packer, Paragraph, TextRun, HeadingLevel, Table, TableRow, TableCell, WidthType, AlignmentType, BorderStyle, ShadingType } = docx;
+  const allObjs = [...OBJETIVOS, ...customObjetivos];
+  const vd = getViewData();
+  const fechaHoy = new Date().toLocaleDateString('es-AR');
+  const periodoLabel = viewMode==='mes' ? monthLabel(activeMonth) : 'Acumulado al ' + fechaHoy;
+
+  const cellBorder = {style:BorderStyle.SINGLE,size:2,color:'E2E8F0'};
+  const borders = {top:cellBorder,bottom:cellBorder,left:cellBorder,right:cellBorder};
+
+  function mkCell(text, opts={}) {
+    return new TableCell({borders, shading: opts.shade?{type:ShadingType.CLEAR,fill:opts.shade}:undefined,
+      width:{size:opts.w||20,type:WidthType.PERCENTAGE},
+      children:[new Paragraph({children:[new TextRun({text:String(text||''),bold:!!opts.bold,size:18,font:'Segoe UI',color:opts.color||'000000'})]})]});
+  }
+  function hdrRow(cols) {
+    return new TableRow({children:cols.map(([t,w])=>mkCell(t,{bold:true,shade:'F7FAFC',w,color:'4A5568'}))});
+  }
+  function p(text,opts={}) {
+    return new Paragraph({spacing:{after:opts.after||120},children:[new TextRun({text:String(text||''),bold:!!opts.bold,size:opts.sz||20,font:'Segoe UI',color:opts.color||'1A202C'})]});
+  }
+
+  const stateColor = est=>est==='Cumplido'?'276749':est==='En curso'?'2C5282':est==='En riesgo'?'744210':est==='Vencido'?'9B2C2C':'718096';
+
+  const secKeys = Object.keys(SECTOR_LABELS).filter(k=>k!=='GERENCIA');
+  let children = [
+    p('PETROSAR PRODUCCIÓN Y SERVICIOS SA',{bold:true,sz:28,color:'1E2D3E',after:60}),
+    p('RM-02 · Programa de Objetivos y Metas 2026',{bold:true,sz:32,color:'1E2D3E',after:60}),
+    p(`${periodoLabel} · Emitido el ${fechaHoy}`,{sz:18,color:'718096',after:400}),
+    p(`Total: ${allObjs.length}  |  Cumplidos: ${[...allObjs].filter(o=>(vd[o.id]||{}).estado==='Cumplido').length}  |  En Curso: ${[...allObjs].filter(o=>(vd[o.id]||{}).estado==='En curso').length}  |  En Riesgo: ${[...allObjs].filter(o=>(vd[o.id]||{}).estado==='En riesgo').length}  |  Vencidos: ${[...allObjs].filter(o=>(vd[o.id]||{}).estado==='Vencido').length}`,{bold:true,after:400}),
+  ];
+
+  secKeys.forEach((sk,idx)=>{
+    const objs = allObjetivos(sk);
+    if(!objs.length) return;
+    children.push(p(`${idx+1}. ${SECTOR_LABELS[sk]}`,{bold:true,sz:24,color:'1E2D3E',after:120}));
+    const rows = objs.map(o=>{
+      const d=vd[o.id]||{estado:'Sin actualizar',avance:0,obs:''};
+      return new TableRow({children:[
+        mkCell(o.id,{w:8,bold:true,color:'1E2D3E'}),
+        mkCell(o.obj,{w:26}),
+        mkCell(o.meta,{w:18}),
+        mkCell(o.fin||'Dic 2026',{w:10}),
+        mkCell(d.estado,{w:12,bold:true,color:stateColor(d.estado)}),
+        mkCell((Number(d.avance)||0)+'%',{w:8}),
+        mkCell(d.obs||'—',{w:18}),
+      ]});
+    });
+    children.push(new Table({width:{size:100,type:WidthType.PERCENTAGE},rows:[
+      hdrRow([['ID',8],['Objetivo',26],['Meta',18],['Fin',10],['Estado',12],['Avance',8],['Observaciones',18]]),
+      ...rows
+    ]}));
+    children.push(p('',{after:300}));
+  });
+
+  children.push(p('PETROSAR PRODUCCIÓN Y SERVICIOS SA · RM-02 Programa de Objetivos y Metas 2026',{sz:16,color:'718096',after:0}));
+
+  const doc = new Document({styles:{default:{document:{run:{font:'Segoe UI',size:20}}}},sections:[{children}]});
+  const blob = await Packer.toBlob(doc);
+  saveAs(blob, `RM-02_Objetivos_Metas_2026_${fechaHoy.replace(/\//g,'-')}.docx`);
+  showToast('Word generado y descargado');
 }
 </script>
 </body>
