@@ -1183,36 +1183,40 @@ function renderGerenciaOverview() {
 
 // ===== GERENCIA DETAIL =====
 function renderGerenciaDetail() {
-  const md=getViewData();
+  const md=getAcumuladoData();
+  const activeMesD = currentMonthVal();
   const secKeys=Object.keys(SECTOR_LABELS).filter(k=>k!=='GERENCIA');
   const secOpts=secKeys.map(k=>`<option value="${k}">${SECTOR_LABELS[k]}</option>`).join('');
   const estOpts=['','Sin actualizar','En curso','En riesgo','Vencido','Cumplido'].map(e=>`<option value="${e}">${e||'Todos los estados'}</option>`).join('');
   const allObj2=[...OBJETIVOS,...customObjetivos]; let rows=allObj2.map(o=>{
     const d=md[o.id]||{estado:'Sin actualizar',avance:0,obs:''};
-    const bc=BADGE_CLASS[d.estado]||'b-pend';
-    const pc=PROG_COLOR[d.estado]||'#a0aec0';
+    const estRaw=d.estado||'Sin actualizar';
+    const finM=parseFin(o.fin||'');
+    const est=(finM<activeMesD && estRaw!=='Cumplido' && estRaw!=='Vencido') ? 'En riesgo' : estRaw;
+    const bc=BADGE_CLASS[est]||'b-pend';
+    const pc=PROG_COLOR[est]||'#a0aec0';
     const avp=Number(d.avance)||0;
-    return `<tr data-sector="${o.s}" data-estado="${d.estado}">
-      <td style="font-size:11px;font-weight:700;color:#1e2d3e">${o.id}</td>
-      <td style="font-size:11.5px;font-weight:600;color:#1e2d3e">${SECTOR_LABELS[o.s]||o.s}</td>
-      <td><div class="obj-txt" title="${o.obj}" style="max-width:210px">${o.obj}</div></td>
+    const sectorKey = o.s||o.sector||'';
+    return `<tr data-sector="${sectorKey}" data-estado="${est}">
+      <td style="font-size:11px;font-weight:700;color:#1e2d3e;white-space:nowrap">${o.id}</td>
+      <td style="font-size:11px;color:#1e2d3e;white-space:nowrap">${SECTOR_LABELS[sectorKey]||sectorKey}</td>
+      <td><div class="obj-txt" title="${o.obj}" style="max-width:200px">${o.obj}</div></td>
       <td><div class="meta-txt" title="${o.meta}">${o.meta}</div></td>
-      <td style="white-space:nowrap;font-size:11px;color:#718096">${o.fin}</td>
-      <td><span class="badge ${bc}">${d.estado}</span></td>
-      <td><div style="display:flex;align-items:center;gap:8px">
-        <div class="prog-wrap" style="min-width:60px"><div class="prog-bar" style="width:${avp}%;background:${pc}"></div></div>
-        <span style="font-size:12px;font-weight:600">${avp}%</span>
+      <td style="white-space:nowrap;font-size:11px;${finM<activeMesD&&est!=='Cumplido'?'color:#e53e3e;font-weight:600':'color:#718096'}">${o.fin||'Dic 2026'}</td>
+      <td><span class="badge ${bc}">${est}</span>${estRaw!==est?`<div style="font-size:9px;color:#a0aec0">ing: ${estRaw}</div>`:''}</td>
+      <td><div style="display:flex;align-items:center;gap:6px">
+        <div class="prog-wrap" style="min-width:50px"><div class="prog-bar" style="width:${avp}%;background:${pc}"></div></div>
+        <span style="font-size:11px;font-weight:600">${avp}%</span>
       </div></td>
-      <td style="font-size:12px;color:#4a5568;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${d.obs||'—'}</td>
-      <td style="font-size:11px;color:#718096">${d.fecha||'—'}</td>
+      <td style="font-size:11.5px;color:#4a5568;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${d.obs||'—'}</td>
+      <td style="font-size:11px;color:#718096;white-space:nowrap">${d.fecha||'—'}</td>
     </tr>`;
   }).join('');
-  const subtitle=viewMode==='acumulado'?'Acumulado':monthLabel(activeMonth);
   document.getElementById('appContent').innerHTML=`<div class="ps-main">
-    <div class="cc"><div class="cc-hdr">
-      <div><div class="cc-title">Detalle Completo — ${subtitle}</div></div>
-      <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
-        ${toggleWidget()}${monthSelWidget('detail')}
+    <div class="cc"><div class="cc-hdr" style="flex-wrap:wrap;gap:10px">
+      <div><div class="cc-title">Detalle Completo — Acumulado</div>
+      <div class="cc-sub">${allObj2.length} objetivos · Estado efectivo aplicando lógica de plazo</div></div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
         <select id="fSec" onchange="applyFilter()"><option value="">Todos los sectores</option>${secOpts}</select>
         <select id="fEst" onchange="applyFilter()"><option value="">Todos los estados</option>${estOpts}</select>
       </div>
@@ -1335,16 +1339,21 @@ function renderRM02() {
   const tieneEval = Object.keys(evalData).length > 0;
   const fechaHoy = new Date().toLocaleDateString('es-AR');
 
-  // KPIs según modo
+  // KPIs según modo — aplicar lógica de plazo vencido
+  const activeMesPrev = currentMonthVal();
   let k1=0,k2=0,k3=0,k4=0;
   if (tieneEval) {
     allObjs.forEach(o=>{ const r=(evalData[o.id]||{}).resultado||'Sin evaluar';
       if(r==='Cumplido')k1++; else if(r==='Parcialmente cumplido')k2++;
       else if(r==='No cumplido')k3++; else k4++; });
   } else {
-    allObjs.forEach(o=>{ const est=(vd[o.id]||{}).estado||'Sin actualizar';
+    allObjs.forEach(o=>{
+      const estRaw=(vd[o.id]||{}).estado||'Sin actualizar';
+      const finM=parseFin(o.fin||'');
+      const est=(finM<activeMesPrev && estRaw!=='Cumplido' && estRaw!=='Vencido') ? 'En riesgo' : estRaw;
       if(est==='Cumplido')k1++; else if(est==='En curso')k2++;
-      else if(est==='En riesgo')k3++; else k4++; });
+      else if(est==='En riesgo')k3++; else k4++;
+    });
   }
 
   const secKeys = Object.keys(SECTOR_LABELS).filter(k=>k!=='GERENCIA');
@@ -1461,14 +1470,17 @@ function generarRM02HTML() {
   const fechaHoy = new Date().toLocaleDateString('es-AR');
   const periodoLabel = tieneEval ? `Evaluación Anual — Cierre ${fechaHoy}` : (viewMode==='mes' ? monthLabel(activeMonth) : 'Acumulado al ' + fechaHoy);
 
-  // KPIs
+  // KPIs — aplicar la misma lógica de plazo vencido que en Resumen General
+  const activeMesRM = currentMonthVal();
   let k1=0,k2=0,k3=0,k4=0;
   allObjs.forEach(o=>{
     if(tieneEval){
       const r=(evalData[o.id]||{}).resultado||'Sin evaluar';
       if(r==='Cumplido')k1++;else if(r==='Parcialmente cumplido')k2++;else if(r==='No cumplido')k3++;else k4++;
     } else {
-      const est=(vd[o.id]||{}).estado||'Sin actualizar';
+      const estRaw=(vd[o.id]||{}).estado||'Sin actualizar';
+      const finM=parseFin(o.fin||'');
+      const est=(finM<activeMesRM && estRaw!=='Cumplido' && estRaw!=='Vencido') ? 'En riesgo' : estRaw;
       if(est==='Cumplido')k1++;else if(est==='En curso')k2++;else if(est==='En riesgo')k3++;else k4++;
     }
   });
