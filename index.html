@@ -1,0 +1,1879 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Objetivos y Metas 2026 — PETROSAR SA</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:#f0f2f6;color:#1a202c;min-height:100vh}
+:root{
+  --ps-bg:#f0f2f6;--ps-hdr:#1e2d3e;--ps-hdr2:#192638;
+  --ps-card:#fff;--ps-border:#e2e8f0;--ps-text:#1a202c;
+  --ps-muted:#718096;--ps-accent:#e8a020;--ps-accent2:#f05a28;
+}
+
+/* LOGIN */
+#loginScreen{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(135deg,#1e2d3e 0%,#2d4263 100%);padding:20px}
+.lcard{background:#fff;border-radius:16px;padding:40px;width:100%;max-width:420px;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+.llogo{display:flex;align-items:center;gap:12px;margin-bottom:28px}
+.llogo img{width:44px;height:44px;border-radius:10px;object-fit:contain}
+.llogo-txt{font-size:18px;font-weight:700;color:#1e2d3e}
+.llogo-sub{font-size:12px;color:#718096}
+.ltitle{font-size:22px;font-weight:700;color:#1e2d3e;margin-bottom:4px}
+.lsub{font-size:13px;color:#718096;margin-bottom:24px}
+.llabel{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:#718096;margin-bottom:6px;display:block}
+.lsel,.linput{width:100%;padding:11px 14px;border:1.5px solid #e2e8f0;border-radius:8px;font-size:14px;font-family:inherit;color:#1a202c;background:#f8fafc;margin-bottom:14px;transition:border-color .2s}
+.lsel:focus,.linput:focus{outline:none;border-color:#e8a020;background:#fff}
+.lbtn{width:100%;padding:13px;background:linear-gradient(135deg,#e8a020,#f05a28);color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:600;font-family:inherit;cursor:pointer;transition:opacity .2s}
+.lbtn:hover{opacity:.9}
+.lerr{background:#fff5f5;border:1px solid #fed7d7;color:#c53030;padding:10px 14px;border-radius:8px;font-size:13px;margin-top:12px;display:none}
+.lnote{font-size:11px;color:rgba(255,255,255,.45);margin-top:20px;text-align:center}
+
+/* HEADER */
+.ps-header{background:linear-gradient(135deg,#1e2d3e 0%,#192638 100%);color:#fff;padding:14px 24px}
+.ps-htop{display:flex;align-items:center;gap:14px}
+.ps-htop img{width:40px;height:40px;border-radius:9px;object-fit:contain}
+.ps-htitle{font-size:19px;font-weight:700;color:#fff}
+.ps-hsub{font-size:11px;color:rgba(255,255,255,.6);margin-top:2px}
+.ps-hright{margin-left:auto;display:flex;align-items:center;gap:8px}
+.ubadge{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:20px;padding:5px 14px;font-size:12px;color:#fff}
+.lout-btn{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.8);padding:5px 14px;border-radius:20px;font-size:12px;cursor:pointer;transition:background .2s;font-family:inherit}
+.lout-btn:hover{background:rgba(255,255,255,.18)}
+
+/* TABS */
+.ps-tabs{background:#fff;border-bottom:2px solid #e2e8f0;display:flex;padding:0 24px;gap:4px}
+.ps-tab{padding:12px 16px;font-size:13px;font-weight:600;color:#718096;border:none;background:none;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;transition:color .2s,border-color .2s;font-family:inherit}
+.ps-tab:hover{color:#1e2d3e}
+.ps-tab.active{color:#e8a020;border-bottom-color:#e8a020}
+
+/* MAIN */
+.ps-main{padding:20px 24px}
+
+/* KPI GRID */
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px;margin-bottom:20px}
+.kpi-card{background:#fff;border-radius:12px;padding:16px;box-shadow:0 1px 3px rgba(0,0,0,.07);border:1px solid #e2e8f0}
+.kpi-icon{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:15px;margin-bottom:10px}
+.ic-green{background:#f0fff4} .ic-blue{background:#ebf8ff} .ic-yellow{background:#fffbeb} .ic-red{background:#fff5f5} .ic-gray{background:#f7fafc}
+.kpi-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:#718096}
+.kpi-val{font-size:26px;font-weight:700;color:#1a202c;line-height:1;margin:4px 0}
+
+/* CONTENT CARD */
+.cc{background:#fff;border-radius:12px;box-shadow:0 1px 3px rgba(0,0,0,.07);border:1px solid #e2e8f0;margin-bottom:18px;overflow:hidden}
+.cc-hdr{padding:14px 20px;border-bottom:1px solid #e2e8f0;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.cc-title{font-size:14px;font-weight:700;color:#1e2d3e}
+.cc-sub{font-size:12px;color:#718096;margin-top:2px}
+
+/* TABLE */
+.tbl-wrap{overflow-x:auto}
+.ps-table{width:100%;border-collapse:collapse;font-size:12.5px}
+.ps-table thead th{background:#f7fafc;padding:9px 14px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#718096;border-bottom:1px solid #e2e8f0;white-space:nowrap}
+.ps-table tbody tr{border-bottom:1px solid #f0f2f6;transition:background .15s}
+.ps-table tbody tr:hover{background:#fafbfd}
+.ps-table tbody td{padding:9px 14px;vertical-align:middle}
+.ps-table tbody tr:last-child{border-bottom:none}
+.obj-txt{max-width:240px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;cursor:help}
+.meta-txt{max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;cursor:help;color:#4a5568;font-size:11.5px}
+
+/* BADGES */
+.badge{display:inline-flex;align-items:center;padding:3px 10px;border-radius:12px;font-size:11px;font-weight:600;white-space:nowrap}
+.b-ok{background:#f0fff4;color:#276749} .b-warn{background:#fffbeb;color:#744210}
+.b-danger{background:#fff5f5;color:#9b2c2c} .b-info{background:#ebf8ff;color:#2c5282}
+.b-pend{background:#f7fafc;color:#4a5568}
+
+/* FORM INPUTS in table */
+.t-sel,.t-inp{padding:6px 9px;border:1.5px solid #e2e8f0;border-radius:6px;font-size:12px;font-family:inherit;color:#1a202c;background:#f8fafc;transition:border-color .2s}
+.t-sel:focus,.t-inp:focus{outline:none;border-color:#e8a020;background:#fff}
+.t-sel{min-width:118px} .t-inp{min-width:70px} .t-inp.wide{min-width:160px} .t-inp.url{min-width:180px}
+
+/* PROGRESS */
+.prog-wrap{background:#e2e8f0;border-radius:6px;height:5px;min-width:70px}
+.prog-bar{height:5px;border-radius:6px;transition:width .3s}
+
+/* SECTOR GRID (gerencia) */
+.sec-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px;margin-bottom:22px}
+.sec-card{background:#fff;border-radius:12px;padding:16px;box-shadow:0 1px 3px rgba(0,0,0,.07);border:1px solid #e2e8f0;border-left:4px solid #e2e8f0;transition:transform .15s,box-shadow .15s;cursor:default}
+.sec-card:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,.1)}
+.sc-all{border-left-color:#38a169} .sc-warn{border-left-color:#d69e2e} .sc-danger{border-left-color:#e53e3e} .sc-none{border-left-color:#a0aec0}
+.sec-name{font-size:13px;font-weight:700;color:#1e2d3e;margin-bottom:10px}
+.sec-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px}
+.sec-lbl{font-size:11px;color:#718096} .sec-val{font-size:12px;font-weight:600}
+
+/* SAVE BTN */
+.sav-btn{padding:5px 12px;background:#e8a020;color:#fff;border:none;border-radius:6px;font-size:11.5px;font-weight:600;cursor:pointer;font-family:inherit;transition:all .2s;white-space:nowrap}
+.sav-btn:hover{opacity:.85} .sav-btn.saved{background:#38a169}
+
+/* FILTER */
+.filter-bar{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap;align-items:center}
+.filter-bar select,.filter-bar input{padding:8px 12px;border:1.5px solid #e2e8f0;border-radius:8px;font-size:12.5px;font-family:inherit;color:#1a202c;background:#fff}
+.filter-bar select:focus,.filter-bar input:focus{outline:none;border-color:#e8a020}
+
+/* TOAST */
+#toast{position:fixed;bottom:24px;right:24px;background:#1e2d3e;color:#fff;padding:11px 18px;border-radius:10px;font-size:13px;font-weight:500;box-shadow:0 8px 24px rgba(0,0,0,.2);opacity:0;transform:translateY(10px);transition:opacity .3s,transform .3s;z-index:9999;pointer-events:none}
+#toast.show{opacity:1;transform:translateY(0)}
+
+/* SECTOR TITLE BAR */
+.sec-bar{background:#fff;border-bottom:1px solid #e2e8f0;padding:10px 24px;display:flex;align-items:center;gap:10px}
+.sec-bar-name{font-size:16px;font-weight:700;color:#1e2d3e}
+.sec-bar-count{font-size:12px;color:#718096;background:#f0f2f6;padding:3px 10px;border-radius:12px}
+
+/* ===== GERENCIA V2 ===== */
+.sumbar{display:grid;grid-template-columns:repeat(5,1fr);background:#1e2d3e;border-radius:14px;overflow:hidden;margin-bottom:22px}
+.sumbar-item{padding:16px 18px;position:relative;border-right:1px solid rgba(255,255,255,.08)}
+.sumbar-item:last-child{border-right:none}
+.sumbar-lbl{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:rgba(255,255,255,.5);margin-bottom:6px}
+.sumbar-val{font-size:32px;font-weight:800;line-height:1;color:#fff}
+.sumbar-item.s-ok .sumbar-val{color:#6ee7b7}
+.sumbar-item.s-blue .sumbar-val{color:#93c5fd}
+.sumbar-item.s-warn .sumbar-val{color:#fcd34d}
+.sumbar-item.s-red .sumbar-val{color:#fca5a5}
+.sumbar-item.s-gray .sumbar-val{color:rgba(255,255,255,.35)}
+.sumbar-stripe{position:absolute;bottom:0;left:0;right:0;height:3px}
+.sec2-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px;margin-bottom:22px}
+.sec2-card{background:#fff;border-radius:14px;padding:16px 18px;box-shadow:0 1px 4px rgba(0,0,0,.07);border:1px solid #e2e8f0;border-left:4px solid #e2e8f0;transition:transform .15s,box-shadow .15s;position:relative;overflow:hidden;display:flex;flex-direction:column;justify-content:space-between}
+.sec2-card:hover{transform:translateY(-2px);box-shadow:0 4px 14px rgba(0,0,0,.1);cursor:pointer}
+.sec2-top{display:flex;align-items:center;gap:16px;margin-bottom:14px}
+.sec2-ring{flex-shrink:0}
+.sec2-info{flex:1;min-width:0}
+.sec2-name{font-size:13.5px;font-weight:700;color:#1e2d3e;margin-bottom:6px}
+.sec2-pills{display:flex;flex-wrap:wrap;gap:5px}
+.sec2-pill{font-size:10.5px;font-weight:600;padding:2px 8px;border-radius:10px;display:inline-flex;align-items:center;gap:4px}
+.p-ok{background:#f0fff4;color:#276749} .p-blue{background:#ebf8ff;color:#2c5282}
+.p-warn{background:#fffbeb;color:#744210} .p-red{background:#fff5f5;color:#9b2c2c}
+.p-gray{background:#f7fafc;color:#718096}
+.sec2-distbar{display:flex;height:5px;border-radius:5px;overflow:hidden;margin-top:10px}
+.sec2-accent{position:absolute;top:0;left:0;width:4px;bottom:0;border-radius:14px 0 0 14px}
+.view-toggle{display:inline-flex;background:#f0f2f6;border-radius:8px;padding:3px;gap:2px}
+.view-toggle button{padding:6px 14px;border:none;background:none;border-radius:6px;font-size:12px;font-weight:600;font-family:inherit;color:#718096;cursor:pointer;transition:all .2s}
+.view-toggle button.active{background:#fff;color:#1e2d3e;box-shadow:0 1px 3px rgba(0,0,0,.1)}{.ps-main{padding:14px}.ps-header{padding:12px 14px}.ps-tabs{padding:0 12px}.sumbar{grid-template-columns:repeat(3,1fr)}}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:9000;display:flex;align-items:center;justify-content:center;padding:20px}
+.modal-box{background:#fff;border-radius:16px;width:100%;max-width:780px;max-height:88vh;display:flex;flex-direction:column;box-shadow:0 20px 60px rgba(0,0,0,.3);overflow:hidden}
+.modal-hdr{background:linear-gradient(135deg,#1e2d3e,#192638);padding:16px 22px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.modal-title{font-size:16px;font-weight:700;color:#fff}
+.modal-sub{font-size:11px;color:rgba(255,255,255,.55);margin-top:2px}
+.modal-close{background:rgba(255,255,255,.12);border:none;color:#fff;width:30px;height:30px;border-radius:50%;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.modal-close:hover{background:rgba(255,255,255,.25)}
+.modal-body{overflow-y:auto;padding:20px}
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/docx@8.5.0/build/index.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/file-saver@2.0.5/dist/FileSaver.min.js"></script>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="loginScreen">
+  <div class="lcard">
+    <div class="llogo">
+      <img src="data:image/png;base64,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" alt="PETROSAR">
+      <div><div class="llogo-txt">PETROSAR SA</div></div>
+    </div>
+    <div class="ltitle">Programa de Objetivos y Metas</div>
+    <div class="lsub" style="margin-bottom:24px">Seguimiento 2026 — Ingresá con tu sector</div>
+    <label class="llabel">Sector</label>
+    <select id="sectorSel" class="lsel">
+      <option value="">— Seleccionar sector —</option>
+      <option value="GESTION">Gestión</option>
+      <option value="SSA_TRANSP">SSA Transporte</option>
+      <option value="SSA_PROD">SSA Producción y Mantenimiento</option>
+      <option value="AMBIENTE">Ambiente</option>
+      <option value="MANTENIMIENTO">Mantenimiento</option>
+      <option value="COMPRAS">Compras</option>
+      <option value="ADM_PROV">Administración – Proveedores</option>
+      <option value="ADM_FACT">Administración – Facturación y Cobranzas</option>
+      <option value="ADM_CONT">Administración – Contabilidad</option>
+      <option value="ADM_RRHH">Administración – RRHH</option>
+      <option value="ADM_CTRL">Administración – Control Documentario</option>
+      <option value="GERENCIA">Gerencia</option>
+    </select>
+    <label class="llabel">Contraseña</label>
+    <input id="passInp" type="password" class="linput" placeholder="Contraseña del sector" onkeydown="if(event.key==='Enter')doLogin()">
+    <button class="lbtn" onclick="doLogin()">Ingresar</button>
+    <label style="display:flex;align-items:center;gap:8px;margin-top:14px;cursor:pointer;font-size:13px;color:#4a5568">
+      <input type="checkbox" id="rememberMe" style="width:16px;height:16px;accent-color:#e8a020">
+      Recordarme en este equipo
+    </label>
+    <div id="lerr" class="lerr">Contraseña incorrecta. Verificá el sector seleccionado.</div>
+  </div>
+  <div class="lnote">Las contraseñas iniciales figuran en el documento de implementación entregado al responsable de cada sector.</div>
+</div>
+
+<!-- APP -->
+<div id="appScreen" style="display:none">
+  <header class="ps-header">
+    <div class="ps-htop">
+      <img src="data:image/png;base64,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" alt="PETROSAR">
+      <div>
+        <div class="ps-htitle">Objetivos y Metas 2026</div>
+        <div class="ps-hsub">Programa Objetivos y Metas 2026</div>
+      </div>
+      <div class="ps-hright">
+        <span class="ubadge" id="userBadge"></span>
+        <button class="lout-btn" onclick="doLogout()">Salir</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="ps-tabs" id="tabBar"></div>
+  <div id="appContent"></div>
+</div>
+
+<div id="sectorModal" style="display:none" class="modal-overlay" onclick="if(event.target===this)closeModal()">
+  <div class="modal-box">
+    <div class="modal-hdr">
+      <div><div class="modal-title" id="modalTitle"></div><div class="modal-sub" id="modalSub"></div></div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+// ===== PASSWORDS =====
+const PASSWORDS = {
+  GESTION:'gestion26', SSA_TRANSP:'transp26', SSA_PROD:'ssprod26',
+  AMBIENTE:'ambiente26', MANTENIMIENTO:'mant26', COMPRAS:'compras26',
+  ADM_PROV:'admprov26', ADM_FACT:'admfact26', ADM_CONT:'admcont26',
+  ADM_RRHH:'admrrhh26', ADM_CTRL:'admctrl26', GERENCIA:'gerencia26'
+};
+const SECTOR_LABELS = {
+  GESTION:'Gestión', SSA_TRANSP:'SSA Transporte', SSA_PROD:'SSA Producción y Mant.',
+  AMBIENTE:'Ambiente', MANTENIMIENTO:'Mantenimiento', COMPRAS:'Compras',
+  ADM_PROV:'Adm. – Proveedores', ADM_FACT:'Adm. – Facturación', ADM_CONT:'Adm. – Contabilidad',
+  ADM_RRHH:'Adm. – RRHH', ADM_CTRL:'Adm. – Control Documental', GERENCIA:'Gerencia'
+};
+const MONTHS = [
+  {val:'2026-01',lbl:'Enero 2026'},{val:'2026-02',lbl:'Febrero 2026'},{val:'2026-03',lbl:'Marzo 2026'},
+  {val:'2026-04',lbl:'Abril 2026'},{val:'2026-05',lbl:'Mayo 2026'},{val:'2026-06',lbl:'Junio 2026'},
+  {val:'2026-07',lbl:'Julio 2026'},{val:'2026-08',lbl:'Agosto 2026'},{val:'2026-09',lbl:'Septiembre 2026'},
+  {val:'2026-10',lbl:'Octubre 2026'},{val:'2026-11',lbl:'Noviembre 2026'},{val:'2026-12',lbl:'Diciembre 2026'}
+];
+const ESTADO_OPTS = ['Sin actualizar','En curso','En riesgo','Vencido','Cumplido'];
+const BADGE_CLASS = {'Sin actualizar':'b-pend','En curso':'b-info','En riesgo':'b-warn','Vencido':'b-danger','Cumplido':'b-ok'};
+const PROG_COLOR  = {'Sin actualizar':'#a0aec0','En curso':'#3182ce','En riesgo':'#d69e2e','Vencido':'#e53e3e','Cumplido':'#38a169'};
+
+// Dates corrected: all objectives end Dec 2026
+const OBJETIVOS = [
+  {id:'G-01a',s:'GESTION',obj:'Asegurar disponibilidad de documentación SGI/SGSV. Gestión Documental 0 Papel.',meta:'80% — Estructura Documental ordenada y disponible en espacio digital',ini:'Dic 2025',fin:'Dic 2026',ind:'Dashboard Interactivo SGI',frec:'Mensual'},
+  {id:'G-01b',s:'GESTION',obj:'Asegurar disponibilidad de documentación SGI/SGSV. Gestión Documental 0 Papel.',meta:'100% — Unificación documental SGI y Seguridad Vial',ini:'Dic 2025',fin:'Dic 2026',ind:'Dashboard Interactivo SGI',frec:'Mensual'},
+  {id:'G-02',s:'GESTION',obj:'Diseñar e implementar App para Gestión de Visitas a Frentes de Trabajo.',meta:'1 aplicación implementada',ini:'Dic 2025',fin:'Jun 2026',ind:'Tablero de Control – Visitas a Frentes',frec:'Mensual'},
+  {id:'G-03',s:'GESTION',obj:'Automatizar seguimiento y control de No Conformidades.',meta:'1 aplicación sistematizada implementada',ini:'Ene 2026',fin:'Jun 2026',ind:'Tablero de Control No Conformidades',frec:'Mensual'},
+  {id:'G-04',s:'GESTION',obj:'Diseñar e implementar APP para Gestión de Checklist de Unidades y Registro Pre viaje.',meta:'1 aplicación implementada',ini:'Ene 2026',fin:'Abr 2026',ind:'App FleetCheck / App FleetCheck PRO',frec:'Mensual'},
+  {id:'ST-01',s:'SSA_TRANSP',obj:'Mantener la baja incidencia de accidentología vial de 2025.',meta:'<1',ini:'Ene 2026',fin:'Dic 2026',ind:'IFAT',frec:'Mensual'},
+  {id:'ST-02',s:'SSA_TRANSP',obj:'ICR: mantener conductores en Riesgo Bajo – Muy Bajo.',meta:'<20% en categorías de riesgo elevado',ini:'Ene 2026',fin:'Dic 2026',ind:'Indicador ICR PRO',frec:'Mensual'},
+  {id:'ST-03',s:'SSA_TRANSP',obj:'Evitar inhabilitaciones por repetición de Riesgos Altos/Moderados en conducta de manejo.',meta:'0 inhabilitaciones',ini:'Ene 2026',fin:'Dic 2026',ind:'Indicador de Habilitación de Recursos',frec:'Mensual'},
+  {id:'ST-04',s:'SSA_TRANSP',obj:'Formación y toma de conciencia. Capacitaciones.',meta:'>3 capacitaciones',ini:'Feb 2026',fin:'Dic 2026',ind:'Indicador de Capacitaciones',frec:'Mensual'},
+  {id:'ST-05',s:'SSA_TRANSP',obj:'Reducir trasbordos respecto a 2025 (4 trasbordos).',meta:'<4 trasbordos',ini:'Ene 2026',fin:'Dic 2026',ind:'Indicador de Trasbordos y Cambios de Unidad',frec:'Mensual'},
+  {id:'SP-01',s:'SSA_PROD',obj:'Reducir accidentes personales respecto a 2025.',meta:'<10 accidentes',ini:'Ene 2026',fin:'Dic 2026',ind:'Indicador de Estadística Interna 2026',frec:'Mensual'},
+  {id:'SP-02',s:'SSA_PROD',obj:'Gestión vehicular: reducir accidentes vehiculares respecto a 2025.',meta:'<5 accidentes',ini:'Ene 2026',fin:'Dic 2026',ind:'Indicador de Estadística Interna 2026',frec:'Mensual'},
+  {id:'SP-03',s:'SSA_PROD',obj:'Visitas a frentes de trabajo.',meta:'>2 visitas por período',ini:'Ene 2026',fin:'Dic 2026',ind:'Indicador de Visitas Realizadas',frec:'Mensual'},
+  {id:'SP-04',s:'SSA_PROD',obj:'Cumplir horas de capacitación por operario.',meta:'4 hs/mes diurno | 1 hs/mes nocturno',ini:'Ene 2026',fin:'Dic 2026',ind:'Indicador Seguimiento de Capacitación',frec:'Mensual'},
+  {id:'SP-05',s:'SSA_PROD',obj:'Evitar inhabilitaciones por ICR Altos/Moderados en conducta de manejo.',meta:'0 inhabilitaciones',ini:'Ene 2026',fin:'Dic 2026',ind:'Indicador de Habilitación de Recursos',frec:'Mensual'},
+  {id:'AM-01',s:'AMBIENTE',obj:'Construir 3 recintos de acopio de residuos peligrosos (Disp. 185).',meta:'3 recintos construidos y operativos',ini:'Jul 2025',fin:'Oct 2026',ind:'N° de recintos construidos y operativos',frec:'Semestral'},
+  {id:'AM-02',s:'AMBIENTE',obj:'Actualizar matriz de evaluación de Impacto Ambiental incluyendo nuevos servicios.',meta:'1 matriz actualizada alineada a ISO 14001',ini:'Jul 2025',fin:'Abr 2026',ind:'Matriz Actualizada (ISO 14.001)',frec:'Mensual'},
+  {id:'AM-03a',s:'AMBIENTE',obj:'Disminuir generación de residuos – Base de datos.',meta:'Base de datos funcional con generación de informes',ini:'Ene 2026',fin:'Jun 2026',ind:'Base de Datos',frec:'Semestral'},
+  {id:'AM-03b',s:'AMBIENTE',obj:'Disminuir generación de residuos – Reducción efectiva.',meta:'Reducción del 10%',ini:'Jul 2026',fin:'Nov 2026',ind:'Indicador de Generación de Residuos',frec:'Mensual'},
+  {id:'AM-04a',s:'AMBIENTE',obj:'Capacitar al personal en temáticas ambientales – Cantidad.',meta:'6 capacitaciones anuales',ini:'Dic 2025',fin:'Nov 2026',ind:'Indicador de Capacitaciones MA',frec:'Bimestral'},
+  {id:'AM-04b',s:'AMBIENTE',obj:'Capacitar al personal en temáticas ambientales – Cobertura.',meta:'80% del personal capacitado',ini:'Ene 2026',fin:'Dic 2026',ind:'Indicador de Capacitaciones MA',frec:'Mensual'},
+  {id:'AM-05',s:'AMBIENTE',obj:'Cumplimiento de Requisitos Legales Ambientales.',meta:'1 (documentación y habilitaciones vigentes)',ini:'Ene 2026',fin:'Dic 2026',ind:'Habilitaciones y Registros Vigentes',frec:'Semestral'},
+  {id:'MN-01',s:'MANTENIMIENTO',obj:'Disponibilidad y confiabilidad de Flota por encima del objetivo.',meta:'>90%',ini:'Ene 2026',fin:'Dic 2026',ind:'Indicador de Mantenimiento',frec:'Mensual'},
+  {id:'MN-02',s:'MANTENIMIENTO',obj:'Clasificar mantenimientos en CORRECTIVO y PREVENTIVO.',meta:'Nueva clasificación implementada',ini:'Ene 2026',fin:'Dic 2026',ind:'Indicador de Mantenimiento',frec:'Mensual'},
+  {id:'MN-03',s:'MANTENIMIENTO',obj:'Reducción de días en taller promedio por intervención.',meta:'1.5 días promedio',ini:'Feb 2026',fin:'Dic 2026',ind:'Indicador de Mantenimiento',frec:'Mensual'},
+  {id:'CP-01',s:'COMPRAS',obj:'Reducir tiempos de entrega de mercadería.',meta:'Máximo 48 hs para mercadería en stock',ini:'Ene 2026',fin:'Dic 2026',ind:'Reportes del sistema',frec:'Mensual'},
+  {id:'CP-02',s:'COMPRAS',obj:'Reorganización y orden del pañol con inventario fidedigno.',meta:'1 reorganización completa',ini:'Ene 2026',fin:'Dic 2026',ind:'Control de stock',frec:'Mensual'},
+  {id:'CP-03',s:'COMPRAS',obj:'Vinculación en compras y pañol de ambos sectores.',meta:'1 integración implementada',ini:'Ene 2026',fin:'Dic 2026',ind:'El reparto de tareas',frec:'Mensual'},
+  {id:'AP-01',s:'ADM_PROV',obj:'Migrar gestión integral de proveedores a SAP Business One.',meta:'1 (trazabilidad completa del ciclo de compras)',ini:'Ene 2026',fin:'Jun 2026',ind:'Proveedores activos SAP / Total x100',frec:'Mensual'},
+  {id:'AP-02',s:'ADM_PROV',obj:'Normalizar base de datos de proveedores con documentación vigente.',meta:'100% proveedores con doc. fiscal y comercial',ini:'Ene 2026',fin:'Jul 2026',ind:'Proveedores con doc. completa / Total x100',frec:'Mensual'},
+  {id:'AP-03',s:'ADM_PROV',obj:'Reducir tiempos de procesamiento de facturas.',meta:'>48 hs = 0%',ini:'Ene 2026',fin:'Sep 2026',ind:'Facturas sin ingresar con antigüedad >48hs',frec:'Mensual'},
+  {id:'AP-04',s:'ADM_PROV',obj:'Deuda vencida proveedores.',meta:'≤5%',ini:'Ene 2026',fin:'Oct 2026',ind:'Monto deuda vencida / Deuda total x100',frec:'Mensual'},
+  {id:'AP-05',s:'ADM_PROV',obj:'Circuito OC completo en SAP.',meta:'≥95%',ini:'Ene 2026',fin:'Jul 2026',ind:'OC con recepción y factura en SAP / Total OC x100',frec:'Mensual'},
+  {id:'AF-01',s:'ADM_FACT',obj:'DSO – Días de cobranza.',meta:'Tendencia a la baja (↓)',ini:'Ene 2026',fin:'Dic 2026',ind:'—',frec:'Mensual'},
+  {id:'AF-02',s:'ADM_FACT',obj:'Cartera vencida >30 días.',meta:'≤10%',ini:'Ene 2026',fin:'Dic 2026',ind:'—',frec:'Mensual'},
+  {id:'AF-03',s:'ADM_FACT',obj:'Efectividad de cobranza.',meta:'≥90%',ini:'Ene 2026',fin:'Dic 2026',ind:'—',frec:'Mensual'},
+  {id:'AC-01',s:'ADM_CONT',obj:'Días cierre contable.',meta:'≤10 días',ini:'Ene 2026',fin:'Dic 2026',ind:'—',frec:'Mensual'},
+  {id:'AC-02',s:'ADM_CONT',obj:'DDJJ en término.',meta:'1 (cumplimiento total)',ini:'Ene 2026',fin:'Dic 2026',ind:'—',frec:'Mensual'},
+  {id:'AC-03',s:'ADM_CONT',obj:'Multas / intereses.',meta:'0',ini:'Ene 2026',fin:'Dic 2026',ind:'—',frec:'Mensual'},
+  {id:'AR-01',s:'ADM_RRHH',obj:'Automatización del ciclo de novedades y liquidación de haberes – Migración Dot People.',meta:'1 (100% empleados activos en sistema)',ini:'Ene 2026',fin:'Jun 2026',ind:'% empleados activos en el sistema',frec:'Mensual'},
+  {id:'AR-02a',s:'ADM_RRHH',obj:'Información automática al sistema de nómina – Relojes operativos 100%.',meta:'Relojes de asistencia operativos 100%',ini:'Ene 2026',fin:'Oct 2026',ind:'% puntos de fichaje activos',frec:'Mensual'},
+  {id:'AR-02b',s:'ADM_RRHH',obj:'Información automática al sistema de nómina – Tasa fichaje automático.',meta:'Tasa fichaje automático ≥95%',ini:'Ene 2026',fin:'Dic 2026',ind:'Personal fichado / Total nómina x100',frec:'Mensual'},
+  {id:'AR-03',s:'ADM_RRHH',obj:'Reducir errores en liquidación de haberes.',meta:'≤5 incidencias por mes',ini:'Ene 2026',fin:'Dic 2026',ind:'% de Liquidaciones sin reclamos',frec:'Mensual'},
+  {id:'AR-04',s:'ADM_RRHH',obj:'Tiempo ciclo liquidación.',meta:'≤5 días hábiles',ini:'Oct 2026',fin:'Dic 2026',ind:'Días hábiles del cierre a pago',frec:'Mensual'},
+  {id:'CD-01a',s:'ADM_CTRL',obj:'Garantizar habilitación permanente del personal para ingreso a yacimiento.',meta:'% personal habilitado ≥98%',ini:'Ene 2026',fin:'Dic 2026',ind:'Personal habilitado / Nómina total x100',frec:'Mensual'},
+  {id:'CD-01b',s:'ADM_CTRL',obj:'Garantizar habilitación permanente de vehículos para ingreso a yacimiento.',meta:'% flota habilitada ≥98%',ini:'Dic 2025',fin:'Oct 2026',ind:'Flota habilitada / Flota total x100',frec:'Mensual'},
+  {id:'CD-01c',s:'ADM_CTRL',obj:'Garantizar 0 rechazos de acceso a yacimiento.',meta:'0 rechazos de acceso',ini:'Ene 2026',fin:'Dic 2026',ind:'—',frec:'Mensual'},
+  {id:'CD-02a',s:'ADM_CTRL',obj:'Digitalizar el 100% de los legajos de empleados.',meta:'100% legajos digitales completos',ini:'Feb 2026',fin:'Dic 2026',ind:'—',frec:'Mensual'},
+  {id:'CD-02b',s:'ADM_CTRL',obj:'Digitalizar el 100% de los legajos vehiculares.',meta:'100% legajos vehiculares digitales',ini:'Mar 2026',fin:'Dic 2026',ind:'—',frec:'Mensual'},
+];
+
+let evalData = {}; // { id: { resultado, pct_logrado, comentario, evidencia } }
+const RESULTADO_OPTS = ['Sin evaluar','Cumplido','Parcialmente cumplido','No cumplido'];
+const RESULTADO_COLOR = {'Cumplido':'#276749','Parcialmente cumplido':'#744210','No cumplido':'#9b2c2c','Sin evaluar':'#718096'};
+const RESULTADO_BG = {'Cumplido':'#f0fff4','Parcialmente cumplido':'#fffbeb','No cumplido':'#fff5f5','Sin evaluar':'#f7fafc'};
+
+let currentSector = null;
+let activeMonth = null;
+let activeTab = null;
+let viewMode = 'acumulado';
+let data = {};
+let customObjetivos = [];
+
+// ===== HELPERS =====
+function currentMonthVal() {
+  const now = new Date();
+  return `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
+}
+function monthData(month) { return data[month] || {}; }
+function monthLabel(val) { return (MONTHS.find(m=>m.val===val)||{lbl:val}).lbl; }
+function monthOpts(selected) {
+  return MONTHS.map(m=>`<option value="${m.val}" ${m.val===selected?'selected':''}>${m.lbl}</option>`).join('');
+}
+function getViewData() {
+  if (viewMode === 'mes') return monthData(activeMonth);
+  return getAcumuladoData();
+}
+function getAcumuladoData() {
+  const result = {};
+  const sortedMonths = MONTHS.map(m=>m.val).filter(m=>data[m]);
+  [...OBJETIVOS, ...customObjetivos].forEach(o => {
+    const oid = o.id;
+    for (let i = sortedMonths.length - 1; i >= 0; i--) {
+      const md = data[sortedMonths[i]];
+      if (md && md[oid] && md[oid].estado !== 'Sin actualizar') {
+        result[oid] = md[oid]; break;
+      }
+    }
+  });
+  return result;
+}
+function updateEviBtn(id, val) {
+  const btn = document.getElementById('evibtn-'+id);
+  if (!btn) return;
+  const isUrl = val && (val.startsWith('http://') || val.startsWith('https://'));
+  if (isUrl) {
+    btn.outerHTML = `<a id="evibtn-${id}" href="${escHtml(val)}" target="_blank" style="flex-shrink:0;padding:5px 10px;background:#1e2d3e;color:#fff;border-radius:6px;font-size:11px;font-weight:600;text-decoration:none;white-space:nowrap">Ver →</a>`;
+  } else {
+    btn.outerHTML = `<span id="evibtn-${id}" style="flex-shrink:0;padding:5px 10px;background:#e2e8f0;color:#a0aec0;border-radius:6px;font-size:11px;font-weight:600;white-space:nowrap">Ver →</span>`;
+  }
+}
+function escHtml(s){ return (s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function showToast(msg) {
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  clearTimeout(window._toastT);
+  window._toastT=setTimeout(()=>t.classList.remove('show'),2200);
+}
+
+// ===== STORAGE (Supabase) =====
+const SB_URL = 'https://atnnhefwyfjhwcudtlbe.supabase.co';
+const SB_KEY = 'sb_publishable__nG3H2u-Ms8789o8ykcl9g_u9K20CaN';
+const SB_HEADERS = { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' };
+
+async function loadData() {
+  try {
+    const [r1, r2] = await Promise.all([
+      fetch(`${SB_URL}/rest/v1/om2026_seguimiento?select=*`, { headers: SB_HEADERS }),
+      fetch(`${SB_URL}/rest/v1/om2026_objetivos_custom?select=*&order=created_at.asc`, { headers: SB_HEADERS })
+    ]);
+    const rows = await r1.json();
+    const custom = await r2.json();
+    data = {};
+    if (Array.isArray(rows)) {
+      rows.forEach(r => {
+        if (!data[r.month]) data[r.month] = {};
+        data[r.month][r.id] = { estado: r.estado, avance: r.avance, obs: r.obs, evidencia: r.evidencia, fecha: r.fecha };
+      });
+    }
+    customObjetivos = Array.isArray(custom) ? custom : [];
+  } catch(e) { data = {}; customObjetivos = []; }
+}
+async function saveItem(month, id, item) {
+  try {
+    if (!data[month]) data[month] = {};
+    data[month][id] = item;
+    await fetch(`${SB_URL}/rest/v1/om2026_seguimiento`, {
+      method: 'POST',
+      headers: { ...SB_HEADERS, 'Prefer': 'resolution=merge-duplicates,return=minimal' },
+      body: JSON.stringify({ id, month, sector: currentSector, estado: item.estado, avance: item.avance, obs: item.obs, evidencia: item.evidencia, fecha: item.fecha })
+    });
+  } catch(e) { showToast('Error al guardar.'); }
+}
+async function saveCustomObjetivo(obj) {
+  try {
+    customObjetivos = customObjetivos.filter(o=>o.id!==obj.id);
+    customObjetivos.push(obj);
+    await fetch(`${SB_URL}/rest/v1/om2026_objetivos_custom`, {
+      method: 'POST',
+      headers: { ...SB_HEADERS, 'Prefer': 'resolution=merge-duplicates,return=minimal' },
+      body: JSON.stringify(obj)
+    });
+  } catch(e) { showToast('Error al guardar objetivo.'); }
+}
+async function deleteCustomObjetivo(id) {
+  if (!confirm('¿Eliminar este objetivo?')) return;
+  customObjetivos = customObjetivos.filter(o=>o.id!==id);
+  await fetch(`${SB_URL}/rest/v1/om2026_objetivos_custom?id=eq.${encodeURIComponent(id)}`, { method:'DELETE', headers: SB_HEADERS });
+  await fetch(`${SB_URL}/rest/v1/om2026_seguimiento?id=eq.${encodeURIComponent(id)}`, { method:'DELETE', headers: SB_HEADERS });
+  renderSectorView();
+}
+function allObjetivos(sector) {
+  return [...OBJETIVOS.filter(o=>o.s===sector), ...customObjetivos.filter(o=>o.sector===sector)];
+}
+
+// ===== LÓGICA DE FIN DE OBJETIVO =====
+const MES_MAP = {
+  'ene':'01','feb':'02','mar':'03','abr':'04','may':'05','jun':'06',
+  'jul':'07','ago':'08','sep':'09','oct':'10','nov':'11','dic':'12'
+};
+function parseFin(finStr) {
+  if (!finStr) return '2026-12';
+  const parts = finStr.trim().toLowerCase().split(' ');
+  if (parts.length < 2) return '2026-12';
+  const mes = MES_MAP[parts[0].substring(0,3)] || '12';
+  const anio = parts[1] || '2026';
+  return `${anio}-${mes}`;
+}
+// Último estado registrado de un objetivo hasta un mes determinado
+function getLastDataUpTo(objId, upToMonth) {
+  const meses = MONTHS.map(m=>m.val).filter(m=>data[m] && m<=upToMonth).reverse();
+  for (const m of meses) {
+    const d = data[m][objId];
+    if (d && d.estado && d.estado !== 'Sin actualizar') return d;
+  }
+  return null;
+}
+// Filtra objetivos activos para un mes determinado:
+// - Oculta los que ya se cerraron (finMonth < activeMes y cumplidos)
+// - Mantiene los que vencieron sin cumplir (se marcan Vencido automático)
+function objetivosActivosMes(sector, activeMes) {
+  return allObjetivos(sector).filter(o => {
+    const finMonth = parseFin(o.fin);
+    if (finMonth >= activeMes) return true; // todavía vigente
+    const last = getLastDataUpTo(o.id, finMonth);
+    return !(last && last.estado === 'Cumplido'); // si cumplido → ocultar
+  });
+}
+
+
+async function loadEvalData() {
+  try {
+    const r = await fetch(`${SB_URL}/rest/v1/om2026_evaluacion_anual?select=*`, { headers: SB_HEADERS });
+    const rows = await r.json();
+    evalData = {};
+    if (Array.isArray(rows)) rows.forEach(r => { evalData[r.id] = { resultado: r.resultado, pct_logrado: r.pct_logrado, comentario: r.comentario, evidencia: r.evidencia }; });
+  } catch(e) { evalData = {}; }
+}
+async function saveEvalItem(id, sector, item) {
+  try {
+    evalData[id] = item;
+    await fetch(`${SB_URL}/rest/v1/om2026_evaluacion_anual`, {
+      method: 'POST',
+      headers: { ...SB_HEADERS, 'Prefer': 'resolution=merge-duplicates,return=minimal' },
+      body: JSON.stringify({ id, sector, resultado: item.resultado, pct_logrado: item.pct_logrado, comentario: item.comentario, evidencia: item.evidencia })
+    });
+  } catch(e) { showToast('Error al guardar.'); }
+}
+
+function doLogin() {
+  const sec = document.getElementById('sectorSel').value;
+  const pass = document.getElementById('passInp').value;
+  const err = document.getElementById('lerr');
+  if (!sec) { err.textContent='Seleccioná un sector.'; err.style.display='block'; return; }
+  if (PASSWORDS[sec] !== pass) { err.style.display='block'; return; }
+  err.style.display='none';
+  if (document.getElementById('rememberMe').checked) {
+    localStorage.setItem('om2026_remember', JSON.stringify({sec, pass}));
+  } else {
+    localStorage.removeItem('om2026_remember');
+  }
+  currentSector = sec;
+  loadData().then(renderApp);
+}
+function doLogout() {
+  currentSector = null;
+  document.getElementById('loginScreen').style.display='flex';
+  document.getElementById('appScreen').style.display='none';
+  document.getElementById('passInp').value='';
+  document.getElementById('sectorSel').value='';
+}
+// Auto-login if remembered
+window.addEventListener('DOMContentLoaded', () => {
+  try {
+    const saved = JSON.parse(localStorage.getItem('om2026_remember'));
+    if (saved && PASSWORDS[saved.sec] === saved.pass) {
+      document.getElementById('sectorSel').value = saved.sec;
+      document.getElementById('passInp').value = saved.pass;
+      document.getElementById('rememberMe').checked = true;
+      currentSector = saved.sec;
+      loadData().then(renderApp);
+    }
+  } catch(e) {}
+});
+
+// ===== RENDER APP =====
+function renderApp() {
+  document.getElementById('loginScreen').style.display='none';
+  document.getElementById('appScreen').style.display='block';
+  document.getElementById('userBadge').textContent = SECTOR_LABELS[currentSector]||currentSector;
+  activeMonth = currentMonthVal();
+  buildTabs();
+}
+function buildTabs() {
+  const bar = document.getElementById('tabBar');
+  if (currentSector === 'GERENCIA') {
+    bar.innerHTML = `
+      <button class="ps-tab active" onclick="switchTab('overview',this)">📊 Resumen General</button>
+      <button class="ps-tab" onclick="switchTab('detail',this)">📋 Detalle por Sector</button>
+      <button class="ps-tab" onclick="switchTab('evalanual',this)">🏆 Evaluación Anual</button>
+      <button class="ps-tab" onclick="switchTab('rm02',this)">📑 RM-02 Prog. Obj. y Metas</button>
+      <button class="ps-tab" onclick="exportarExcel()" style="margin-left:auto;color:#e8a020">⬇ Excel</button>`;
+    activeTab = 'overview';
+    renderGerenciaOverview();
+  } else {
+    bar.innerHTML = `
+      <button class="ps-tab active" onclick="switchTab('tablero',this)">📊 Mi Tablero</button>
+      <button class="ps-tab" onclick="switchTab('sector',this)">📋 Mis Objetivos</button>
+      <button class="ps-tab" onclick="switchTab('evalanual',this)">🏆 Evaluación Anual</button>`;
+    activeTab = 'tablero';
+    renderSectorTablero();
+  }
+}
+function switchTab(tab, el) {
+  document.querySelectorAll('.ps-tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  activeTab = tab;
+  if (tab==='overview') loadData().then(renderGerenciaOverview);
+  else if (tab==='detail') loadData().then(renderGerenciaDetail);
+  else if (tab==='evalanual') loadData().then(()=>loadEvalData().then(currentSector==='GERENCIA'?renderGerenciaEvalAnual:renderSectorEvalAnual));
+  else if (tab==='rm02') loadData().then(()=>loadEvalData().then(renderRM02));
+  else if (tab==='sector') renderSectorView();
+  else if (tab==='tablero') renderSectorTablero();
+}
+
+// ===== SECTOR TABLERO =====
+function sectorViewData() {
+  // Acumulado para el sector: último estado conocido por objetivo
+  const result = {};
+  const sortedMonths = MONTHS.map(m=>m.val).filter(m=>data[m]);
+  const objs = allObjetivos(currentSector);
+  objs.forEach(o => {
+    for (let i=sortedMonths.length-1;i>=0;i--) {
+      const md=data[sortedMonths[i]];
+      if(md&&md[o.id]&&md[o.id].estado!=='Sin actualizar'){result[o.id]=md[o.id];break;}
+    }
+  });
+  return result;
+}
+function miniRing(pct, color, size=52) {
+  const r=18,cx=size/2,cy=size/2,circ=2*Math.PI*r,dash=(pct/100)*circ;
+  return `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">
+    <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="#f0f2f6" stroke-width="4.5"/>
+    <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${color}" stroke-width="4.5"
+      stroke-dasharray="${dash} ${circ}" stroke-linecap="round" transform="rotate(-90 ${cx} ${cy})"/>
+    <text x="${cx}" y="${cy}" text-anchor="middle" dominant-baseline="central"
+      fill="#1a202c" font-size="9.5" font-weight="700" font-family="Segoe UI,sans-serif">${pct}%</text>
+  </svg>`;
+}
+function renderSectorTablero() {
+  const objs = allObjetivos(currentSector);
+  const md = sectorViewData();
+  const activeMes = currentMonthVal();
+  let sc=0,si=0,sr=0,sv=0,sa=0;
+  objs.forEach(o=>{
+    const estRaw=(md[o.id]||{}).estado||'Sin actualizar';
+    const finMonth=parseFin(o.fin||'');
+    // Aplicar lógica de plazo vencido igual que en el score
+    const est=(finMonth<activeMes && estRaw!=='Cumplido' && estRaw!=='Vencido') ? 'En riesgo' : estRaw;
+    if(est==='Cumplido')sc++;
+    else if(est==='En curso')si++;
+    else if(est==='En riesgo')sr++;
+    else if(est==='Vencido')sv++;
+    else sa++;
+  });
+  const avgP=objs.length?Math.round(sc/objs.length*100):0;
+  const ringColor=sv>0?'#e53e3e':sr>0?'#d69e2e':sc===objs.length?'#38a169':si>0?'#3182ce':'#a0aec0';
+
+  // Objective cards
+  let objCards = objs.map(o=>{
+    const d=md[o.id]||{estado:'Sin actualizar',avance:0};
+    const av=Number(d.avance)||0;
+    const estOriginal=d.estado||'Sin actualizar';
+    // Aplicar la misma lógica que el score: si venció el plazo y no está cumplido → en riesgo
+    const finMonth=parseFin(o.fin||'');
+    const activeMes=currentMonthVal();
+    const pastDue = finMonth < activeMes;
+    const estEfectivo = (pastDue && estOriginal!=='Cumplido' && estOriginal!=='Vencido')
+      ? 'En riesgo' : estOriginal;
+    const bc=BADGE_CLASS[estEfectivo]||'b-pend';
+    const pc=PROG_COLOR[estEfectivo]||'#a0aec0';
+    const accentColor=estEfectivo==='Cumplido'?'#38a169':estEfectivo==='En curso'?'#3182ce':estEfectivo==='En riesgo'?'#d69e2e':estEfectivo==='Vencido'?'#e53e3e':'#e2e8f0';
+    const diferente = pastDue && estOriginal!==estEfectivo; // el estado fue modificado por el sistema
+    return `<div style="background:#fff;border-radius:12px;padding:14px 16px;border:1px solid #e2e8f0;box-shadow:0 1px 3px rgba(0,0,0,.06);border-left:4px solid ${accentColor};display:flex;align-items:center;gap:14px">
+      <div style="flex-shrink:0">${miniRing(av,pc)}</div>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:10px;font-weight:700;color:#e8a020;text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px">${o.id}${pastDue&&estEfectivo!=='Cumplido'?` <span style="color:#d69e2e">· Plazo vencido (${o.fin})</span>`:''}</div>
+        <div style="font-size:12.5px;font-weight:600;color:#1e2d3e;margin-bottom:6px;line-height:1.35;white-space:normal">${o.obj}</div>
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+          <span class="badge ${bc}" style="font-size:10.5px">${estEfectivo}</span>
+          ${diferente?`<span style="font-size:10px;color:#718096;font-style:italic">Ingresado: ${estOriginal}</span>`:''}
+          <span style="font-size:11px;color:#718096">Meta: <em>${o.meta}</em></span>
+        </div>
+        ${d.obs?`<div style="font-size:11px;color:#718096;margin-top:4px;font-style:italic">💬 ${escHtml(d.obs)}</div>`:''}
+        ${d.evidencia?`<div style="margin-top:6px"><a href="${escHtml(d.evidencia)}" target="_blank" style="font-size:11px;font-weight:600;color:#1e2d3e;text-decoration:none;background:#f0f2f6;padding:3px 9px;border-radius:5px">🔗 Ver indicador →</a></div>`:''}
+      </div>
+    </div>`;
+  }).join('');
+
+  const sectorScore = calcAnnualScore(currentSector);
+  const mesScore = calcScoreForMonth(allObjetivos(currentSector), activeMonth).score;
+  const mesesFaltantes = getMissingMonths(currentSector);
+  const lastUpdate = getLastUpdateMonth(currentSector);
+  const mesesCargados = MONTHS.map(m=>m.val).filter(m=>data[m]&&allObjetivos(currentSector).some(o=>parseIni(o.ini||'')<=m&&getLastDataUpTo(o.id,m)!==null)).length;
+  const scoreSub = mesesCargados>1 ? `Promedio ${mesesCargados} meses · Este mes: ${mesScore}%` : mesesCargados===1 ? `1 mes registrado · Este mes: ${mesScore}%` : 'Sin datos aún';
+  const warningBanner = mesesFaltantes.length>0 ? `
+    <div style="background:#fffbeb;border:1.5px solid #f6e05e;border-radius:10px;padding:12px 16px;margin-bottom:14px;display:flex;align-items:flex-start;gap:10px">
+      <span style="font-size:18px;flex-shrink:0">⚠️</span>
+      <div>
+        <div style="font-size:13px;font-weight:700;color:#744210">Sin actualizar desde ${monthLabel(lastUpdate)}</div>
+        <div style="font-size:11.5px;color:#975a16;margin-top:3px">
+          Meses sin registro: <strong>${mesesFaltantes.map(m=>monthLabel(m)).join(', ')}</strong>.<br>
+          Estos meses se calculan con el último estado conocido pero con una <strong>penalización del 50%</strong> en el score anual.<br>
+          Actualizá los objetivos para recuperar esos puntos.
+        </div>
+      </div>
+    </div>` : '';
+
+
+  document.getElementById('appContent').innerHTML = `<div class="ps-main">
+    ${warningBanner}
+    <div class="cc" style="margin-bottom:16px">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:0">
+        <!-- Velocímetro sector -->
+        <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:16px 20px;border-right:1px solid #e2e8f0">
+          <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#718096;margin-bottom:6px">Desempeño del Sector</div>
+          ${buildSpeedometer(sectorScore, scoreSub, true)}
+        </div>
+        <!-- KPIs -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:16px 20px;align-content:center">
+          <div style="text-align:center;padding:12px;background:#f7fafc;border-radius:10px">
+            <div style="font-size:28px;font-weight:800;color:#1a202c">${objs.length}</div>
+            <div style="font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:#718096;margin-top:3px">Total</div>
+          </div>
+          <div style="text-align:center;padding:12px;background:#f0fff4;border-radius:10px">
+            <div style="font-size:28px;font-weight:800;color:#276749">${sc}</div>
+            <div style="font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:#276749;margin-top:3px">Cumplidos</div>
+          </div>
+          <div style="text-align:center;padding:12px;background:#ebf8ff;border-radius:10px">
+            <div style="font-size:28px;font-weight:800;color:#2c5282">${si}</div>
+            <div style="font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:#2c5282;margin-top:3px">En Curso</div>
+          </div>
+          <div style="text-align:center;padding:12px;background:#fffbeb;border-radius:10px">
+            <div style="font-size:28px;font-weight:800;color:#744210">${sr}</div>
+            <div style="font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:#744210;margin-top:3px">En Riesgo</div>
+          </div>
+          ${sv>0?`<div style="text-align:center;padding:12px;background:#fff5f5;border-radius:10px;grid-column:span 2"><div style="font-size:28px;font-weight:800;color:#9b2c2c">${sv}</div><div style="font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:#9b2c2c;margin-top:3px">Vencidos</div></div>`:''}
+          ${sa>0?`<div style="text-align:center;padding:12px;background:#f7fafc;border-radius:10px;${sv>0?'':'grid-column:span 2'}"><div style="font-size:28px;font-weight:800;color:#718096">${sa}</div><div style="font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:#718096;margin-top:3px">Sin actualizar</div></div>`:''}
+        </div>
+      </div>
+    </div>
+
+    <!-- Objetivo cards -->
+    <div class="cc" style="overflow:hidden">
+      <div class="cc-hdr"><div class="cc-title">Estado por Objetivo — Acumulado</div></div>
+      <div style="padding:14px;display:flex;flex-direction:column;gap:10px">${objCards}</div>
+    </div>
+
+    <!-- Desglose del score anual -->
+    <div class="cc" style="overflow:hidden;margin-top:0">
+      <div class="cc-hdr">
+        <div><div class="cc-title">Desglose del Score Anual</div>
+        <div class="cc-sub">Así se calcula el ${sectorScore}% promedio</div></div>
+      </div>
+      <div class="tbl-wrap"><table class="ps-table">
+        <thead><tr>
+          <th>Período</th><th>Objetivos evaluados</th><th>Score del mes</th><th>Dato real</th><th>Impacto en promedio</th>
+        </tr></thead>
+        <tbody>${(()=>{
+          const prevM = previousMonthVal();
+          const todosLosMeses = MONTHS.map(m=>m.val).filter(m=>m<=currentMonthVal());
+          const primerMes = todosLosMeses.find(m=>
+            data[m] && allObjetivos(currentSector).some(o=>data[m][o.id]&&data[m][o.id].estado!=='Sin actualizar')
+          );
+          if (!primerMes) return `<tr><td colspan="5" style="text-align:center;color:#718096;padding:16px">Sin datos cargados aún</td></tr>`;
+          const mesesRel = todosLosMeses.filter(m=>m>=primerMes);
+          return mesesRel.map(m=>{
+            const {score,count}=calcScoreForMonth(allObjetivos(currentSector),m);
+            if(!count) return '';
+            const hayCarry=allObjetivos(currentSector).some(o=>parseIni(o.ini||'')<=m&&getLastDataUpTo(o.id,m)!==null);
+            if(!hayCarry) return '';
+            const objsQueTocan=allObjetivos(currentSector).filter(o=>parseIni(o.ini||'')<=m&&shouldEvaluate(o.frec||'Mensual',m));
+            if(!objsQueTocan.length) return '';
+            const hayReal=data[m]&&objsQueTocan.some(o=>data[m][o.id]&&data[m][o.id].estado!=='Sin actualizar');
+            const esMesFaltante=!hayReal&&prevM&&m<=prevM;
+            const esMesActual=m===currentMonthVal()&&!hayReal;
+            let impacto, rowBg='';
+            if(hayReal){
+              impacto=`<span style="color:#276749;font-weight:600">${score}% (completo)</span>`;
+            } else if(esMesFaltante){
+              impacto=`<span style="color:#744210;font-weight:600">${Math.round(score*0.5)}% (penalizado 50%)</span>`;
+              rowBg='background:#fffbeb';
+            } else {
+              impacto=`<span style="color:#718096">En curso — no penaliza</span>`;
+              rowBg='background:#f7fafc';
+            }
+            return `<tr style="${rowBg}">
+              <td style="font-weight:600;color:#1e2d3e">${monthLabel(m)}</td>
+              <td style="color:#718096">${objsQueTocan.length} obj.</td>
+              <td><span style="font-size:13px;font-weight:700;color:${score>=80?'#276749':score>=50?'#d97706':'#c53030'}">${score}%</span></td>
+              <td>${hayReal?'<span style="color:#276749">✓ Actualizado</span>':esMesActual?'<span style="color:#718096">En curso</span>':'<span style="color:#c05621">✗ Sin actualizar</span>'}</td>
+              <td>${impacto}</td>
+            </tr>`;
+          }).join('');
+        })()}</tbody>
+      </table></div>
+    </div>
+  </div>`;
+}
+
+// ===== SECTOR SEGUIMIENTO =====
+function renderSectorView() {
+  const objs = objetivosActivosMes(currentSector, activeMonth);
+  const md = monthData(activeMonth);
+  const totalSector = allObjetivos(currentSector).length;
+  const ocultados = totalSector - objs.length;
+  let rows = objs.map(o=>{
+    const finMonth = parseFin(o.fin);
+    const pastDue = finMonth < activeMonth;
+    const lastD = pastDue ? getLastDataUpTo(o.id, finMonth) : null;
+    // Si está vencido y no tiene dato este mes, pre-llenar desde el último conocido o marcar Vencido
+    const dRaw = md[o.id];
+    const d = dRaw || (pastDue && lastD ? {...lastD, estado:'En riesgo'} : {estado:'Sin actualizar',avance:0,obs:'',evidencia:''});
+    const isCustom = customObjetivos.some(c=>c.id===o.id);
+    const vencidoAuto = pastDue && !dRaw;
+    return `<tr ${vencidoAuto?'style="background:#fffbeb"':''}>
+      <td><strong style="color:#1e2d3e">${o.id}</strong>${isCustom?'<span style="font-size:9px;background:#ebf8ff;color:#2c5282;border-radius:4px;padding:1px 5px;margin-left:4px">nuevo</span>':''}${vencidoAuto?'<span style="font-size:9px;background:#fffbeb;color:#d69e2e;border-radius:4px;padding:1px 5px;margin-left:4px">⚠ en riesgo</span>':''}</td>
+      <td><div class="obj-txt" title="${o.obj}">${o.obj}</div></td>
+      <td><div class="meta-txt" title="${o.meta}">${o.meta}</div></td>
+      <td style="white-space:nowrap;color:#718096;font-size:11.5px">${o.ini||'—'}</td>
+      <td style="white-space:nowrap;font-size:11.5px;${pastDue?'color:#e53e3e;font-weight:600':''}">${o.fin||'Dic 2026'}</td>
+      <td><div class="meta-txt" title="${o.ind||''}">${o.ind||'—'}</div></td>
+      <td style="font-size:11px;color:#718096">${o.frec||'Mensual'}</td>
+      <td><select class="t-sel" id="est-${o.id}">
+        ${ESTADO_OPTS.map(e=>`<option value="${e}" ${e===d.estado?'selected':''}>${e}</option>`).join('')}
+      </select></td>
+      <td><input type="number" class="t-inp" id="av-${o.id}" min="0" max="100" value="${d.avance||0}" style="width:62px"></td>
+      <td><input type="text" class="t-inp wide" id="obs-${o.id}" value="${escHtml(d.obs||'')}" placeholder="Observaciones…"></td>
+      <td>
+        <div style="display:flex;align-items:center;gap:6px">
+          <input type="text" class="t-inp url" id="evi-${o.id}" value="${escHtml(d.evidencia||'')}" placeholder="Pegar URL…" oninput="updateEviBtn('${o.id}',this.value)">
+          ${d.evidencia ? `<a id="evibtn-${o.id}" href="${escHtml(d.evidencia)}" target="_blank" style="flex-shrink:0;padding:5px 10px;background:#1e2d3e;color:#fff;border-radius:6px;font-size:11px;font-weight:600;text-decoration:none;white-space:nowrap">Ver →</a>` : `<span id="evibtn-${o.id}" style="flex-shrink:0;padding:5px 10px;background:#e2e8f0;color:#a0aec0;border-radius:6px;font-size:11px;font-weight:600;white-space:nowrap">Ver →</span>`}
+        </div>
+      </td>
+      <td style="white-space:nowrap">
+        <button class="sav-btn" id="btn-${o.id}" onclick="saveRow('${o.id}')">Guardar</button>
+        ${isCustom?`<button onclick="renombrarObjetivo('${o.id}')" style="margin-left:4px;padding:5px 8px;background:none;border:1.5px solid #bee3f8;color:#2c5282;border-radius:6px;font-size:11px;cursor:pointer" title="Renombrar">✏️</button>
+        <button onclick="deleteCustomObjetivo('${o.id}')" style="margin-left:2px;padding:5px 8px;background:none;border:1.5px solid #fed7d7;color:#e53e3e;border-radius:6px;font-size:11px;cursor:pointer" title="Eliminar">✕</button>`:''}
+      </td>
+    </tr>`;
+  }).join('');
+
+  document.getElementById('appContent').innerHTML = `<div class="ps-main">
+    <div class="cc"><div class="cc-hdr">
+      <div><div class="cc-title">${SECTOR_LABELS[currentSector]} — Seguimiento Mensual</div>
+      <div class="cc-sub">${objs.length} objetivo${objs.length!==1?'s':''} activo${objs.length!==1?'s':''}${ocultados>0?` · <span style="color:#38a169">✅ ${ocultados} cumplido${ocultados!==1?'s':''} y cerrado${ocultados!==1?'s':''}</span>`:''} · Completá y guardá cada fila</div>
+      <div style="margin-top:8px;padding:8px 12px;background:#ebf8ff;border-radius:8px;font-size:11.5px;color:#2c5282;border-left:3px solid #3182ce">
+        <strong>Avance %:</strong> ingresá el % de cumplimiento de la meta completa del objetivo.<br>
+        Ej: meta = 3 capacitaciones, hiciste 2 → <strong>67%</strong> · Meta = app en 6 meses, van en mes 3 → <strong>50%</strong> · Meta = 0 accidentes, tuviste 0 → <strong>100%</strong>
+      </div></div>
+      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+        <label style="font-size:11px;font-weight:600;color:#718096;text-transform:uppercase;letter-spacing:.05em">Período</label>
+        <select onchange="changeMonth(this.value)" style="padding:7px 12px;border:1.5px solid #e2e8f0;border-radius:8px;font-size:13px;font-family:inherit;color:#1a202c;background:#fff;font-weight:600">${monthOpts(activeMonth)}</select>
+        <button onclick="toggleNuevoObjetivo()" style="padding:7px 14px;background:linear-gradient(135deg,#e8a020,#f05a28);color:#fff;border:none;border-radius:8px;font-size:12.5px;font-weight:600;cursor:pointer;font-family:inherit">+ Nuevo objetivo</button>
+      </div>
+    </div>
+
+    <!-- FORM NUEVO OBJETIVO -->
+    <div id="nuevoObjForm" style="display:none;padding:16px 20px;border-bottom:1px solid #e2e8f0;background:#fafbfd">
+      <div style="font-size:13px;font-weight:700;color:#1e2d3e;margin-bottom:12px">Agregar nuevo objetivo</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+        <div>
+          <label style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:#718096;display:block;margin-bottom:4px">Descripción del objetivo *</label>
+          <input id="nObj" type="text" class="t-inp" style="width:100%" placeholder="Describí el objetivo…">
+        </div>
+        <div>
+          <label style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:#718096;display:block;margin-bottom:4px">Meta *</label>
+          <input id="nMeta" type="text" class="t-inp" style="width:100%" placeholder="Valor o condición de cumplimiento…">
+        </div>
+        <div>
+          <label style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:#718096;display:block;margin-bottom:4px">Indicador</label>
+          <input id="nInd" type="text" class="t-inp" style="width:100%" placeholder="Indicador de medición…">
+        </div>
+        <div>
+          <label style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:#718096;display:block;margin-bottom:4px">Frecuencia</label>
+          <select id="nFrec" class="t-sel" style="width:100%">
+            <option>Mensual</option><option>Bimestral</option><option>Trimestral</option><option>Semestral</option><option>Anual</option>
+          </select>
+        </div>
+      </div>
+      <div style="display:flex;gap:8px">
+        <button onclick="guardarNuevoObjetivo()" style="padding:8px 18px;background:#e8a020;color:#fff;border:none;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit">Guardar objetivo</button>
+        <button onclick="toggleNuevoObjetivo()" style="padding:8px 14px;background:none;border:1.5px solid #e2e8f0;color:#718096;border-radius:7px;font-size:13px;cursor:pointer;font-family:inherit">Cancelar</button>
+      </div>
+    </div>
+
+    <div class="tbl-wrap"><table class="ps-table">
+      <thead><tr><th>ID</th><th>Objetivo</th><th>Meta</th><th>Inicio</th><th>Fin</th><th>Indicador</th><th>Frec.</th><th>Estado</th>
+        <th title="Ingresá el % de cumplimiento de la meta COMPLETA del objetivo. Ej: meta = 3 capacitaciones, hiciste 2 → 67%. Meta = app en 6 meses, vas en el mes 3 → 50%.">
+          Avance % ⓘ
+        </th>
+        <th>Observaciones</th><th>Evidencia / Link</th><th></th></tr></thead>
+      <tbody>${rows}</tbody>
+    </table></div></div>
+  </div>`;
+}
+function toggleNuevoObjetivo() {
+  const f = document.getElementById('nuevoObjForm');
+  f.style.display = f.style.display==='none' ? 'block' : 'none';
+}
+// Mapa de prefijos por sector
+const SECTOR_PREFIX = {
+  GESTION:'G', SSA_TRANSP:'ST', SSA_PROD:'SP', AMBIENTE:'AM',
+  MANTENIMIENTO:'MN', COMPRAS:'CP', ADM_PROV:'AP', ADM_FACT:'AF',
+  ADM_CONT:'AC', ADM_RRHH:'AR', ADM_CTRL:'CD'
+};
+function nextCustomId(sector) {
+  const prefix = SECTOR_PREFIX[sector] || sector.substring(0,2).toUpperCase();
+  // Obtener todos los IDs existentes del sector (base + custom)
+  const allIds = allObjetivos(sector).map(o=>o.id);
+  // Buscar el mayor número usado con este prefijo
+  let max = 0;
+  allIds.forEach(id => {
+    const match = id.match(new RegExp(`^${prefix}-(\\d+)`, 'i'));
+    if (match) { const n = parseInt(match[1]); if (n > max) max = n; }
+  });
+  return `${prefix}-${String(max + 1).padStart(2,'0')}`;
+}
+async function guardarNuevoObjetivo() {
+  const obj = document.getElementById('nObj').value.trim();
+  const meta = document.getElementById('nMeta').value.trim();
+  const ind = document.getElementById('nInd').value.trim();
+  const frec = document.getElementById('nFrec').value;
+  if (!obj || !meta) { showToast('Completá al menos objetivo y meta.'); return; }
+  const now = new Date();
+  const id = nextCustomId(currentSector);
+  const iniLabel = now.toLocaleString('es-AR',{month:'short',year:'numeric'}).replace('.','').replace(/^\w/,c=>c.toUpperCase());
+  const newObj = { id, sector: currentSector, obj, meta, ini: iniLabel, fin: 'Dic 2026', ind, frec };
+  await saveCustomObjetivo(newObj);
+  showToast(`Objetivo ${id} agregado correctamente`);
+  renderSectorView();
+}
+async function renombrarObjetivo(oldId) {
+  const newId = prompt(`Nuevo ID para "${oldId}":`, oldId);
+  if (!newId || newId === oldId) return;
+  if (!/^[A-Z]{1,3}-\d+[a-z]?$/i.test(newId)) { showToast('Formato inválido. Usá algo como G-05 o ST-06'); return; }
+  try {
+    // Actualizar en objetivos_custom
+    await fetch(`${SB_URL}/rest/v1/om2026_objetivos_custom?id=eq.${encodeURIComponent(oldId)}`, {
+      method: 'PATCH', headers: SB_HEADERS,
+      body: JSON.stringify({id: newId.toUpperCase()})
+    });
+    // Actualizar en seguimiento
+    await fetch(`${SB_URL}/rest/v1/om2026_seguimiento?id=eq.${encodeURIComponent(oldId)}`, {
+      method: 'PATCH', headers: SB_HEADERS,
+      body: JSON.stringify({id: newId.toUpperCase()})
+    });
+    const obj = customObjetivos.find(o=>o.id===oldId);
+    if (obj) obj.id = newId.toUpperCase();
+    showToast(`Renombrado a ${newId.toUpperCase()}`);
+    renderSectorView();
+  } catch(e) { showToast('Error al renombrar.'); }
+}
+
+function changeMonth(val) { activeMonth=val; renderSectorView(); }
+async function saveRow(id) {
+  const est=document.getElementById('est-'+id).value;
+  const av=parseInt(document.getElementById('av-'+id).value)||0;
+  const obs=document.getElementById('obs-'+id).value;
+  const evi=document.getElementById('evi-'+id).value;
+  await saveItem(activeMonth, id, {estado:est,avance:av,obs,evidencia:evi,fecha:new Date().toLocaleDateString('es-AR')});
+  const btn=document.getElementById('btn-'+id);
+  btn.textContent='✓ Guardado'; btn.classList.add('saved');
+  setTimeout(()=>{btn.textContent='Guardar';btn.classList.remove('saved');},2000);
+  showToast(`Guardado — ${monthLabel(activeMonth)}`);
+}
+
+// ===== GERENCIA HELPERS =====
+function svgRing(pct, color, size=56) {
+  const r=size*0.357,cx=size/2,cy=size/2,circ=2*Math.PI*r,dash=(pct/100)*circ;
+  const sw=size*0.089;
+  return `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">
+    <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="#f0f2f6" stroke-width="${sw}"/>
+    <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${color}" stroke-width="${sw}"
+      stroke-dasharray="${dash} ${circ}" stroke-linecap="round" transform="rotate(-90 ${cx} ${cy})"/>
+    <text x="${cx}" y="${cy}" text-anchor="middle" dominant-baseline="central"
+      fill="#1a202c" font-size="${size*0.178}" font-weight="700" font-family="Segoe UI,sans-serif">${pct}%</text>
+  </svg>`;
+}
+function distBar(sc,si,sr,sv,sa) {
+  const segs=[{n:sc,c:'#38a169'},{n:si,c:'#3182ce'},{n:sr,c:'#d69e2e'},{n:sv,c:'#e53e3e'},{n:sa,c:'#e2e8f0'}];
+  return `<div class="sec2-distbar">${segs.filter(s=>s.n>0).map(s=>`<div style="flex:${s.n};background:${s.c}"></div>`).join('')}</div>`;
+}
+function toggleWidget() {
+  return `<div class="view-toggle">
+    <button class="${viewMode==='acumulado'?'active':''}" onclick="setViewMode('acumulado')">Acumulado</button>
+    <button class="${viewMode==='mes'?'active':''}" onclick="setViewMode('mes')">Por mes</button>
+  </div>`;
+}
+function monthSelWidget(tab) {
+  if(viewMode!=='mes') return '';
+  return `<select onchange="changeMonthGerencia(this.value,'${tab}')" style="padding:7px 12px;border:1.5px solid #e2e8f0;border-radius:8px;font-size:13px;font-family:inherit;color:#1a202c;background:#fff;font-weight:600">${monthOpts(activeMonth)}</select>`;
+}
+
+// ===== SCORING PONDERADO =====
+function parseIni(iniStr) {
+  if (!iniStr || iniStr==='—') return '2026-01';
+  const parts = iniStr.trim().toLowerCase().split(' ');
+  if (parts.length<2) return '2026-01';
+  const mes = MES_MAP[parts[0].substring(0,3)]||'01';
+  return `${parts[1]||'2026'}-${mes}`;
+}
+
+// Determina si un objetivo debe evaluarse en un mes dado según su frecuencia
+function shouldEvaluate(frec, monthVal) {
+  const mn = parseInt(monthVal.split('-')[1]); // 1-12
+  const f = (frec||'Mensual').toLowerCase();
+  if (f.includes('bimestral'))  return mn%2===0;              // Feb,Abr,Jun,Ago,Oct,Dic
+  if (f.includes('trimestral')) return [3,6,9,12].includes(mn); // Mar,Jun,Sep,Dic
+  if (f.includes('semestral'))  return [6,12].includes(mn);   // Jun,Dic
+  if (f.includes('anual'))      return mn===12;               // solo Dic
+  return true; // Mensual y cualquier otro: siempre
+}
+
+// Score de un mes: solo incluye objetivos que arrancaron Y les toca evaluarse según frecuencia
+function calcScoreForMonth(objs, month) {
+  const activos = objs.filter(o =>
+    parseIni(o.ini||'') <= month && shouldEvaluate(o.frec||'Mensual', month)
+  );
+  if (!activos.length) return {score:0, count:0};
+  let pts=0;
+  activos.forEach(o => {
+    const d = getLastDataUpTo(o.id, month) || {estado:'Sin actualizar',avance:0};
+    let est = d.estado||'Sin actualizar';
+    const av = Math.min(100, Math.max(0, Number(d.avance)||0));
+    const finMonth = parseFin(o.fin||'');
+    if (finMonth < month && est !== 'Cumplido' && est !== 'Vencido') est = 'En riesgo';
+    if (est==='Cumplido')       pts += 100;
+    else if (est==='En curso')   pts += 80;
+    else if (est==='En riesgo')  pts += 30;
+    else if (est==='Vencido')    pts += 0;
+    // avance% es informativo — el score se basa en el estado
+  });
+  return {score: Math.round(pts/activos.length), count: activos.length};
+}
+
+// Promedio anual: solo meses con datos guardados; usa carry-forward
+function previousMonthVal() {
+  const prev = MONTHS.map(m=>m.val).filter(m=>m<currentMonthVal());
+  return prev.length>0 ? prev[prev.length-1] : null;
+}
+function calcAnnualScoreGeneral(objs) {
+  if (!objs.length) return 0;
+  const prevMonth = previousMonthVal();
+  const todosLosMeses = MONTHS.map(m=>m.val).filter(m=>m<=currentMonthVal());
+  const primerMes = todosLosMeses.find(m=>
+    data[m] && objs.some(o=>parseIni(o.ini||'')<= m && data[m][o.id] && data[m][o.id].estado!=='Sin actualizar')
+  );
+  if (!primerMes) return 0;
+  const mesesRelevantes = todosLosMeses.filter(m=>m>=primerMes);
+  let total=0, cnt=0;
+  mesesRelevantes.forEach(m=>{
+    const {score, count}=calcScoreForMonth(objs, m);
+    if (!count) return;
+    const hayCarry = objs.some(o=>parseIni(o.ini||'')<= m && getLastDataUpTo(o.id,m)!==null);
+    if (!hayCarry) return;
+    // Solo penalizar si había objetivos que debían evaluarse este mes
+    const objsQueTocan = objs.filter(o=>parseIni(o.ini||'')<=m && shouldEvaluate(o.frec||'Mensual', m));
+    if (!objsQueTocan.length) return; // nada que evaluar: no cuenta en el promedio
+    const hayDatoReal = data[m] && objsQueTocan.some(o=>data[m][o.id]&&data[m][o.id].estado!=='Sin actualizar');
+    if (hayDatoReal) {
+      total += score; cnt++;
+    } else if (prevMonth && m<=prevMonth) {
+      total += score * 0.5; cnt++; // mes pasado sin actualizar con evaluación pendiente
+    }
+    // mes en curso sin dato aún: no penalizar
+  });
+  return cnt>0 ? Math.round(total/cnt) : 0;
+}
+function getLastUpdateMonth(sector) {
+  const objs = allObjetivos(sector);
+  const meses = MONTHS.map(m=>m.val).filter(m=>data[m]).reverse();
+  for (const m of meses) {
+    if (objs.some(o=>data[m][o.id]&&data[m][o.id].estado!=='Sin actualizar')) return m;
+  }
+  return null;
+}
+function getMissingMonths(sector) {
+  const objs = allObjetivos(sector);
+  const prevMonth = previousMonthVal();
+  if (!prevMonth) return [];
+  const meses = MONTHS.map(m=>m.val).filter(m=>m<=prevMonth);
+  const primerMes = meses.find(m=>
+    data[m] && objs.some(o=>data[m][o.id]&&data[m][o.id].estado!=='Sin actualizar')
+  );
+  if (!primerMes) return [];
+  // Solo son "faltantes" los meses donde al menos un objetivo debía evaluarse y no se actualizó
+  return meses.filter(m => {
+    if (m <= primerMes) return false;
+    const objsToEval = objs.filter(o => parseIni(o.ini||'')<=m && shouldEvaluate(o.frec||'Mensual', m));
+    if (!objsToEval.length) return false; // nada que evaluar este mes
+    return !(data[m] && objsToEval.some(o=>data[m][o.id]&&data[m][o.id].estado!=='Sin actualizar'));
+  });
+}
+function calcAnnualScore(sector) {
+  return calcAnnualScoreGeneral(allObjetivos(sector));
+}
+function calcAnnualScoreGlobal() {
+  return calcAnnualScoreGeneral([...OBJETIVOS,...customObjetivos]);
+}
+
+// ===== VELOCÍMETRO SVG =====
+function buildSpeedometer(score, sub, compact=false) {
+  const W=compact?280:360, H=compact?156:200;
+  const cx=W/2, cy=H-26, mR=compact?98:128, thick=compact?26:34;
+  const N=60;
+  const stops=[[0,[239,68,68]],[25,[249,115,22]],[50,[234,179,8]],[75,[132,204,22]],[100,[34,197,94]]];
+  function lerp(p){
+    for(let i=1;i<stops.length;i++){
+      if(p<=stops[i][0]){
+        const t=(p-stops[i-1][0])/(stops[i][0]-stops[i-1][0]);
+        return stops[i-1][1].map((c,j)=>Math.round(c+t*(stops[i][1][j]-c)));
+      }
+    }
+    return stops[stops.length-1][1];
+  }
+  function arad(p){return(-1+p/100)*Math.PI;}
+  function px(r,p){return+(cx+r*Math.cos(arad(p))).toFixed(1);}
+  function py(r,p){return+(cy+r*Math.sin(arad(p))).toFixed(1);}
+  let segs='';
+  for(let i=0;i<N;i++){
+    const p1=i/N*100, p2=(i+1)/N*100;
+    const [r,g,b]=lerp((p1+p2)/2);
+    segs+=`<path d="M${px(mR,p1)} ${py(mR,p1)} A${mR} ${mR} 0 0 0 ${px(mR,p2)} ${py(mR,p2)}" fill="none" stroke="rgb(${r},${g},${b})" stroke-width="${thick}" stroke-linecap="butt"/>`;
+  }
+  const [sr,sg,sb]=lerp(score);
+  const col=`rgb(${sr},${sg},${sb})`;
+  const nLen=mR-4;
+  const scoreSz=compact?28:36, subSz=compact?9:10, lSz=compact?9:10;
+  const ndR=compact?6:8;
+  const oy=compact?13:17;
+  const l0x=px(mR+thick/2+4,0), l0y=py(mR+thick/2+4,0)+14;
+  const l1x=px(mR+thick/2+4,100), l1y=py(mR+thick/2+4,100)+14;
+  return `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:${W}px">
+    <path d="M${px(mR,0)} ${py(mR,0)} A${mR} ${mR} 0 0 0 ${px(mR,100)} ${py(mR,100)}" fill="none" stroke="#E5E7EB" stroke-width="${thick}" stroke-linecap="round"/>
+    ${segs}
+    <line x1="${cx}" y1="${cy}" x2="${px(nLen,score)}" y2="${py(nLen,score)}" stroke="#111827" stroke-width="${compact?2:2.5}" stroke-linecap="round"/>
+    <circle cx="${cx}" cy="${cy}" r="${ndR}" fill="#111827"/>
+    <circle cx="${cx}" cy="${cy}" r="${ndR*0.44}" fill="#fff"/>
+    <text x="${cx}" y="${cy-oy}" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="${scoreSz}" font-weight="800" fill="${col}">${score}%</text>
+    <text x="${cx}" y="${cy-2}" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="${subSz}" fill="#6B7280">${sub}</text>
+    <text x="${l0x}" y="${l0y}" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="${lSz}" fill="#9CA3AF">0%</text>
+    <text x="${l1x}" y="${l1y}" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="${lSz}" fill="#9CA3AF">100%</text>
+  </svg>`;
+}
+// ===== GERENCIA OVERVIEW =====
+function renderGerenciaOverview() {
+  // Las tarjetas de sector SIEMPRE muestran acumulado (último estado conocido por objetivo)
+  // El toggle solo afecta la vista Detalle por Sector
+  const md = getAcumuladoData();
+  const allObj=[...OBJETIVOS,...customObjetivos]; const total=allObj.length;
+  const activeMesG = currentMonthVal();
+  let cumplidos=0,enCurso=0,enRiesgo=0,vencidos=0,sinAct=0;
+  allObj.forEach(o=>{
+    const estRaw=(md[o.id]||{}).estado||'Sin actualizar';
+    const finM=parseFin(o.fin||'');
+    const est=(finM<activeMesG && estRaw!=='Cumplido' && estRaw!=='Vencido') ? 'En riesgo' : estRaw;
+    if(est==='Cumplido')cumplidos++;
+    else if(est==='En curso')enCurso++;
+    else if(est==='En riesgo')enRiesgo++;
+    else if(est==='Vencido')vencidos++;
+    else sinAct++;
+  });
+  const secKeys=Object.keys(SECTOR_LABELS).filter(k=>k!=='GERENCIA');
+  let secCards='';
+  secKeys.forEach(sk=>{
+    const objs=allObjetivos(sk);
+    if(!objs.length)return;
+    let sc=0,si=0,sr=0,sv=0,sa=0;
+    objs.forEach(o=>{
+      const estRaw=(md[o.id]||{}).estado||'Sin actualizar';
+      const finM=parseFin(o.fin||'');
+      const est=(finM<activeMesG && estRaw!=='Cumplido' && estRaw!=='Vencido') ? 'En riesgo' : estRaw;
+      if(est==='Cumplido')sc++;else if(est==='En curso')si++;else if(est==='En riesgo')sr++;else if(est==='Vencido')sv++;else sa++;
+    });
+    const accentColor=sv>0?'#e53e3e':sr>0?'#d69e2e':sa===objs.length?'#a0aec0':'#38a169';
+    const sectorMissing = getMissingMonths(sk);
+    const lastUpd = getLastUpdateMonth(sk);
+    let pills='';
+    if(sc)pills+=`<span class="sec2-pill p-ok">✅ ${sc} Cumplido${sc>1?'s':''}</span>`;
+    if(si)pills+=`<span class="sec2-pill p-blue">🔵 ${si} En curso</span>`;
+    if(sr)pills+=`<span class="sec2-pill p-warn">⚠️ ${sr} En riesgo</span>`;
+    if(sv)pills+=`<span class="sec2-pill p-red">🔴 ${sv} Vencido${sv>1?'s':''}</span>`;
+    if(sa)pills+=`<span class="sec2-pill p-gray">⬜ ${sa} Sin actualizar</span>`;
+    if(sectorMissing.length>0)pills+=`<span class="sec2-pill" style="background:#fffbeb;color:#744210;border:1px solid #f6e05e">🕐 Sin actualizar ${sectorMissing.length} mes${sectorMissing.length>1?'es':''}</span>`;
+    secCards+=`<div class="sec2-card" onclick="showSectorDesglose('${sk}')">
+      <div class="sec2-accent" style="background:${accentColor}"></div>
+      <div style="margin-bottom:8px">
+        <div style="font-size:13px;font-weight:700;color:#1e2d3e;margin-bottom:2px">${SECTOR_LABELS[sk]}</div>
+        <div style="font-size:9px;color:#a0aec0;margin-bottom:8px">${lastUpd?`últ. ${monthLabel(lastUpd)}`:'Sin datos aún'}</div>
+        <div style="display:flex;flex-wrap:wrap;gap:4px">${pills}</div>
+      </div>
+      ${distBar(sc,si,sr,sv,sa)}
+    </div>`;
+  });
+  const perfScore = calcAnnualScoreGlobal();
+  const mesesGlobal = MONTHS.map(m=>m.val).filter(m=>data[m]&&[...OBJETIVOS,...customObjetivos].some(o=>parseIni(o.ini||'')<=m&&getLastDataUpTo(o.id,m)!==null)).length;
+  const perfSub = mesesGlobal>1 ? `Promedio ${mesesGlobal} meses · ${cumplidos} cumplidos de ${total}` : `${cumplidos} cumplidos · ${enCurso} en curso · ${enRiesgo} en riesgo de ${total}`;
+  const subtitle=viewMode==='acumulado'?'Última actualización registrada por objetivo':`Datos del período <strong>${monthLabel(activeMonth)}</strong>`;
+  document.getElementById('appContent').innerHTML=`<div class="ps-main">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px">
+      <div style="font-size:13px;color:#718096">${subtitle}</div>
+      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">${toggleWidget()}${monthSelWidget('overview')}</div>
+    </div>
+
+    <div class="cc" style="margin-bottom:18px">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:0">
+        <!-- Velocímetro -->
+        <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px 24px;border-right:1px solid #e2e8f0">
+          <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#718096;margin-bottom:8px">Desempeño General del Programa</div>
+          ${buildSpeedometer(perfScore, perfSub)}
+          <div style="font-size:10px;color:#9ca3af;margin-top:4px">Índice ponderado: cumplidos×100% + en curso×60% + en riesgo×30%</div>
+        </div>
+        <!-- KPIs -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:20px 24px;align-content:center">
+          <div style="text-align:center;padding:14px;background:#f7fafc;border-radius:12px">
+            <div style="font-size:32px;font-weight:800;color:#1a202c">${total}</div>
+            <div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:#718096;margin-top:4px">Total Objetivos</div>
+          </div>
+          <div style="text-align:center;padding:14px;background:#f0fff4;border-radius:12px">
+            <div style="font-size:32px;font-weight:800;color:#276749">${cumplidos}</div>
+            <div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:#276749;margin-top:4px">Cumplidos</div>
+          </div>
+          <div style="text-align:center;padding:14px;background:#ebf8ff;border-radius:12px">
+            <div style="font-size:32px;font-weight:800;color:#2c5282">${enCurso}</div>
+            <div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:#2c5282;margin-top:4px">En Curso</div>
+          </div>
+          <div style="text-align:center;padding:14px;background:#fffbeb;border-radius:12px">
+            <div style="font-size:32px;font-weight:800;color:#744210">${enRiesgo}</div>
+            <div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:#744210;margin-top:4px">En Riesgo</div>
+          </div>
+          <div style="text-align:center;padding:14px;background:#fff5f5;border-radius:12px;grid-column:span 2">
+            <div style="font-size:32px;font-weight:800;color:#9b2c2c">${vencidos}</div>
+            <div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:#9b2c2c;margin-top:4px">Vencidos</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cc"><div class="cc-hdr"><div class="cc-title">Estado por Sector</div></div>
+      <div style="padding:16px"><div class="sec2-grid">${secCards}</div></div>
+    </div>
+  </div>`;
+}
+
+// ===== GERENCIA DETAIL =====
+function renderGerenciaDetail() {
+  const md=getViewData();
+  const secKeys=Object.keys(SECTOR_LABELS).filter(k=>k!=='GERENCIA');
+  const secOpts=secKeys.map(k=>`<option value="${k}">${SECTOR_LABELS[k]}</option>`).join('');
+  const estOpts=['','Sin actualizar','En curso','En riesgo','Vencido','Cumplido'].map(e=>`<option value="${e}">${e||'Todos los estados'}</option>`).join('');
+  const allObj2=[...OBJETIVOS,...customObjetivos]; let rows=allObj2.map(o=>{
+    const d=md[o.id]||{estado:'Sin actualizar',avance:0,obs:''};
+    const bc=BADGE_CLASS[d.estado]||'b-pend';
+    const pc=PROG_COLOR[d.estado]||'#a0aec0';
+    const avp=Number(d.avance)||0;
+    return `<tr data-sector="${o.s}" data-estado="${d.estado}">
+      <td style="font-size:11px;font-weight:700;color:#1e2d3e">${o.id}</td>
+      <td style="font-size:11.5px;font-weight:600;color:#1e2d3e">${SECTOR_LABELS[o.s]||o.s}</td>
+      <td><div class="obj-txt" title="${o.obj}" style="max-width:210px">${o.obj}</div></td>
+      <td><div class="meta-txt" title="${o.meta}">${o.meta}</div></td>
+      <td style="white-space:nowrap;font-size:11px;color:#718096">${o.fin}</td>
+      <td><span class="badge ${bc}">${d.estado}</span></td>
+      <td><div style="display:flex;align-items:center;gap:8px">
+        <div class="prog-wrap" style="min-width:60px"><div class="prog-bar" style="width:${avp}%;background:${pc}"></div></div>
+        <span style="font-size:12px;font-weight:600">${avp}%</span>
+      </div></td>
+      <td style="font-size:12px;color:#4a5568;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${d.obs||'—'}</td>
+      <td style="font-size:11px;color:#718096">${d.fecha||'—'}</td>
+    </tr>`;
+  }).join('');
+  const subtitle=viewMode==='acumulado'?'Acumulado':monthLabel(activeMonth);
+  document.getElementById('appContent').innerHTML=`<div class="ps-main">
+    <div class="cc"><div class="cc-hdr">
+      <div><div class="cc-title">Detalle Completo — ${subtitle}</div></div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+        ${toggleWidget()}${monthSelWidget('detail')}
+        <select id="fSec" onchange="applyFilter()"><option value="">Todos los sectores</option>${secOpts}</select>
+        <select id="fEst" onchange="applyFilter()"><option value="">Todos los estados</option>${estOpts}</select>
+      </div>
+    </div>
+    <div class="tbl-wrap"><table class="ps-table">
+      <thead><tr><th>ID</th><th>Sector</th><th>Objetivo</th><th>Meta</th><th>Fin</th><th>Estado</th><th>Avance</th><th>Observaciones</th><th>Guardado</th></tr></thead>
+      <tbody id="detailTbody">${rows}</tbody>
+    </table></div></div>
+  </div>`;
+}
+
+function setViewMode(mode) {
+  viewMode=mode;
+  if(activeTab==='overview') loadData().then(renderGerenciaOverview);
+  else loadData().then(renderGerenciaDetail);
+}
+function changeMonthGerencia_old_removed() {}
+function applyFilter() {
+  const sec=document.getElementById('fSec').value;
+  const est=document.getElementById('fEst').value;
+  document.querySelectorAll('#detailTbody tr').forEach(tr=>{
+    tr.style.display=(!sec||tr.dataset.sector===sec)&&(!est||tr.dataset.estado===est)?'':'none';
+  });
+}
+// ===== EXPORT EXCEL =====
+async function exportarExcel() {
+  showToast('Generando Excel…');
+  await loadData();
+
+  const WB_NAVY  = '1E2D3E';
+  const WB_ORANGE= 'E8A020';
+  const WB_WHITE = 'FFFFFF';
+  const WB_LGRAY = 'F7FAFC';
+  const WB_GRAY  = 'E2E8F0';
+  const WB_TEXT  = '1A202C';
+
+  function hdrStyle(bgHex, fontHex='FFFFFF', sz=10) {
+    return { font:{name:'Arial',sz,bold:true,color:{rgb:fontHex}}, fill:{patternType:'solid',fgColor:{rgb:bgHex}},
+      alignment:{horizontal:'center',vertical:'center',wrapText:true},
+      border:{bottom:{style:'thin',color:{rgb:WB_GRAY}}} };
+  }
+  function cellStyle(bgHex=WB_WHITE, fontHex=WB_TEXT, bold=false, wrap=true) {
+    return { font:{name:'Arial',sz:9,bold,color:{rgb:fontHex}}, fill:{patternType:'solid',fgColor:{rgb:bgHex}},
+      alignment:{vertical:'center',wrapText:wrap},
+      border:{bottom:{style:'thin',color:{rgb:WB_GRAY}},right:{style:'thin',color:{rgb:WB_GRAY}}} };
+  }
+  function statusColor(est) {
+    return est==='Cumplido'?'C6F6D5':est==='En curso'?'BEE3F8':est==='En riesgo'?'FEFCBF':est==='Vencido'?'FED7D7':'F7FAFC';
+  }
+  function makeCell(v, style) { return { v, s: style, t: typeof v==='number'?'n':'s' }; }
+
+  const wb = XLSX.utils.book_new();
+
+  // ========== HOJA 1: PROGRAMA BASE ==========
+  const ws1 = {};
+  const merge1 = [];
+
+  // Título
+  ws1['A1'] = makeCell('PETROSAR SA — Programa de Objetivos y Metas 2026',
+    {...hdrStyle(WB_NAVY,WB_ORANGE,13), alignment:{horizontal:'center',vertical:'center'}});
+  ws1['B1']=ws1['C1']=ws1['D1']=ws1['E1']=ws1['F1']=ws1['G1']=ws1['H1']={v:'',s:hdrStyle(WB_NAVY)};
+  merge1.push({s:{r:0,c:0},e:{r:0,c:7}});
+
+  // Sub-header
+  const h1 = ['ID','Sector','Objetivo','Meta','Inicio','Fin','Indicador','Frecuencia'];
+  h1.forEach((h,i)=> { ws1[XLSX.utils.encode_cell({r:1,c:i})] = makeCell(h, hdrStyle(WB_ORANGE,WB_WHITE)); });
+
+  const allObjs = [...OBJETIVOS, ...customObjetivos];
+  allObjs.forEach((o, ri) => {
+    const r = ri + 2;
+    const bg = ri%2===0 ? WB_WHITE : WB_LGRAY;
+    const sector = SECTOR_LABELS[o.s||o.sector] || o.s || o.sector || '';
+    const row = [o.id, sector, o.obj, o.meta, o.ini||'', o.fin||'Dic 2026', o.ind||'', o.frec||'Mensual'];
+    row.forEach((v,ci) => { ws1[XLSX.utils.encode_cell({r,c:ci})] = makeCell(v, cellStyle(bg)); });
+  });
+  ws1['!ref'] = XLSX.utils.encode_range({s:{r:0,c:0},e:{r:allObjs.length+1,c:7}});
+  ws1['!merges'] = merge1;
+  ws1['!rows'] = [{hpt:24},{hpt:30},...allObjs.map(()=>({hpt:40}))];
+  ws1['!cols'] = [{wch:10},{wch:22},{wch:52},{wch:34},{wch:10},{wch:10},{wch:32},{wch:11}];
+  XLSX.utils.book_append_sheet(wb, ws1, 'Programa Base');
+
+  // ========== HOJA 2: SEGUIMIENTO ==========
+  const ws2 = {};
+  const merge2 = [];
+  const vd = getViewData();
+
+  ws2['A1'] = makeCell('PETROSAR SA — Seguimiento de Objetivos y Metas 2026',
+    {...hdrStyle(WB_NAVY,WB_ORANGE,13), alignment:{horizontal:'center',vertical:'center'}});
+  ['B1','C1','D1','E1','F1','G1','H1','I1','J1'].forEach(k=>{ws2[k]={v:'',s:hdrStyle(WB_NAVY)};});
+  merge2.push({s:{r:0,c:0},e:{r:0,c:9}});
+
+  const h2 = ['ID','Sector','Objetivo','Meta','Fin','Estado','Avance %','Observaciones','Evidencia / Link','Última actualización'];
+  h2.forEach((h,i)=> { ws2[XLSX.utils.encode_cell({r:1,c:i})] = makeCell(h, hdrStyle(WB_ORANGE,WB_WHITE)); });
+
+  allObjs.forEach((o, ri) => {
+    const r = ri + 2;
+    const d = vd[o.id] || {estado:'Sin actualizar',avance:0,obs:'',evidencia:'',fecha:''};
+    const bg = statusColor(d.estado);
+    const sector = SECTOR_LABELS[o.s||o.sector] || o.s || o.sector || '';
+    const row = [o.id, sector, o.obj, o.meta, o.fin||'Dic 2026', d.estado, Number(d.avance)||0, d.obs||'', d.evidencia||'', d.fecha||''];
+    row.forEach((v,ci) => {
+      const s = cellStyle(ci===5?bg:ri%2===0?WB_WHITE:WB_LGRAY, WB_TEXT, ci===5);
+      ws2[XLSX.utils.encode_cell({r,c:ci})] = makeCell(v, s);
+    });
+  });
+  ws2['!ref'] = XLSX.utils.encode_range({s:{r:0,c:0},e:{r:allObjs.length+1,c:9}});
+  ws2['!merges'] = merge2;
+  ws2['!rows'] = [{hpt:24},{hpt:30},...allObjs.map(()=>({hpt:40}))];
+  ws2['!cols'] = [{wch:10},{wch:22},{wch:46},{wch:30},{wch:10},{wch:14},{wch:9},{wch:32},{wch:28},{wch:14}];
+  XLSX.utils.book_append_sheet(wb, ws2, 'Seguimiento');
+
+  const fecha = new Date().toLocaleDateString('es-AR').replace(/\//g,'-');
+  XLSX.writeFile(wb, `OM2026_PETROSAR_${fecha}.xlsx`);
+  showToast('Excel descargado correctamente');
+}
+// ===== RM-02 PROGRAMA DE OBJETIVOS Y METAS =====
+function renderRM02() {
+  const allObjs = [...OBJETIVOS, ...customObjetivos];
+  const vd = getAcumuladoData();
+  const tieneEval = Object.keys(evalData).length > 0;
+  const fechaHoy = new Date().toLocaleDateString('es-AR');
+
+  // KPIs según modo
+  let k1=0,k2=0,k3=0,k4=0;
+  if (tieneEval) {
+    allObjs.forEach(o=>{ const r=(evalData[o.id]||{}).resultado||'Sin evaluar';
+      if(r==='Cumplido')k1++; else if(r==='Parcialmente cumplido')k2++;
+      else if(r==='No cumplido')k3++; else k4++; });
+  } else {
+    allObjs.forEach(o=>{ const est=(vd[o.id]||{}).estado||'Sin actualizar';
+      if(est==='Cumplido')k1++; else if(est==='En curso')k2++;
+      else if(est==='En riesgo')k3++; else k4++; });
+  }
+
+  const secKeys = Object.keys(SECTOR_LABELS).filter(k=>k!=='GERENCIA');
+  let sectoresHTML = secKeys.map((sk,idx)=>{
+    const objs = allObjetivos(sk);
+    if(!objs.length) return '';
+    let sc=0,si=0,sr=0,sv=0;
+    let rows = objs.map(o=>{
+      if (tieneEval) {
+        const e = evalData[o.id]||{resultado:'Sin evaluar',pct_logrado:0,comentario:'',evidencia:''};
+        const rc = RESULTADO_COLOR[e.resultado]||'#718096';
+        const rb = RESULTADO_BG[e.resultado]||'#f7fafc';
+        if(e.resultado==='Cumplido')sc++; else if(e.resultado==='Parcialmente cumplido')si++;
+        else if(e.resultado==='No cumplido')sr++; else sv++;
+        return `<tr style="background:${rb}">
+          <td style="font-size:11px;font-weight:700;color:#1e2d3e">${o.id}</td>
+          <td style="font-size:12px">${o.obj}</td>
+          <td style="font-size:11.5px;color:#4a5568">${o.meta}</td>
+          <td><strong style="color:${rc}">${e.resultado}</strong></td>
+          <td style="font-weight:700;color:${rc}">${e.pct_logrado||0}%</td>
+          <td style="font-size:11.5px;color:#4a5568">${e.comentario||'—'}</td>
+        </tr>`;
+      } else {
+        const d=vd[o.id]||{estado:'Sin actualizar',avance:0,obs:''};
+        const bc=BADGE_CLASS[d.estado]||'b-pend';
+        const avp=Number(d.avance)||0;
+        const pc=PROG_COLOR[d.estado]||'#a0aec0';
+        if(d.estado==='Cumplido')sc++; else if(d.estado==='En curso')si++;
+        else if(d.estado==='En riesgo')sr++; else sv++;
+        return `<tr>
+          <td style="font-size:11px;font-weight:700;color:#1e2d3e">${o.id}</td>
+          <td style="font-size:12px">${o.obj}</td>
+          <td style="font-size:11.5px;color:#4a5568">${o.meta}</td>
+          <td style="white-space:nowrap;font-size:11px;color:#718096">${o.fin||'Dic 2026'}</td>
+          <td><span class="badge ${bc}">${d.estado}</span></td>
+          <td><div style="display:flex;align-items:center;gap:6px">
+            <div class="prog-wrap" style="min-width:50px"><div class="prog-bar" style="width:${avp}%;background:${pc}"></div></div>
+            <span style="font-size:11.5px;font-weight:600">${avp}%</span>
+          </div></td>
+          <td style="font-size:11.5px;color:#4a5568">${d.obs||'—'}</td>
+        </tr>`;
+      }
+    }).join('');
+    const accentColor=sr>0?'#e53e3e':si>0&&!tieneEval?'#d69e2e':sc===objs.length?'#38a169':'#3182ce';
+    const headers = tieneEval
+      ? '<th>ID</th><th>Objetivo</th><th>Meta</th><th>Resultado</th><th>% Logrado</th><th>Comentario de cierre</th>'
+      : '<th>ID</th><th>Objetivo</th><th>Meta</th><th>Fin</th><th>Estado</th><th>Avance</th><th>Observaciones</th>';
+    const summary = tieneEval
+      ? `${objs.length} obj.${sc?` · ✅ ${sc}`:''} ${si?`· 🟡 ${si}`:''}${sr?` · ❌ ${sr}`:''}`
+      : `${objs.length} obj.${sc?` · ✅ ${sc}`:''} ${si?`· 🔵 ${si}`:''}${sr?` · ⚠️ ${sr}`:''}`;
+    return `<div style="background:#fff;border-radius:12px;border:1px solid #e2e8f0;box-shadow:0 1px 3px rgba(0,0,0,.06);margin-bottom:16px;overflow:hidden">
+      <div style="background:#f7fafc;border-bottom:3px solid ${accentColor};padding:12px 20px;display:flex;align-items:center;justify-content:space-between">
+        <span style="font-size:14px;font-weight:700;color:#1e2d3e">${SECTOR_LABELS[sk]}</span>
+        <span style="font-size:12px;color:#718096">${summary}</span>
+      </div>
+      <div class="tbl-wrap"><table class="ps-table">
+        <thead><tr>${headers}</tr></thead><tbody>${rows}</tbody>
+      </table></div>
+    </div>`;
+  }).join('');
+
+  const modoBadge = tieneEval
+    ? '<span style="background:#f0fff4;color:#276749;padding:3px 10px;border-radius:8px;font-size:11px;font-weight:600;border:1px solid #c6f6d5">📋 Evaluación Anual</span>'
+    : '<span style="background:#ebf8ff;color:#2c5282;padding:3px 10px;border-radius:8px;font-size:11px;font-weight:600;border:1px solid #bee3f8">📊 Seguimiento Mensual</span>';
+
+  const kpiBar = tieneEval ? `
+    <div class="sumbar" style="margin-bottom:20px">
+      <div class="sumbar-item"><div class="sumbar-lbl">Total</div><div class="sumbar-val">${allObjs.length}</div><div class="sumbar-stripe" style="background:#e8a020"></div></div>
+      <div class="sumbar-item s-ok"><div class="sumbar-lbl">Cumplidos</div><div class="sumbar-val">${k1}</div><div class="sumbar-stripe" style="background:#38a169"></div></div>
+      <div class="sumbar-item s-warn"><div class="sumbar-lbl">Parcialmente</div><div class="sumbar-val">${k2}</div><div class="sumbar-stripe" style="background:#d69e2e"></div></div>
+      <div class="sumbar-item s-red"><div class="sumbar-lbl">No cumplidos</div><div class="sumbar-val">${k3}</div><div class="sumbar-stripe" style="background:#e53e3e"></div></div>
+      <div class="sumbar-item s-gray"><div class="sumbar-lbl">Sin evaluar</div><div class="sumbar-val">${k4}</div><div class="sumbar-stripe" style="background:#a0aec0"></div></div>
+    </div>` : `
+    <div class="sumbar" style="margin-bottom:20px">
+      <div class="sumbar-item"><div class="sumbar-lbl">Total</div><div class="sumbar-val">${allObjs.length}</div><div class="sumbar-stripe" style="background:#e8a020"></div></div>
+      <div class="sumbar-item s-ok"><div class="sumbar-lbl">Cumplidos</div><div class="sumbar-val">${k1}</div><div class="sumbar-stripe" style="background:#38a169"></div></div>
+      <div class="sumbar-item s-blue"><div class="sumbar-lbl">En Curso</div><div class="sumbar-val">${k2}</div><div class="sumbar-stripe" style="background:#3182ce"></div></div>
+      <div class="sumbar-item s-warn"><div class="sumbar-lbl">En Riesgo</div><div class="sumbar-val">${k3}</div><div class="sumbar-stripe" style="background:#d69e2e"></div></div>
+      <div class="sumbar-item s-red"><div class="sumbar-lbl">Vencidos</div><div class="sumbar-val">${k4}</div><div class="sumbar-stripe" style="background:#e53e3e"></div></div>
+    </div>`;
+
+  document.getElementById('appContent').innerHTML = `<div class="ps-main">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px">
+      <div>
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#718096;margin-bottom:4px">Documento SGI · RM-02 &nbsp; ${modoBadge}</div>
+        <div style="font-size:18px;font-weight:800;color:#1e2d3e">Programa de Objetivos y Metas 2026</div>
+        <div style="font-size:12px;color:#718096;margin-top:2px">${tieneEval?'Cierre anual':'Acumulado al'} ${fechaHoy}</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+        ${tieneEval?'':toggleWidget()+monthSelWidget('rm02')}
+        <button onclick="generarRM02HTML()" style="padding:8px 16px;background:#1e2d3e;color:#fff;border:none;border-radius:8px;font-size:12.5px;font-weight:600;cursor:pointer;font-family:inherit">🌐 Generar HTML</button>
+        <button onclick="generarRM02Word()" style="padding:8px 16px;background:linear-gradient(135deg,#e8a020,#f05a28);color:#fff;border:none;border-radius:8px;font-size:12.5px;font-weight:600;cursor:pointer;font-family:inherit">📄 Generar Word</button>
+      </div>
+    </div>
+    ${kpiBar}
+    ${sectoresHTML}
+  </div>`;
+}
+
+function changeMonthGerencia(val, tab) {
+  activeMonth = val;
+  if (tab==='overview') renderGerenciaOverview();
+  else if (tab==='detail') renderGerenciaDetail();
+  else if (tab==='rm02') renderRM02();
+}
+
+// ── Generar HTML ──────────────────────────────────────────────────
+const PETROSAR_LOGO = "data:image/png;base64,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";
+function generarRM02HTML() {
+  const LOGO_B64 = PETROSAR_LOGO;
+  const allObjs = [...OBJETIVOS, ...customObjetivos];
+  const vd = getAcumuladoData();
+  const tieneEval = Object.keys(evalData).length > 0;
+  const fechaHoy = new Date().toLocaleDateString('es-AR');
+  const periodoLabel = tieneEval ? `Evaluación Anual — Cierre ${fechaHoy}` : (viewMode==='mes' ? monthLabel(activeMonth) : 'Acumulado al ' + fechaHoy);
+
+  // KPIs
+  let k1=0,k2=0,k3=0,k4=0;
+  allObjs.forEach(o=>{
+    if(tieneEval){
+      const r=(evalData[o.id]||{}).resultado||'Sin evaluar';
+      if(r==='Cumplido')k1++;else if(r==='Parcialmente cumplido')k2++;else if(r==='No cumplido')k3++;else k4++;
+    } else {
+      const est=(vd[o.id]||{}).estado||'Sin actualizar';
+      if(est==='Cumplido')k1++;else if(est==='En curso')k2++;else if(est==='En riesgo')k3++;else k4++;
+    }
+  });
+
+  function badgeCls(val) {
+    const map={'Cumplido':'great','En curso':'info','En riesgo':'warn','Vencido':'danger','Parcialmente cumplido':'warn','No cumplido':'danger'};
+    return map[val]||'gray';
+  }
+
+  const secKeys = Object.keys(SECTOR_LABELS).filter(k=>k!=='GERENCIA');
+  const seccionesHTML = secKeys.map((sk,idx)=>{
+    const objs = allObjetivos(sk);
+    if(!objs.length) return '';
+    let sc=0,si=0,sr=0,sv=0;
+    const rows = objs.map(o=>{
+      if (tieneEval) {
+        const e=evalData[o.id]||{resultado:'Sin evaluar',pct_logrado:0,comentario:'',evidencia:''};
+        const cls=badgeCls(e.resultado);
+        if(e.resultado==='Cumplido')sc++;else if(e.resultado==='Parcialmente cumplido')si++;else if(e.resultado==='No cumplido')sr++;else sv++;
+        return `<tr>
+          <td style="font-weight:700;font-size:11px;color:#1e2d3e">${o.id}</td>
+          <td style="font-size:12px">${o.obj}</td>
+          <td style="font-size:11.5px;color:#4a5568">${o.meta}</td>
+          <td><span class="badge-${cls}">${e.resultado}</span></td>
+          <td style="font-weight:700;font-size:12px">${e.pct_logrado||0}%</td>
+          <td style="font-size:11.5px;color:#4a5568">${e.comentario||'—'}</td>
+        </tr>`;
+      } else {
+        const d=vd[o.id]||{estado:'Sin actualizar',avance:0,obs:''};
+        const cls=badgeCls(d.estado);
+        const avp=Number(d.avance)||0;
+        if(d.estado==='Cumplido')sc++;else if(d.estado==='En curso')si++;else if(d.estado==='En riesgo')sr++;else sv++;
+        return `<tr>
+          <td style="font-weight:700;font-size:11px;color:#1e2d3e">${o.id}</td>
+          <td style="font-size:12px">${o.obj}</td>
+          <td style="font-size:11.5px;color:#4a5568">${o.meta}</td>
+          <td style="white-space:nowrap;font-size:11px;color:#718096">${o.fin||'Dic 2026'}</td>
+          <td><span class="badge-${cls}">${d.estado}</span></td>
+          <td>
+            <div style="display:flex;align-items:center;gap:6px">
+              <div style="background:#e2e8f0;border-radius:4px;height:5px;min-width:60px"><div style="height:5px;border-radius:4px;width:${avp}%;background:${avp===100?'#38a169':avp>0?'#3182ce':'#a0aec0'}"></div></div>
+              <span style="font-size:11px;font-weight:600">${avp}%</span>
+            </div>
+          </td>
+          <td style="font-size:11.5px;color:#4a5568">${d.obs||'—'}</td>
+        </tr>`;
+      }
+    }).join('');
+    const accent=sr>0?'#e53e3e':si>0&&tieneEval?'#d69e2e':sc===objs.length?'#38a169':'#3182ce';
+    const headers = tieneEval
+      ? '<th>ID</th><th>Objetivo</th><th>Meta</th><th>Resultado</th><th>% Logrado</th><th>Comentario de cierre</th>'
+      : '<th>ID</th><th>Objetivo</th><th>Meta</th><th>Fin</th><th>Estado</th><th>Avance</th><th>Observaciones</th>';
+    const summary = tieneEval
+      ? `${objs.length} obj.${sc?` · ✅ ${sc}`:''}${si?` · 🟡 ${si}`:''}${sr?` · ❌ ${sr}`:''}`
+      : `${objs.length} obj.${sc?` · ✅ ${sc}`:''}${si?` · 🔵 ${si}`:''}${sr?` · ⚠️ ${sr}`:''}`;
+    return `<div class="section">
+      <div class="section-header" style="border-left:4px solid ${accent}">
+        <span class="section-num">${idx+1}</span>
+        <span class="section-title">${SECTOR_LABELS[sk]}</span>
+        <span class="section-pills" style="margin-left:auto;font-size:11px;color:#718096">${summary}</span>
+      </div>
+      <div class="tbl-wrap"><table class="tbl"><thead><tr>${headers}</tr></thead><tbody>${rows}</tbody></table></div>
+    </div>`;
+  }).join('');
+
+  const kpiHtml = tieneEval ? `
+    <div class="header-kpis">
+      <div class="kpi"><div class="kpi-val">${allObjs.length}</div><div class="kpi-lbl">Total</div></div>
+      <div class="kpi kpi-ok"><div class="kpi-val">${k1}</div><div class="kpi-lbl">Cumplidos</div></div>
+      <div class="kpi kpi-warn"><div class="kpi-val">${k2}</div><div class="kpi-lbl">Parcialmente</div></div>
+      <div class="kpi kpi-red"><div class="kpi-val">${k3}</div><div class="kpi-lbl">No cumplidos</div></div>
+      <div class="kpi kpi-gray"><div class="kpi-val">${k4}</div><div class="kpi-lbl">Sin evaluar</div></div>
+    </div>` : '';
+
+  const html = `<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8">
+<title>RM-02 Programa de Objetivos y Metas 2026 — PETROSAR SA</title>
+<style>
+@page{size:A4 portrait;margin:12mm 10mm}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#d0d4d8;color:#1a202c;font-family:'Segoe UI',system-ui,sans-serif;min-height:100vh}
+.page{background:#fff;width:794px;max-width:794px;margin:24px auto;box-shadow:0 4px 24px rgba(0,0,0,.18);overflow:hidden}
+@media print{html,body{background:#fff}.page{width:100%;max-width:100%;margin:0;box-shadow:none}}
+.header{background:linear-gradient(135deg,#1e2d3e,#192638);padding:18px 24px 20px;color:#fff}
+.header-top{display:flex;align-items:center;gap:14px;margin-bottom:${tieneEval?'14px':'0'}}
+.header-logo{width:44px;height:44px;border-radius:10px;object-fit:contain;flex-shrink:0}
+.header-brand{display:flex;flex-direction:column}
+.header-company{font-size:13px;font-weight:700;color:#fff}
+.header-sgi{font-size:10px;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.08em}
+.header-divider{width:1px;height:40px;background:rgba(255,255,255,.2);margin:0 4px}
+.header-doc-block{flex:1}
+.header-doc{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.5);margin-bottom:4px}
+.header-title{font-size:18px;font-weight:800;margin-bottom:2px}
+.header-sub{font-size:11px;color:rgba(255,255,255,.55)}
+.header-kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:14px}
+.kpi{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:10px 12px}
+.kpi-val{font-size:22px;font-weight:800}.kpi-lbl{font-size:9px;color:rgba(255,255,255,.55);margin-top:3px}
+.kpi-ok .kpi-val{color:#6ee7b7}.kpi-warn .kpi-val{color:#fcd34d}.kpi-red .kpi-val{color:#fca5a5}.kpi-gray .kpi-val{color:rgba(255,255,255,.4)}
+.main{padding:14px 20px}
+.section{background:#fff;border-radius:12px;border:1px solid #e2e8f0;box-shadow:0 1px 3px rgba(0,0,0,.06);margin-bottom:18px;overflow:hidden}
+.section-header{background:#f7fafc;padding:12px 20px;display:flex;align-items:center;gap:10px;border-bottom:1px solid #e2e8f0}
+.section-num{background:#1e2d3e;color:#fff;font-weight:700;font-size:12px;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.section-title{font-size:14px;font-weight:700;color:#1e2d3e}
+.tbl-wrap{overflow-x:auto}
+.tbl{width:100%;border-collapse:collapse;font-size:12px}
+.tbl thead th{background:#f7fafc;padding:9px 14px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#718096;border-bottom:1px solid #e2e8f0}
+.tbl tbody td{padding:9px 14px;border-bottom:1px solid #f0f2f6;vertical-align:middle}
+.tbl tbody tr:last-child td{border-bottom:none}
+.badge-great{background:#f0fff4;color:#276749;padding:3px 10px;border-radius:12px;font-size:11px;font-weight:600;display:inline-block}
+.badge-info{background:#ebf8ff;color:#2c5282;padding:3px 10px;border-radius:12px;font-size:11px;font-weight:600;display:inline-block}
+.badge-warn{background:#fffbeb;color:#744210;padding:3px 10px;border-radius:12px;font-size:11px;font-weight:600;display:inline-block}
+.badge-danger{background:#fff5f5;color:#9b2c2c;padding:3px 10px;border-radius:12px;font-size:11px;font-weight:600;display:inline-block}
+.badge-gray{background:#f7fafc;color:#4a5568;padding:3px 10px;border-radius:12px;font-size:11px;font-weight:600;display:inline-block}
+.footer{text-align:center;padding:14px;font-size:11px;color:#718096;border-top:1px solid #e2e8f0;background:#fff}
+</style></head><body>
+<div class="page">
+<div class="header">
+  <div class="header-top">
+    <img class="header-logo" src="${LOGO_B64}" alt="PETROSAR">
+    <div class="header-brand"><div class="header-company">PETROSAR SA</div><div class="header-sgi">Sistema de Gestión Integrado</div></div>
+    <div class="header-divider"></div>
+    <div class="header-doc-block">
+      <div class="header-doc">Documento SGI · RM-02${tieneEval?' · CIERRE ANUAL':''}</div>
+      <div class="header-title">Programa de Objetivos y Metas 2026</div>
+      <div class="header-sub">${periodoLabel}</div>
+    </div>
+  </div>
+  ${kpiHtml}
+</div>
+<div class="main">${seccionesHTML}</div>
+<div class="footer">PETROSAR PRODUCCIÓN Y SERVICIOS SA · RM-02 Programa de Objetivos y Metas 2026 · ${periodoLabel}</div>
+</div>
+</body></html>`;
+
+  const blob = new Blob([html], {type:'text/html'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href=url; a.download=`RM-02_${tieneEval?'CierreAnual_':''}Objetivos_Metas_2026_${fechaHoy.replace(/\//g,'-')}.html`;
+  a.click();
+  window.open(url,'_blank');
+  URL.revokeObjectURL(url);
+  showToast(tieneEval?'RM-02 Cierre Anual generado':'HTML generado y descargado');
+}
+
+// ── Generar Word (.docx) ──────────────────────────────────────────
+async function generarRM02Word() {
+  const { Document, Packer, Paragraph, TextRun, HeadingLevel, Table, TableRow, TableCell, WidthType, AlignmentType, BorderStyle, ShadingType } = docx;
+  const allObjs = [...OBJETIVOS, ...customObjetivos];
+  const vd = getViewData();
+  const fechaHoy = new Date().toLocaleDateString('es-AR');
+  const periodoLabel = viewMode==='mes' ? monthLabel(activeMonth) : 'Acumulado al ' + fechaHoy;
+
+  const cellBorder = {style:BorderStyle.SINGLE,size:2,color:'E2E8F0'};
+  const borders = {top:cellBorder,bottom:cellBorder,left:cellBorder,right:cellBorder};
+
+  function mkCell(text, opts={}) {
+    return new TableCell({borders, shading: opts.shade?{type:ShadingType.CLEAR,fill:opts.shade}:undefined,
+      width:{size:opts.w||20,type:WidthType.PERCENTAGE},
+      children:[new Paragraph({children:[new TextRun({text:String(text||''),bold:!!opts.bold,size:18,font:'Segoe UI',color:opts.color||'000000'})]})]});
+  }
+  function hdrRow(cols) {
+    return new TableRow({children:cols.map(([t,w])=>mkCell(t,{bold:true,shade:'F7FAFC',w,color:'4A5568'}))});
+  }
+  function p(text,opts={}) {
+    return new Paragraph({spacing:{after:opts.after||120},children:[new TextRun({text:String(text||''),bold:!!opts.bold,size:opts.sz||20,font:'Segoe UI',color:opts.color||'1A202C'})]});
+  }
+
+  const stateColor = est=>est==='Cumplido'?'276749':est==='En curso'?'2C5282':est==='En riesgo'?'744210':est==='Vencido'?'9B2C2C':'718096';
+
+  const secKeys = Object.keys(SECTOR_LABELS).filter(k=>k!=='GERENCIA');
+  let children = [
+    p('PETROSAR PRODUCCIÓN Y SERVICIOS SA',{bold:true,sz:28,color:'1E2D3E',after:60}),
+    p('RM-02 · Programa de Objetivos y Metas 2026',{bold:true,sz:32,color:'1E2D3E',after:60}),
+    p(`${periodoLabel} · Emitido el ${fechaHoy}`,{sz:18,color:'718096',after:400}),
+    p(`Total: ${allObjs.length}  |  Cumplidos: ${[...allObjs].filter(o=>(vd[o.id]||{}).estado==='Cumplido').length}  |  En Curso: ${[...allObjs].filter(o=>(vd[o.id]||{}).estado==='En curso').length}  |  En Riesgo: ${[...allObjs].filter(o=>(vd[o.id]||{}).estado==='En riesgo').length}  |  Vencidos: ${[...allObjs].filter(o=>(vd[o.id]||{}).estado==='Vencido').length}`,{bold:true,after:400}),
+  ];
+
+  secKeys.forEach((sk,idx)=>{
+    const objs = allObjetivos(sk);
+    if(!objs.length) return;
+    children.push(p(`${idx+1}. ${SECTOR_LABELS[sk]}`,{bold:true,sz:24,color:'1E2D3E',after:120}));
+    const rows = objs.map(o=>{
+      const d=vd[o.id]||{estado:'Sin actualizar',avance:0,obs:''};
+      return new TableRow({children:[
+        mkCell(o.id,{w:8,bold:true,color:'1E2D3E'}),
+        mkCell(o.obj,{w:26}),
+        mkCell(o.meta,{w:18}),
+        mkCell(o.fin||'Dic 2026',{w:10}),
+        mkCell(d.estado,{w:12,bold:true,color:stateColor(d.estado)}),
+        mkCell((Number(d.avance)||0)+'%',{w:8}),
+        mkCell(d.obs||'—',{w:18}),
+      ]});
+    });
+    children.push(new Table({width:{size:100,type:WidthType.PERCENTAGE},rows:[
+      hdrRow([['ID',8],['Objetivo',26],['Meta',18],['Fin',10],['Estado',12],['Avance',8],['Observaciones',18]]),
+      ...rows
+    ]}));
+    children.push(p('',{after:300}));
+  });
+
+  children.push(p('PETROSAR PRODUCCIÓN Y SERVICIOS SA · RM-02 Programa de Objetivos y Metas 2026',{sz:16,color:'718096',after:0}));
+
+  const doc = new Document({styles:{default:{document:{run:{font:'Segoe UI',size:20}}}},sections:[{children}]});
+  const blob = await Packer.toBlob(doc);
+  saveAs(blob, `RM-02_Objetivos_Metas_2026_${fechaHoy.replace(/\//g,'-')}.docx`);
+  showToast('Word generado y descargado');
+}
+// ===== MODAL DESGLOSE SECTOR (desde Gerencia) =====
+function showSectorDesglose(sk) {
+  const objs = allObjetivos(sk);
+  const sectorScore = calcAnnualScore(sk);
+  const prevM = previousMonthVal();
+  const todosLosMeses = MONTHS.map(m=>m.val).filter(m=>m<=currentMonthVal());
+  const primerMes = todosLosMeses.find(m=>
+    data[m] && objs.some(o=>data[m][o.id]&&data[m][o.id].estado!=='Sin actualizar')
+  );
+
+  // Desglose mes a mes
+  let rows = '';
+  if (!primerMes) {
+    rows = `<tr><td colspan="5" style="text-align:center;color:#718096;padding:20px">Sin datos cargados aún</td></tr>`;
+  } else {
+    todosLosMeses.filter(m=>m>=primerMes).forEach(m=>{
+      const {score,count}=calcScoreForMonth(objs,m);
+      if(!count) return;
+      const hayCarry=objs.some(o=>parseIni(o.ini||'')<=m&&getLastDataUpTo(o.id,m)!==null);
+      if(!hayCarry) return;
+      const objsQueTocan=objs.filter(o=>parseIni(o.ini||'')<=m&&shouldEvaluate(o.frec||'Mensual',m));
+      if(!objsQueTocan.length) return;
+      const hayReal=data[m]&&objsQueTocan.some(o=>data[m][o.id]&&data[m][o.id].estado!=='Sin actualizar');
+      const esMesFaltante=!hayReal&&prevM&&m<=prevM;
+      let impacto, rowBg='';
+      if(hayReal){
+        impacto=`<span style="color:#276749;font-weight:600">${score}% (completo)</span>`;
+      } else if(esMesFaltante){
+        impacto=`<span style="color:#744210;font-weight:600">${Math.round(score*0.5)}% (penalizado 50%)</span>`;
+        rowBg='background:#fffbeb';
+      } else {
+        impacto=`<span style="color:#718096">En curso — no penaliza</span>`;
+        rowBg='background:#f7fafc';
+      }
+      rows+=`<tr style="${rowBg}">
+        <td style="font-weight:600;color:#1e2d3e">${monthLabel(m)}</td>
+        <td style="color:#718096">${objsQueTocan.length} obj.</td>
+        <td><span style="font-size:14px;font-weight:700;color:${score>=80?'#276749':score>=50?'#d97706':'#c53030'}">${score}%</span></td>
+        <td>${hayReal?'<span style="color:#276749">✓ Actualizado</span>':m===currentMonthVal()?'<span style="color:#718096">En curso</span>':'<span style="color:#c05621">✗ Sin actualizar</span>'}</td>
+        <td>${impacto}</td>
+      </tr>`;
+    });
+  }
+
+  document.getElementById('modalTitle').textContent = SECTOR_LABELS[sk];
+  document.getElementById('modalSub').textContent = `Score anual: ${sectorScore}% · Desglose mes a mes`;
+  document.getElementById('modalBody').innerHTML = `
+    <table class="ps-table" style="width:100%">
+      <thead><tr>
+        <th>Período</th><th>Obj. evaluados</th><th>Score del mes</th><th>Actualización</th><th>Impacto en promedio</th>
+      </tr></thead>
+      <tbody>${rows}</tbody>
+    </table>`;
+  document.getElementById('sectorModal').style.display='flex';
+}
+function closeModal() {
+  document.getElementById('sectorModal').style.display='none';
+}
+// ===== EVALUACIÓN ANUAL — SECTOR =====
+function renderSectorEvalAnual() {
+  const objs = allObjetivos(currentSector);
+  let sc=0,sp=0,nc=0,se=0;
+  objs.forEach(o=>{
+    const r=(evalData[o.id]||{}).resultado||'Sin evaluar';
+    if(r==='Cumplido')sc++;
+    else if(r==='Parcialmente cumplido')sp++;
+    else if(r==='No cumplido')nc++;
+    else se++;
+  });
+
+  let rows = objs.map(o=>{
+    const d = evalData[o.id]||{resultado:'Sin evaluar',pct_logrado:0,comentario:'',evidencia:''};
+    const rc = RESULTADO_COLOR[d.resultado]||'#718096';
+    const rb = RESULTADO_BG[d.resultado]||'#f7fafc';
+    return `<tr style="background:${rb}">
+      <td><strong style="color:#1e2d3e">${o.id}</strong></td>
+      <td><div class="obj-txt" title="${o.obj}">${o.obj}</div></td>
+      <td><div class="meta-txt" title="${o.meta}">${o.meta}</div></td>
+      <td>
+        <select class="t-sel" id="eval-res-${o.id}" onchange="this.parentElement.parentElement.style.background=RESULTADO_BG[this.value]||'#f7fafc'">
+          ${RESULTADO_OPTS.map(r=>`<option value="${r}" ${r===d.resultado?'selected':''}>${r}</option>`).join('')}
+        </select>
+      </td>
+      <td><input type="number" class="t-inp" id="eval-pct-${o.id}" min="0" max="100" value="${d.pct_logrado||0}" style="width:62px"> %</td>
+      <td><input type="text" class="t-inp wide" id="eval-com-${o.id}" value="${escHtml(d.comentario||'')}" placeholder="Comentario de cierre…"></td>
+      <td>
+        <div style="display:flex;align-items:center;gap:6px">
+          <input type="text" class="t-inp url" id="eval-evi-${o.id}" value="${escHtml(d.evidencia||'')}" placeholder="Link evidencia…" oninput="updateEviBtn('eval-evibtn-${o.id}',this.value)">
+          ${d.evidencia?`<a id="eval-evibtn-${o.id}" href="${escHtml(d.evidencia)}" target="_blank" style="flex-shrink:0;padding:5px 10px;background:#1e2d3e;color:#fff;border-radius:6px;font-size:11px;font-weight:600;text-decoration:none">Ver →</a>`:`<span id="eval-evibtn-${o.id}" style="flex-shrink:0;padding:5px 10px;background:#e2e8f0;color:#a0aec0;border-radius:6px;font-size:11px;font-weight:600">Ver →</span>`}
+        </div>
+      </td>
+      <td><button class="sav-btn" id="eval-btn-${o.id}" onclick="saveEvalRow('${o.id}')">Guardar</button></td>
+    </tr>`;
+  }).join('');
+
+  document.getElementById('appContent').innerHTML = `<div class="ps-main">
+    <div class="sumbar" style="margin-bottom:18px">
+      <div class="sumbar-item"><div class="sumbar-lbl">Total</div><div class="sumbar-val">${objs.length}</div><div class="sumbar-stripe" style="background:#e8a020"></div></div>
+      <div class="sumbar-item s-ok"><div class="sumbar-lbl">Cumplidos</div><div class="sumbar-val">${sc}</div><div class="sumbar-stripe" style="background:#38a169"></div></div>
+      <div class="sumbar-item s-warn"><div class="sumbar-lbl">Parcialmente</div><div class="sumbar-val">${sp}</div><div class="sumbar-stripe" style="background:#d69e2e"></div></div>
+      <div class="sumbar-item s-red"><div class="sumbar-lbl">No cumplidos</div><div class="sumbar-val">${nc}</div><div class="sumbar-stripe" style="background:#e53e3e"></div></div>
+      <div class="sumbar-item s-gray"><div class="sumbar-lbl">Sin evaluar</div><div class="sumbar-val">${se}</div><div class="sumbar-stripe" style="background:#a0aec0"></div></div>
+    </div>
+    <div class="cc"><div class="cc-hdr">
+      <div><div class="cc-title">${SECTOR_LABELS[currentSector]} — Evaluación de Cumplimiento Anual 2026</div>
+      <div class="cc-sub">Completá el resultado final de cada objetivo al cierre del año</div></div>
+    </div>
+    <div class="tbl-wrap"><table class="ps-table">
+      <thead><tr><th>ID</th><th>Objetivo</th><th>Meta</th><th>Resultado</th><th>% Logrado</th><th>Comentario de cierre</th><th>Evidencia</th><th></th></tr></thead>
+      <tbody>${rows}</tbody>
+    </table></div></div>
+  </div>`;
+}
+async function saveEvalRow(id) {
+  const res = document.getElementById('eval-res-'+id).value;
+  const pct = parseInt(document.getElementById('eval-pct-'+id).value)||0;
+  const com = document.getElementById('eval-com-'+id).value;
+  const evi = document.getElementById('eval-evi-'+id).value;
+  await saveEvalItem(id, currentSector, {resultado:res,pct_logrado:pct,comentario:com,evidencia:evi});
+  const btn = document.getElementById('eval-btn-'+id);
+  btn.textContent='✓ Guardado'; btn.classList.add('saved');
+  setTimeout(()=>{btn.textContent='Guardar';btn.classList.remove('saved');},2000);
+  showToast('Evaluación guardada');
+}
+function updateEviBtn(btnId, val) {
+  const btn = document.getElementById(btnId);
+  if (!btn) return;
+  const isUrl = val && (val.startsWith('http://') || val.startsWith('https://'));
+  if (isUrl) btn.outerHTML = `<a id="${btnId}" href="${escHtml(val)}" target="_blank" style="flex-shrink:0;padding:5px 10px;background:#1e2d3e;color:#fff;border-radius:6px;font-size:11px;font-weight:600;text-decoration:none">Ver →</a>`;
+  else btn.outerHTML = `<span id="${btnId}" style="flex-shrink:0;padding:5px 10px;background:#e2e8f0;color:#a0aec0;border-radius:6px;font-size:11px;font-weight:600">Ver →</span>`;
+}
+
+// ===== EVALUACIÓN ANUAL — GERENCIA =====
+function renderGerenciaEvalAnual() {
+  const secKeys = Object.keys(SECTOR_LABELS).filter(k=>k!=='GERENCIA');
+  let totalC=0,totalP=0,totalN=0,totalSE=0,totalObj=0;
+  let secCards = secKeys.map(sk=>{
+    const objs = allObjetivos(sk);
+    if(!objs.length) return '';
+    let sc=0,sp=0,nc=0,se=0;
+    objs.forEach(o=>{
+      const r=(evalData[o.id]||{}).resultado||'Sin evaluar';
+      if(r==='Cumplido')sc++;
+      else if(r==='Parcialmente cumplido')sp++;
+      else if(r==='No cumplido')nc++;
+      else se++;
+    });
+    totalC+=sc;totalP+=sp;totalN+=nc;totalSE+=se;totalObj+=objs.length;
+    const pctCumpl = Math.round((sc+sp*0.5)/objs.length*100);
+    const color = pctCumpl>=85?'#15803d':pctCumpl>=60?'#16a34a':pctCumpl>=30?'#d97706':'#dc2626';
+    const accentColor = nc>0?'#e53e3e':sp>0?'#d69e2e':se===objs.length?'#a0aec0':'#38a169';
+    return `<div class="sec2-card" style="cursor:default">
+      <div class="sec2-accent" style="background:${accentColor}"></div>
+      <div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:8px">
+        <div style="flex-shrink:0;display:flex;flex-direction:column;align-items:center;width:68px">
+          ${svgRing(pctCumpl,color)}
+          <div style="font-size:9px;font-weight:700;color:${color};margin-top:2px;text-align:center">Cumplimiento</div>
+        </div>
+        <div style="flex:1;min-width:0;padding-top:2px">
+          <div style="font-size:13px;font-weight:700;color:#1e2d3e;margin-bottom:6px">${SECTOR_LABELS[sk]}</div>
+          <div style="display:flex;flex-wrap:wrap;gap:4px">
+            ${sc?`<span class="sec2-pill p-ok">✅ ${sc} Cumplidos</span>`:''}
+            ${sp?`<span class="sec2-pill p-warn">🟡 ${sp} Parciales</span>`:''}
+            ${nc?`<span class="sec2-pill p-red">❌ ${nc} No cumplidos</span>`:''}
+            ${se?`<span class="sec2-pill p-gray">⬜ ${se} Sin evaluar</span>`:''}
+          </div>
+        </div>
+      </div>
+      <div class="sec2-distbar">
+        ${sc?`<div style="flex:${sc};background:#38a169"></div>`:''}
+        ${sp?`<div style="flex:${sp};background:#d69e2e"></div>`:''}
+        ${nc?`<div style="flex:${nc};background:#e53e3e"></div>`:''}
+        ${se?`<div style="flex:${se};background:#e2e8f0"></div>`:''}
+      </div>
+    </div>`;
+  }).join('');
+
+  const pctGlobal = totalObj ? Math.round((totalC+totalP*0.5)/totalObj*100) : 0;
+
+  document.getElementById('appContent').innerHTML = `<div class="ps-main">
+    <div class="cc" style="margin-bottom:18px">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:0">
+        <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px 24px;border-right:1px solid #e2e8f0">
+          <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#718096;margin-bottom:8px">Cumplimiento Global 2026</div>
+          ${buildSpeedometer(pctGlobal, `${totalC} cumplidos · ${totalP} parciales · ${totalN} no cumplidos de ${totalObj}`)}
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:20px 24px;align-content:center">
+          <div style="text-align:center;padding:12px;background:#f7fafc;border-radius:10px"><div style="font-size:28px;font-weight:800;color:#1a202c">${totalObj}</div><div style="font-size:9px;font-weight:600;text-transform:uppercase;color:#718096;margin-top:3px">Total</div></div>
+          <div style="text-align:center;padding:12px;background:#f0fff4;border-radius:10px"><div style="font-size:28px;font-weight:800;color:#276749">${totalC}</div><div style="font-size:9px;font-weight:600;text-transform:uppercase;color:#276749;margin-top:3px">Cumplidos</div></div>
+          <div style="text-align:center;padding:12px;background:#fffbeb;border-radius:10px"><div style="font-size:28px;font-weight:800;color:#744210">${totalP}</div><div style="font-size:9px;font-weight:600;text-transform:uppercase;color:#744210;margin-top:3px">Parciales</div></div>
+          <div style="text-align:center;padding:12px;background:#fff5f5;border-radius:10px"><div style="font-size:28px;font-weight:800;color:#9b2c2c">${totalN}</div><div style="font-size:9px;font-weight:600;text-transform:uppercase;color:#9b2c2c;margin-top:3px">No cumplidos</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="cc"><div class="cc-hdr"><div class="cc-title">Evaluación de Cumplimiento por Sector — 2026</div></div>
+      <div style="padding:16px"><div class="sec2-grid">${secCards}</div></div>
+    </div>
+  </div>`;
+}
+</script>
+</body>
+</html>
