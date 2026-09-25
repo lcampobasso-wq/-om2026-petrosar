@@ -1399,8 +1399,8 @@ function renderRM02() {
     }).join('');
     const accentColor=sr>0?'#e53e3e':si>0&&!tieneEval?'#d69e2e':sc===objs.length?'#38a169':'#3182ce';
     const headers = tieneEval
-      ? '<th>ID</th><th>Objetivo</th><th>Meta</th><th>Resultado</th><th>% Logrado</th><th>Comentario de cierre</th>'
-      : '<th>ID</th><th>Objetivo</th><th>Meta</th><th>Fin</th><th>Estado</th><th>Avance</th><th>Observaciones</th>';
+      ? '<th class="col-id">ID</th><th class="col-obj">Objetivo</th><th class="col-meta">Meta</th><th class="col-res">Resultado</th><th class="col-pct">% Logrado</th><th class="col-com">Comentario de cierre</th>'
+      : '<th class="col-id">ID</th><th class="col-obj">Objetivo</th><th class="col-meta">Meta</th><th class="col-fin">Fin</th><th class="col-est">Estado</th><th class="col-av">Avance</th><th class="col-obs">Observaciones</th>';
     const summary = tieneEval
       ? `${objs.length} obj.${sc?` · ✅ ${sc}`:''} ${si?`· 🟡 ${si}`:''}${sr?` · ❌ ${sr}`:''}`
       : `${objs.length} obj.${sc?` · ✅ ${sc}`:''} ${si?`· 🔵 ${si}`:''}${sr?` · ⚠️ ${sr}`:''}`;
@@ -1445,7 +1445,8 @@ function renderRM02() {
       <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
         ${tieneEval?'':toggleWidget()+monthSelWidget('rm02')}
         <button onclick="generarRM02HTML()" style="padding:8px 16px;background:#1e2d3e;color:#fff;border:none;border-radius:8px;font-size:12.5px;font-weight:600;cursor:pointer;font-family:inherit">🌐 Generar HTML</button>
-        <button onclick="generarRM02Word()" style="padding:8px 16px;background:linear-gradient(135deg,#e8a020,#f05a28);color:#fff;border:none;border-radius:8px;font-size:12.5px;font-weight:600;cursor:pointer;font-family:inherit">📄 Generar Word</button>
+        <button onclick="generarRM02PDF()" style="padding:8px 16px;background:#e53e3e;color:#fff;border:none;border-radius:8px;font-size:12.5px;font-weight:600;cursor:pointer;font-family:inherit">📄 Guardar PDF</button>
+        <button onclick="generarRM02Word()" style="padding:8px 16px;background:linear-gradient(135deg,#e8a020,#f05a28);color:#fff;border:none;border-radius:8px;font-size:12.5px;font-weight:600;cursor:pointer;font-family:inherit">📝 Generar Word</button>
       </div>
     </div>
     ${kpiBar}
@@ -1531,8 +1532,8 @@ function generarRM02HTML() {
     }).join('');
     const accent=sr>0?'#e53e3e':si>0&&tieneEval?'#d69e2e':sc===objs.length?'#38a169':'#3182ce';
     const headers = tieneEval
-      ? '<th>ID</th><th>Objetivo</th><th>Meta</th><th>Resultado</th><th>% Logrado</th><th>Comentario de cierre</th>'
-      : '<th>ID</th><th>Objetivo</th><th>Meta</th><th>Fin</th><th>Estado</th><th>Avance</th><th>Observaciones</th>';
+      ? '<th class="col-id">ID</th><th class="col-obj">Objetivo</th><th class="col-meta">Meta</th><th class="col-res">Resultado</th><th class="col-pct">% Logrado</th><th class="col-com">Comentario de cierre</th>'
+      : '<th class="col-id">ID</th><th class="col-obj">Objetivo</th><th class="col-meta">Meta</th><th class="col-fin">Fin</th><th class="col-est">Estado</th><th class="col-av">Avance</th><th class="col-obs">Observaciones</th>';
     const summary = tieneEval
       ? `${objs.length} obj.${sc?` · ✅ ${sc}`:''}${si?` · 🟡 ${si}`:''}${sr?` · ❌ ${sr}`:''}`
       : `${objs.length} obj.${sc?` · ✅ ${sc}`:''}${si?` · 🔵 ${si}`:''}${sr?` · ⚠️ ${sr}`:''}`;
@@ -1584,8 +1585,11 @@ html,body{background:#d0d4d8;color:#1a202c;font-family:'Segoe UI',system-ui,sans
 .section-num{background:#1e2d3e;color:#fff;font-weight:700;font-size:12px;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .section-title{font-size:14px;font-weight:700;color:#1e2d3e}
 .tbl-wrap{overflow-x:auto}
-.tbl{width:100%;border-collapse:collapse;font-size:12px}
-.tbl thead th{background:#f7fafc;padding:9px 14px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#718096;border-bottom:1px solid #e2e8f0}
+.tbl{width:100%;border-collapse:collapse;font-size:12px;table-layout:fixed}
+.tbl thead th{background:#f7fafc;padding:9px 14px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#718096;border-bottom:1px solid #e2e8f0;overflow:hidden}
+.tbl tbody td{padding:9px 14px;border-bottom:1px solid #f0f2f6;vertical-align:middle;overflow:hidden;text-overflow:ellipsis}
+.col-id{width:7%}.col-obj{width:28%}.col-meta{width:22%}.col-fin{width:8%}.col-est{width:11%}.col-av{width:9%}.col-obs{width:15%}
+.col-res{width:14%}.col-pct{width:8%}.col-com{width:20%}
 .tbl tbody td{padding:9px 14px;border-bottom:1px solid #f0f2f6;vertical-align:middle}
 .tbl tbody tr:last-child td{border-bottom:none}
 .badge-great{background:#f0fff4;color:#276749;padding:3px 10px;border-radius:12px;font-size:11px;font-weight:600;display:inline-block}
@@ -1622,6 +1626,13 @@ html,body{background:#d0d4d8;color:#1a202c;font-family:'Segoe UI',system-ui,sans
   window.open(url,'_blank');
   URL.revokeObjectURL(url);
   showToast(tieneEval?'RM-02 Cierre Anual generado':'HTML generado y descargado');
+}
+
+// ── Guardar PDF ──────────────────────────────────────────────────
+function generarRM02PDF() {
+  // Genera el HTML y abre ventana de impresión para guardar como PDF
+  generarRM02HTML();
+  showToast('En la ventana que se abre → Ctrl+P → Guardar como PDF');
 }
 
 // ── Generar Word (.docx) ──────────────────────────────────────────
