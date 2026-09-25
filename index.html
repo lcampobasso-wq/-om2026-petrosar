@@ -67,6 +67,7 @@ body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:#f0f2f
 /* TABLE */
 .tbl-wrap{overflow-x:auto}
 .ps-table{width:100%;border-collapse:collapse;font-size:12.5px}
+.rm02-tbl{width:100%;border-collapse:collapse;font-size:12px;table-layout:fixed}
 .ps-table thead th{background:#f7fafc;padding:9px 14px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#718096;border-bottom:1px solid #e2e8f0;white-space:nowrap}
 .ps-table tbody tr{border-bottom:1px solid #f0f2f6;transition:background .15s}
 .ps-table tbody tr:hover{background:#fafbfd}
@@ -1399,8 +1400,8 @@ function renderRM02() {
     }).join('');
     const accentColor=sr>0?'#e53e3e':si>0&&!tieneEval?'#d69e2e':sc===objs.length?'#38a169':'#3182ce';
     const headers = tieneEval
-      ? '<th class="col-id">ID</th><th class="col-obj">Objetivo</th><th class="col-meta">Meta</th><th class="col-res">Resultado</th><th class="col-pct">% Logrado</th><th class="col-com">Comentario de cierre</th>'
-      : '<th class="col-id">ID</th><th class="col-obj">Objetivo</th><th class="col-meta">Meta</th><th class="col-fin">Fin</th><th class="col-est">Estado</th><th class="col-av">Avance</th><th class="col-obs">Observaciones</th>';
+      ? '<th style="width:9%">ID</th><th style="width:27%">Objetivo</th><th style="width:19%">Meta</th><th style="width:14%">Resultado</th><th style="width:9%">% Logrado</th><th style="width:22%">Comentario de cierre</th>'
+      : '<th style="width:9%">ID</th><th style="width:29%">Objetivo</th><th style="width:20%">Meta</th><th style="width:8%">Fin</th><th style="width:11%">Estado</th><th style="width:10%">Avance</th><th style="width:13%">Observaciones</th>';
     const summary = tieneEval
       ? `${objs.length} obj.${sc?` · ✅ ${sc}`:''} ${si?`· 🟡 ${si}`:''}${sr?` · ❌ ${sr}`:''}`
       : `${objs.length} obj.${sc?` · ✅ ${sc}`:''} ${si?`· 🔵 ${si}`:''}${sr?` · ⚠️ ${sr}`:''}`;
@@ -1409,7 +1410,7 @@ function renderRM02() {
         <span style="font-size:14px;font-weight:700;color:#1e2d3e">${SECTOR_LABELS[sk]}</span>
         <span style="font-size:12px;color:#718096">${summary}</span>
       </div>
-      <div class="tbl-wrap"><table class="ps-table">
+      <div class="tbl-wrap"><table class="rm02-tbl ps-table">
         <thead><tr>${headers}</tr></thead><tbody>${rows}</tbody>
       </table></div>
     </div>`;
@@ -1532,8 +1533,8 @@ function generarRM02HTML() {
     }).join('');
     const accent=sr>0?'#e53e3e':si>0&&tieneEval?'#d69e2e':sc===objs.length?'#38a169':'#3182ce';
     const headers = tieneEval
-      ? '<th class="col-id">ID</th><th class="col-obj">Objetivo</th><th class="col-meta">Meta</th><th class="col-res">Resultado</th><th class="col-pct">% Logrado</th><th class="col-com">Comentario de cierre</th>'
-      : '<th class="col-id">ID</th><th class="col-obj">Objetivo</th><th class="col-meta">Meta</th><th class="col-fin">Fin</th><th class="col-est">Estado</th><th class="col-av">Avance</th><th class="col-obs">Observaciones</th>';
+      ? '<th style="width:9%">ID</th><th style="width:27%">Objetivo</th><th style="width:19%">Meta</th><th style="width:14%">Resultado</th><th style="width:9%">% Logrado</th><th style="width:22%">Comentario de cierre</th>'
+      : '<th style="width:9%">ID</th><th style="width:29%">Objetivo</th><th style="width:20%">Meta</th><th style="width:8%">Fin</th><th style="width:11%">Estado</th><th style="width:10%">Avance</th><th style="width:13%">Observaciones</th>';
     const summary = tieneEval
       ? `${objs.length} obj.${sc?` · ✅ ${sc}`:''}${si?` · 🟡 ${si}`:''}${sr?` · ❌ ${sr}`:''}`
       : `${objs.length} obj.${sc?` · ✅ ${sc}`:''}${si?` · 🔵 ${si}`:''}${sr?` · ⚠️ ${sr}`:''}`;
@@ -1588,7 +1589,7 @@ html,body{background:#d0d4d8;color:#1a202c;font-family:'Segoe UI',system-ui,sans
 .tbl{width:100%;border-collapse:collapse;font-size:12px;table-layout:fixed}
 .tbl thead th{background:#f7fafc;padding:9px 14px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#718096;border-bottom:1px solid #e2e8f0;overflow:hidden}
 .tbl tbody td{padding:9px 14px;border-bottom:1px solid #f0f2f6;vertical-align:middle;overflow:hidden;text-overflow:ellipsis}
-.col-id{width:7%}.col-obj{width:28%}.col-meta{width:22%}.col-fin{width:8%}.col-est{width:11%}.col-av{width:9%}.col-obs{width:15%}
+.col-id{width:9%}.col-obj{width:29%}.col-meta{width:20%}.col-fin{width:8%}.col-est{width:11%}.col-av{width:10%}.col-obs{width:13%}.col-res{width:14%}.col-pct{width:9%}.col-com{width:22%}
 .col-res{width:14%}.col-pct{width:8%}.col-com{width:20%}
 .tbl tbody td{padding:9px 14px;border-bottom:1px solid #f0f2f6;vertical-align:middle}
 .tbl tbody tr:last-child td{border-bottom:none}
