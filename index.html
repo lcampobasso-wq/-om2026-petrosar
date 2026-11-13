@@ -268,8 +268,7 @@ const OBJETIVOS = [
   {id:'ST-04',s:'SSA_TRANSP',obj:'Formación y toma de conciencia. Capacitaciones.',meta:'>3 capacitaciones',ini:'Feb 2026',fin:'Dic 2026',ind:'Indicador de Capacitaciones',frec:'Mensual'},
   {id:'ST-05',s:'SSA_TRANSP',obj:'Reducir trasbordos respecto a 2025 (4 trasbordos).',meta:'<4 trasbordos',ini:'Ene 2026',fin:'Dic 2026',ind:'Indicador de Trasbordos y Cambios de Unidad',frec:'Mensual'},
   {id:'SP-01',s:'SSA_PROD',obj:'Reducir accidentes personales respecto a 2025.',meta:'<10 accidentes',ini:'Ene 2026',fin:'Dic 2026',ind:'Indicador de Estadística Interna 2026',frec:'Mensual'},
-  {id:'SP-02',s:'SSA_PROD',obj:'Gestión vehicular: reducir accidentes vehiculares respecto a 2025.',meta:'<5 accidentes',ini:'Ene 2026',fin:'Dic 2026',ind:'Indicador de Estadística Interna 2026',frec:'Mensual'},
-  {id:'SP-03',s:'SSA_PROD',obj:'Visitas a frentes de trabajo.',meta:'>2 visitas por período',ini:'Ene 2026',fin:'Dic 2026',ind:'Indicador de Visitas Realizadas',frec:'Mensual'},
+  {id:'SP-02',s:'SSA_PROD',obj:'Gestión vehicular: reducir accidentes vehiculares respecto a 2025.',meta:'<1 accidente',ini:'Ene 2026',fin:'Dic 2026',ind:'Indicador de Estadística Interna 2026',frec:'Mensual'},
   {id:'SP-04',s:'SSA_PROD',obj:'Cumplir horas de capacitación por operario.',meta:'4 hs/mes diurno | 1 hs/mes nocturno',ini:'Ene 2026',fin:'Dic 2026',ind:'Indicador Seguimiento de Capacitación',frec:'Mensual'},
   {id:'SP-05',s:'SSA_PROD',obj:'Evitar inhabilitaciones por ICR Altos/Moderados en conducta de manejo.',meta:'0 inhabilitaciones',ini:'Ene 2026',fin:'Dic 2026',ind:'Indicador de Habilitación de Recursos',frec:'Mensual'},
   {id:'AM-01',s:'AMBIENTE',obj:'Construir 3 recintos de acopio de residuos peligrosos (Disp. 185).',meta:'3 recintos construidos y operativos',ini:'Jul 2025',fin:'Oct 2026',ind:'N° de recintos construidos y operativos',frec:'Semestral'},
@@ -337,7 +336,7 @@ function getViewData() {
 function getAcumuladoData() {
   const result = {};
   const sortedMonths = MONTHS.map(m=>m.val).filter(m=>data[m]);
-  [...OBJETIVOS, ...customObjetivos].forEach(o => {
+  allObjGlobal().forEach(o => {
     const oid = o.id;
     for (let i = sortedMonths.length - 1; i >= 0; i--) {
       const md = data[sortedMonths[i]];
@@ -418,8 +417,16 @@ async function deleteCustomObjetivo(id) {
   await fetch(`${SB_URL}/rest/v1/om2026_seguimiento?id=eq.${encodeURIComponent(id)}`, { method:'DELETE', headers: SB_HEADERS });
   renderSectorView();
 }
+function allObjGlobal() {
+  const order = []; OBJETIVOS.forEach(o=>{ if(!order.includes(o.s)) order.push(o.s); });
+  const sec = o => { const k=o.s||o.sector; const i=order.indexOf(k); return i<0?999:i; };
+  const num = o => { const m=String(o.id).match(/-(\d+)/); return m?parseInt(m[1]):0; };
+  return [...OBJETIVOS, ...customObjetivos].map((o,i)=>[o,i]).sort((a,b)=>sec(a[0])-sec(b[0]) || num(a[0])-num(b[0]) || a[1]-b[1]).map(x=>x[0]);
+}
 function allObjetivos(sector) {
-  return [...OBJETIVOS.filter(o=>o.s===sector), ...customObjetivos.filter(o=>o.sector===sector)];
+  const idKey = id => { const m=String(id).match(/^([A-Za-z]+)-(\d+)/); return m?[m[1],parseInt(m[2])]:[String(id),0]; };
+  return [...OBJETIVOS.filter(o=>o.s===sector), ...customObjetivos.filter(o=>o.sector===sector)]
+    .sort((a,b)=>{ const x=idKey(a.id), y=idKey(b.id); return x[0]===y[0] ? x[1]-y[1] : x[0].localeCompare(y[0]); });
 }
 
 // ===== LÓGICA DE FIN DE OBJETIVO =====
@@ -636,7 +643,7 @@ function renderSectorTablero() {
     <div style="background:#fffbeb;border:1.5px solid #f6e05e;border-radius:10px;padding:12px 16px;margin-bottom:14px;display:flex;align-items:flex-start;gap:10px">
       <span style="font-size:18px;flex-shrink:0">⚠️</span>
       <div>
-        <div style="font-size:13px;font-weight:700;color:#744210">Sin actualizar desde ${monthLabel(lastUpdate)}</div>
+        <div style="font-size:13px;font-weight:700;color:#744210">Último mes actualizado: ${monthLabel(lastUpdate)}</div>
         <div style="font-size:11.5px;color:#975a16;margin-top:3px">
           Meses sin registro: <strong>${mesesFaltantes.map(m=>monthLabel(m)).join(', ')}</strong>.<br>
           Estos meses se calculan con el último estado conocido pero con una <strong>penalización del 50%</strong> en el score anual.<br>
@@ -1035,7 +1042,7 @@ function calcAnnualScore(sector) {
   return calcAnnualScoreGeneral(allObjetivos(sector));
 }
 function calcAnnualScoreGlobal() {
-  return calcAnnualScoreGeneral([...OBJETIVOS,...customObjetivos]);
+  return calcAnnualScoreGeneral(allObjGlobal());
 }
 
 // ===== VELOCÍMETRO SVG =====
@@ -1087,7 +1094,7 @@ function renderGerenciaOverview() {
   // Las tarjetas de sector SIEMPRE muestran acumulado (último estado conocido por objetivo)
   // El toggle solo afecta la vista Detalle por Sector
   const md = getAcumuladoData();
-  const allObj=[...OBJETIVOS,...customObjetivos]; const total=allObj.length;
+  const allObj=allObjGlobal(); const total=allObj.length;
   const activeMesG = currentMonthVal();
   let cumplidos=0,enCurso=0,enRiesgo=0,vencidos=0,sinAct=0;
   allObj.forEach(o=>{
@@ -1133,7 +1140,7 @@ function renderGerenciaOverview() {
     </div>`;
   });
   const perfScore = calcAnnualScoreGlobal();
-  const mesesGlobal = MONTHS.map(m=>m.val).filter(m=>data[m]&&[...OBJETIVOS,...customObjetivos].some(o=>parseIni(o.ini||'')<=m&&getLastDataUpTo(o.id,m)!==null)).length;
+  const mesesGlobal = MONTHS.map(m=>m.val).filter(m=>data[m]&&allObjGlobal().some(o=>parseIni(o.ini||'')<=m&&getLastDataUpTo(o.id,m)!==null)).length;
   const perfSub = mesesGlobal>1 ? `Promedio ${mesesGlobal} meses · ${cumplidos} cumplidos de ${total}` : `${cumplidos} cumplidos · ${enCurso} en curso · ${enRiesgo} en riesgo de ${total}`;
   const subtitle=viewMode==='acumulado'?'Última actualización registrada por objetivo':`Datos del período <strong>${monthLabel(activeMonth)}</strong>`;
   document.getElementById('appContent').innerHTML=`<div class="ps-main">
@@ -1189,7 +1196,7 @@ function renderGerenciaDetail() {
   const secKeys=Object.keys(SECTOR_LABELS).filter(k=>k!=='GERENCIA');
   const secOpts=secKeys.map(k=>`<option value="${k}">${SECTOR_LABELS[k]}</option>`).join('');
   const estOpts=['','Sin actualizar','En curso','En riesgo','Vencido','Cumplido'].map(e=>`<option value="${e}">${e||'Todos los estados'}</option>`).join('');
-  const allObj2=[...OBJETIVOS,...customObjetivos]; let rows=allObj2.map(o=>{
+  const allObj2=allObjGlobal(); let rows=allObj2.map(o=>{
     const d=md[o.id]||{estado:'Sin actualizar',avance:0,obs:''};
     const estRaw=d.estado||'Sin actualizar';
     const finM=parseFin(o.fin||'');
@@ -1285,7 +1292,7 @@ async function exportarExcel() {
   const h1 = ['ID','Sector','Objetivo','Meta','Inicio','Fin','Indicador','Frecuencia'];
   h1.forEach((h,i)=> { ws1[XLSX.utils.encode_cell({r:1,c:i})] = makeCell(h, hdrStyle(WB_ORANGE,WB_WHITE)); });
 
-  const allObjs = [...OBJETIVOS, ...customObjetivos];
+  const allObjs = allObjGlobal();
   allObjs.forEach((o, ri) => {
     const r = ri + 2;
     const bg = ri%2===0 ? WB_WHITE : WB_LGRAY;
@@ -1335,7 +1342,7 @@ async function exportarExcel() {
 }
 // ===== RM-02 PROGRAMA DE OBJETIVOS Y METAS =====
 function renderRM02() {
-  const allObjs = [...OBJETIVOS, ...customObjetivos];
+  const allObjs = allObjGlobal();
   const vd = getAcumuladoData();
   const tieneEval = Object.keys(evalData).length > 0;
   const fechaHoy = new Date().toLocaleDateString('es-AR');
@@ -1466,7 +1473,7 @@ function changeMonthGerencia(val, tab) {
 const PETROSAR_LOGO = "data:image/png;base64,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";
 function generarRM02HTML() {
   const LOGO_B64 = PETROSAR_LOGO;
-  const allObjs = [...OBJETIVOS, ...customObjetivos];
+  const allObjs = allObjGlobal();
   const vd = getAcumuladoData();
   const tieneEval = Object.keys(evalData).length > 0;
   const fechaHoy = new Date().toLocaleDateString('es-AR');
@@ -1639,7 +1646,7 @@ function generarRM02PDF() {
 // ── Generar Word (.docx) ──────────────────────────────────────────
 async function generarRM02Word() {
   const { Document, Packer, Paragraph, TextRun, HeadingLevel, Table, TableRow, TableCell, WidthType, AlignmentType, BorderStyle, ShadingType } = docx;
-  const allObjs = [...OBJETIVOS, ...customObjetivos];
+  const allObjs = allObjGlobal();
   const vd = getViewData();
   const fechaHoy = new Date().toLocaleDateString('es-AR');
   const periodoLabel = viewMode==='mes' ? monthLabel(activeMonth) : 'Acumulado al ' + fechaHoy;
